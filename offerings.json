@@ -1,0 +1,38 @@
+[
+    {
+        "id": 0,
+        "memory": 4,
+        "camera": 12,
+        "battery": 3000,
+        "weight:": 150,
+        "display": 5,
+        "simSlots": 2
+    },
+    {
+        "id": 1,
+        "memory": 2,
+        "camera": 24,
+        "battery": 2500,
+        "weight:": 130,
+        "display": 4.5,
+        "simSlots": 1
+    },
+    {
+        "id": 2,
+        "memory": 3,
+        "camera": 8,
+        "battery": 2300,
+        "weight:": 120,
+        "display": 4,
+        "simSlots": 1
+    },
+    {
+        "id": 3,
+        "memory": 6,
+        "camera": 24,
+        "battery": 2850,
+        "weight:": 140,
+        "display": 5.5,
+        "simSlots": 1
+    }
+]
