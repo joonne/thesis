@@ -244,29 +244,25 @@ Recently, RSs have proved to be an effective cure for the information overload p
 
 Compared to research in the classical fields of information systems such as databases and search engines, study of recommender systems is relatively new. They became an independent research area in the mid-1990s. Recently, the interest towards recommendation systems has dramatically increased. Evidence can be found for example from such highly rated Internet sites as Amazon.com, YouTube, Netflix and IMDB in which RSs are playing an important role. Another example are conferences and journal issues dedicated to RS research and development such as RecSys and AI Communications (2008), consecutively. \cite{ricci11}
 
-A recommendation system must balance between the needs of service provider and the customer. \cite{ricci11} Recommendation systems can be used in tasks such as increasing the number of items sold, selling more diverse items, increasing user satisfaction, increasing user loyalty or understanding better what the user wants \cite{ricci11}. In addition, a number of different functions exist that the user might expect a recommendation system to offer. Some of these are similar to the ones mentioned above, thus considered as core functions. Others include tasks such as recommending a sequence of items. \cite{ricci11}
+Two primary purposes exist for a RS: first is to aid the service provider somehow and the other is to produce value to the user of the service. Thus, a RS must balance between the needs of service provider and the customer \cite{ricci11}. For example, a service provider might introduce a RS to get help in tasks such as increasing the number of items sold, selling more diverse items, increasing user satisfaction, increasing user loyalty or understanding better what the user wants \cite{ricci11}. In addition, a number of different functions exist that the user might expect a recommendation system to offer. Some of these are similar to the ones mentioned above, thus considered as core functions. For instance, a user may want a RS to recommend a sequence of items, aid in browsing or enable user to influence others. \cite{ricci11}
 
-GroupLens was a pioneer in RSs along with BookLens and MovieLens. In addition, they also released data sets which, aside of recommendation, was also pioneering in the field. Data sets were not that common for benchmarking or just trying out new technologies. \cite{aggarwal16}
+GroupLens, BookLens and MovieLens were pioneers in RSs. Furthermore, they also released data sets which, aside of recommendation, was also pioneering in the field. Data sets were not that common for benchmarking or just trying out new technologies. \cite{aggarwal16}
 
-Lately, a number of service providers, like Telegram and Microsoft, have started to introduce bot frameworks for their services. A bot is a web service that uses a conversational format to interact with users. Users can start conversations with the bot from any channel the bot is configured to work on. Conversations can be designed to be freeform, natural language interactions or more guided ones where the user is provided choices or actions. It is possible to utilize simple text strings or something more complex such as rich cards that contain text, images, and action buttons. \cite{bots16}
-
-%Already for a long time, companies have had some sort of SMS that have been accepting feedback from customer or ordering a new data package for you mobile subscription. IRC channel bots have been around even longer. Idea is not new but now there are popular platforms for the bots. As any other idea, also a recommendation engine could be implemented in a way that it can be used via a bot. For example ElasticSearch forms a RESTful API so a bot could simply place queries against the API.
-
-%\section{Building own recommendation engine}
-%
-%Simplest form of recommendation might be just issuing SQL queries to suitable tables. ElasticSearch could be the next step since it needs some additional steps before using it. Either pointing it to the existing database or populating the ElasticSearch NoSQL database with the data and then start to issue queries against it. Writing own recommendation engine from the scratch requires considerably more development, many options available such as Spark and Hadoop.
-%
-%\section{3rd party alternatives}
-%
-%When recommendation is not the core business for a company, it might be better to get the recommendation as a service from service providers such as AWS, Azure ML and IBM Watson. As a side note, even using these ready technologies needs considerably deep domain knowledge, knowledge about problem to be solved and everything related to the task. Another option is to purchase this recommendation service from a software company.
-%
 %A Recommendation engine system or part of it can also be acquired via a competition such as the Netflix prize competition held in 2007, 2008 and 2009. As a result, Netflix's algorithm was beaten by 10.05\%\ . Sequels were canceled due to privacy concerns. Two people were apparently able to reveal the identities of users by matching the rating data to those of Internet Movie Database (IMDB) thus finding out the identities of IMDB users. Netflix (Netflix Prize competition, winner used RBM) \cite{bell06} \cite{koren09}.
 
-% \section{Recommendation techniques}
+\section{Recommendation techniques}
 
-% Recommendation system must have some sort of understanding about the items to be able to recommend something. Several methods have been proposed and studied to address this problem \cite{gorakala15} \cite{ricci11} \cite{burke02}. Majority of these techniques are discussed in the following sections.
+Recommendation system must have some sort of understanding about the items to be able to recommend something. To achieve its goal, the system must be able to predict the usefulness or at least compare the utility of some item2s and then decide the items to recommend. \cite{ricci11}
 
-\section{Collaborative filtering}
+Collaborative filtering algorithms suffer from the new user and new item problems \cite{gorakala15}, which originates to the fact that it is based only on user's recommendations. If user has not given any reviews, the algorithm is not able to produce any recommendations either.
+
+Collaborative filtering algorithms typically suffer from issues such as cold start and sparsity. Cold start denotes that a relatively large amount of data is required in order to be able to provide accurate recommendations for a user. Sparsity means that the number of items typically exceeds the number of users. This makes the relations extremely sparse since most users have rated or purchased only a small subset of the total items. \cite{aberger14}
+
+Amazon.com, the biggest Internet retailer in the United States, has previously been using item-to-item collaborative filtering method. However, the current status of Amazon recommendation seems to be unknown to the public, which, in fact, is better for the business. In their implementation the algorithm builds a table containing similar items by finding ones that users tend to purchase together. The algorithm then finds items similar to each of the user's purchases and ratings, combines those items, and returns the most popular or correlated items. \cite{linden03}
+
+The following sections describe user-based collaborative filtering and item-based collaborative filtering.
+
+\subsection{Item-based collaborative filtering}
 
 Collaborative Filtering Recommendation Systems (CF, CFRS) are based on the collaboration of users. They aim at identifying patterns of user interests in order to make targeted recommendations \cite{aberger14}. First a user provides ratings for items. Next the method will find recommendations based on other users that have purchased similar items or based on items that are the most similar to the user's purchases. Collaborative filtering can be divided into two sub categories which are item based collaborative filtering and user based collaborative filtering. Collaborative filtering has been studied the most thus being considered as the most popular technique in recommendation systems \cite{gorakala15} \cite{ricci11} \cite{burke02}. It is, also, usually easy to implement.
 
@@ -293,6 +289,8 @@ The following snippet presents the idea in IBCF for every new user. Popular simi
 
 \end{lstlisting}
 
+\subsection{User-based collaborative filtering}
+
 User-based collaborative filtering (UBCF) starts by finding the most similar users, rate items purchased by similar users, pick top rated items. The similarity in taste of two users is calculated based on the similarity in the rating history of the users \cite{ricci11}.
 
 The steps for every new user in user-based collaborative filtering are as follows:
@@ -317,12 +315,6 @@ The steps for every new user in user-based collaborative filtering are as follow
 
   4. Pick the top-rated items.
 \end{lstlisting}
-
-Collaborative filtering algorithms suffer from the new user and new item problems \cite{gorakala15}, which originates to the fact that it is based only on user's recommendations. If user has not given any reviews, the algorithm is not able to produce any recommendations either.
-
-Collaborative filtering algorithms typically suffer from issues such as cold start and sparsity. Cold start denotes that a relatively large amount of data is required in order to be able to provide accurate recommendations for a user. Sparsity means that the number of items typically exceeds the number of users. This makes the relations extremely sparse since most users have rated or purchased only a small subset of the total items. \cite{aberger14}
-
-Amazon.com, the biggest Internet retailer in the United States, has previously been using item-to-item collaborative filtering method. However, the current status of Amazon recommendation seems to be unknown to the public, which, in fact, is better for the business. In their implementation the algorithm builds a table containing similar items by finding ones that users tend to purchase together. The algorithm then finds items similar to each of the user's purchases and ratings, combines those items, and returns the most popular or correlated items. \cite{linden03}
 
 %\subsection{Content based recommendation systems}
 %
@@ -850,6 +842,10 @@ In the end the most difficult thing was to find the right approach for this task
 \section{Future work}
 
 Actual parallelization?
+
+Lately, a number of service providers, like Telegram and Microsoft, have started to introduce bot frameworks for their services. A bot is a web service that uses a conversational format to interact with users. Users can start conversations with the bot from any channel the bot is configured to work on. Conversations can be designed to be freeform, natural language interactions or more guided ones where the user is provided choices or actions. It is possible to utilize simple text strings or something more complex such as rich cards that contain text, images, and action buttons. \cite{bots16}
+
+Already for a long time, companies have had some sort of SMS that have been accepting feedback from customer or ordering a new data package for you mobile subscription. IRC channel bots have been around even longer. Idea is not new but now there are popular platforms for the bots. As any other idea, also a recommendation engine could be implemented in a way that it can be used via a bot. For example ElasticSearch forms a RESTful API so a bot could simply place queries against the API.
 
 %
 % The bibliography, i.e the list of references (3 options available)
