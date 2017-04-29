@@ -25,7 +25,7 @@
 %
 \author{Jonne Petteri Pihlanen}
 \title{Building a Recommendation Engine with Apache Spark}      % primary title (for front page)
-\titleB{Suosittelijajärjestelmän rakentaminen Apache Sparkilla} % translated title for abstract
+\titleB{Suosittelijajï¿½rjestelmï¿½n rakentaminen Apache Sparkilla} % translated title for abstract
 \thesistype{Master of Science thesis} % or Bachelor of Science, Laboratory Report... 
 \examiner{????} % without title Prof., Dr., MSc or such
 
@@ -51,7 +51,7 @@
 
 % You can also add your own commands
 \newcommand\todo[1]{{\color{red}!!!TODO: #1}} % Remark text in braces appears in red
-\newcommand{\angs}{\textsl{\AA}}              % , e.g. slanted symbol for Ångstöm
+\newcommand{\angs}{\textsl{\AA}}              % , e.g. slanted symbol for ï¿½ngstï¿½m
 
 % Preparatory content ends here
 
@@ -123,20 +123,20 @@ This paper studies the usage of Apache Spark when building a recommendation engi
 %%\end{otherlanguage} % End on 2nd language part -- (Disabled 2014-11-03)
 
 
-% Foreign students do not need Fininsh abstract (tiivistelmä). Move
+% Foreign students do not need Fininsh abstract (tiivistelmï¿½). Move
 % this before English abstract if thesis is in Finnish. 
 
 % !!! Problems with other language. Disable it (ES, 2014-11-03)
 %%\begin{otherlanguage}{finnish} %  Following text in in 2nd language
-\chapter*{Tiivistelmä}         % Asterisk * turns numbering off
+\chapter*{Tiivistelmï¿½}         % Asterisk * turns numbering off
 
 \begin{spacing}{1.0}
          {\bf \textsf{\MakeUppercase{\@author}}}: \@titleB\\  % or use \@title when thesis is in Finnish
          \textsf{Tampereen teknillinen yliopisto}\\
-         \textsf{Diplomityö, xx sivua}\\ %
+         \textsf{Diplomityï¿½, xx sivua}\\ %
          \textsf{syyskuu 2016}\\
-         \textsf{Signaalinkäsittelyn koulutusohjelma}\\
-         \textsf{Pääaine: Data Engineering}\\
+         \textsf{Signaalinkï¿½sittelyn koulutusohjelma}\\
+         \textsf{Pï¿½ï¿½aine: Data Engineering}\\
          \textsf{Tarkastajat: \@examiner}\\
          \textsf{Avainsanat: }\\
 \end{spacing}
@@ -172,7 +172,7 @@ Jonne Pihlanen
 %
 
 \renewcommand\contentsname{Table of Contents} % Set English name (otherwise bilingual babel might break this), 2014-09-01
-%\renewcommand\contentsname{Sisällys}         % Set Finnish name
+%\renewcommand\contentsname{Sisï¿½llys}         % Set Finnish name
 \setcounter{tocdepth}{3}                      % How many header level are included
 \tableofcontents                              % Create TOC
 
@@ -219,24 +219,46 @@ Jonne Pihlanen
 % can add labels e.g. to chapters, sections, figures, tables, and
 % equations.
 
-Recommender systems have been successfully utilized to aid customers in decision making. In fact, they are constantly present in our everyday life. Whether a customer is shopping online, watching a movie from Netflix, browsing the Facebook or simply reading the news. All of these tasks involve a presence of a recommendation engine. Basically all parts of our daily life include recommendations of some sorts. However, the most basic type of recommendation is the one from human to human and happens completely without computers.
+Recommender systems have been successfully utilized to aid customers in decision making.
+In fact, they are constantly present in our everyday life.
+Whether a customer is shopping online, watching a movie from Netflix, browsing the Facebook or simply reading the news.
+All of these tasks involve a presence of a recommendation engine.
+Basically all parts of our daily life include recommendations of some sorts.
+However, the most basic type of recommendation is the one from human to human and happens completely without computers.
 
 Recommendation can be divided into two major categories: item based and user based.
 
 %Present state of recommendation is to incorporate context awareness into recommendation. Context and Context Aware Recommendation Systems (CARS) are described in Chapter 2.
 
-This thesis is structured as follows. Chapter 2 describes recommendation systems. In Chapter 3, the data for this project and related tasks are discussed. Chapter 4 discusses Apache Spark, an open source framework for building distributed programs. Chapter 5 discusses the results. Finally, in Chapter 6 the evaluation is presented along with conclusions.
+This thesis is structured as follows.
+Chapter 2 describes recommendation systems.
+In Chapter 3, the data for this project and related tasks are discussed.
+Chapter 4 discusses Apache Spark, an open source framework for building distributed programs.
+Chapter 5 discusses the results. Finally, in Chapter 6 the evaluation is presented along with conclusions.
 
 %Bigger companies have also released directly and indirectly their open source recommendation solutions. Twitter contributed to Spark project directly by releasing the DIMSUM algorithm, short for Dimension Independent Matrix Square using MapReduce, which limits the list of potential combinations to a reasonable number, enabling other recommendation algorithms to run in a reasonable amount of time \cite{harris14}. Netflix contributed indirectly by hosting the Netflix Prize competitions. Around these competitions, Alternating Least Squares (ALS) algorithm became popular and the ALS implementation in Spark MLlib is inspired by some of the solutions in the competition \cite{ryza15}. DIMSUM and ALS are described in chapter 5.
 
 \chapter{Recommendation Systems}
 \label{ch:rs}
 
-Recommendation denotes a task in which items are recommended to users. The most simple version of recommendation is from peer to peer, completely without computers. However, humans can only recommend effectively those items they have personally experienced. This is where recommendation systems (RSs) become useful as they can potentially offer recommendations from thousands of different items. Recommender systems are a set of techniques and software tools that provide suggestions to users about potentially useful items. Item denotes the general subject that the system recommends to users. Recommendation systems are usually intended to recommend only specific kind of items such as books or movies. \cite{ricci11}
+Recommendation denotes a task in which items are recommended to users.
+The most simple version of recommendation is from peer to peer, completely without computers.
+However, humans can only recommend effectively those items they have personally experienced.
+This is where recommendation systems (RSs) become useful as they can potentially offer recommendations from thousands of different items.
+Recommender systems are a set of techniques and software tools that provide suggestions to users about potentially useful items.
+Item denotes the general subject that the system recommends to users.
+Recommendation systems are usually intended to recommend only specific kind of items such as books or movies. \cite{ricci11}
 
-Recommendation systems are often targeted to aid customers in decision making when the amount of all items is overwhelming. Usually the recommendations are personalized, which implies that the recommendations are different for different users or groups of users. Recommendations can also be non-personalized and usually these are much simpler to generate. A simple ranked top-ten list of items is an example of non-personalized recommendation. Ranking is done by predicting the most suitable items based on the user's preferences and constraints. To complete this task, RS needs to collect these preferences from users. They might be explicitly expressed ratings for products or interpreted from user actions such as clicks and page views. For example, RS could consider navigation to a product page as an implicit evidence of preference for the items in that page. \cite{ricci11}
+Recommendation systems are often targeted to aid customers in decision making when the amount of all items is overwhelming.
+Usually the recommendations are personalized, which implies that the recommendations are different for different users or groups of users.
+Recommendations can also be non-personalized and usually these are much simpler to generate.
+A simple ranked top-ten list of items is an example of non-personalized recommendation.
+Ranking is done by predicting the most suitable items based on the user's preferences and constraints.
+To complete this task, RS needs to collect these preferences from users.
+They might be explicitly expressed ratings for products or interpreted from user actions such as clicks and page viewsFor example, RS could consider navigation to a product page as an implicit evidence of preference for the items in that page\cite{ricci11}
 
-Development of RSs initiated from a rather simple observation: people usually tend to trust recommendations provided by others in making routine decisions. For example, it is common to rely on peer feedback when selecting a book to read or rely on the reviews the movie critics have written. First RSs tried to mimic this behavior by applying algorithms to leverage recommendations from the community to an active user looking for recommendations. Recommendations were for users with similar tastes. This approach is essentially collaborative-filtering and the idea behind it is that if users liked similar items in the past, they are likely to consider recommendations from these same users relevant. \cite{ricci11}
+Development of RSs initiated from a rather simple observation: people usually tend to trust recommendations provided by others in making routine decisions.
+For example, it is common to rely on peer feedback when selecting a book to read or rely on the reviews the movie critics have writtenFirst RSs tried to mimic this behavior by applying algorithms to leverage recommendations from the community to an active user looking for recommendations. Recommendations were for users with similar tastes. This approach is essentially collaborative-filtering and the idea behind it is that if users liked similar items in the past, they are likely to consider recommendations from these same users relevant. \cite{ricci11}
 
 Along with the development of e-commerce sites, a need for recommendations emerged to limit the amount of alternatives. Users were finding it more and more difficult to find the correct choices from the vast range of items the sites were offering. As the variety of information in the Web has explosively grown constantly overwhelmed users, it has led them to make poor decisions. The availability of choices had begun to decrease users well-being, instead of producing benefit. While choice is good, more choice is not always better. \cite{ricci11}
 
@@ -454,7 +476,7 @@ The steps for every new user in user-based collaborative filtering are as follow
 %The simplest method for calculating similarity between two items is the euclidean distance, which, in mathematics, is the distance between two points in Euclidean space. Euclidean distance is defined by the following equation:
 %
 %\begin{equation}
-%distance(x,y) = \sqrt{\sum_{i=1}^{n}{(x_i - y_i)}²}
+%distance(x,y) = \sqrt{\sum_{i=1}^{n}{(x_i - y_i)}ï¿½}
 %\end{equation}
 %
 %where
@@ -466,11 +488,11 @@ The steps for every new user in user-based collaborative filtering are as follow
 %Euclidean distance between feature vectors a' and b' is  
 %
 %\begin{equation*}
-%distance(x,y) = \sqrt{\sum_{i=1}^{6}{(x_i - y_i)}²}
+%distance(x,y) = \sqrt{\sum_{i=1}^{6}{(x_i - y_i)}ï¿½}
 %\end{equation*}
 %
 %\begin{equation*}
-%= \sqrt{(0.5-0)² + (0.25-1)² + (1-0.29)² + (1-0.33)² + (0.67-0.5)² + (1-0)²}
+%= \sqrt{(0.5-0)ï¿½ + (0.25-1)ï¿½ + (1-0.29)ï¿½ + (1-0.33)ï¿½ + (0.67-0.5)ï¿½ + (1-0)ï¿½}
 %\end{equation*}
 %
 %\begin{equation*}
@@ -566,7 +588,7 @@ The steps for every new user in user-based collaborative filtering are as follow
 %\end{equation*}
 %
 %\begin{equation*}
-%= \frac{(0.5 * 0) + (0.25 * 1) + (1 * 0.29) + (1 * 0.33) + (0.67 * 0.5) + (1 * 0)}{\sqrt{0.5² + 0.25² + 1² + 1² + 0.67² + 1²}\sqrt{0² + 1² + 0.29² + 0.33² + 0.5² + 0²}}
+%= \frac{(0.5 * 0) + (0.25 * 1) + (1 * 0.29) + (1 * 0.33) + (0.67 * 0.5) + (1 * 0)}{\sqrt{0.5ï¿½ + 0.25ï¿½ + 1ï¿½ + 1ï¿½ + 0.67ï¿½ + 1ï¿½}\sqrt{0ï¿½ + 1ï¿½ + 0.29ï¿½ + 0.33ï¿½ + 0.5ï¿½ + 0ï¿½}}
 %\end{equation*}
 %
 %\begin{equation*}
@@ -612,13 +634,13 @@ The steps for every new user in user-based collaborative filtering are as follow
 %Standard deviation is given by
 %
 %\begin{equation}
-%\sigma_X = \sqrt{\sum_{i = 1}^{n}(x_i - \overline{x})²}
+%\sigma_X = \sqrt{\sum_{i = 1}^{n}(x_i - \overline{x})ï¿½}
 %\end{equation}
 %
 %where $\overline{x}$ (and $\overline{y}$) is the mean and is given by $\overline{x} = \frac{1}{n}\sum_{i = 1}^{n}x_i$
 %
 %\begin{equation}
-%\rho_{x,y} = \frac{\sum_{i = 1}^{n}(x_i-\overline{x})(y_i-\overline{y})}{\sqrt{\sum_{i = 1}^{n}(x_i - \overline{x})²}\sqrt{\sum_{i = 1}^{n}(y_i - \overline{y})²}}
+%\rho_{x,y} = \frac{\sum_{i = 1}^{n}(x_i-\overline{x})(y_i-\overline{y})}{\sqrt{\sum_{i = 1}^{n}(x_i - \overline{x})ï¿½}\sqrt{\sum_{i = 1}^{n}(y_i - \overline{y})ï¿½}}
 %\end{equation}
 %
 %\begin{equation*}
@@ -854,8 +876,8 @@ Already for a long time, companies have had some sort of SMS that have been acce
 \newpage
 
 \renewcommand{\bibname}{Bibliography}     % Otherwise bilingual babel uses Finnish ``Kirjallisutta''. Strange...
-%\renewcommand{\bibname}{Lähteet}         % Set Finnish header, remove this if using English
-%\addcontentsline{toc}{chapter}{Lähteet}  % Include this in TOC
+%\renewcommand{\bibname}{Lï¿½hteet}         % Set Finnish header, remove this if using English
+%\addcontentsline{toc}{chapter}{Lï¿½hteet}  % Include this in TOC
 \addcontentsline{toc}{chapter}{\bibname}  % Include this in TOC
 
 \bibliographystyle{IEEEtranS}
