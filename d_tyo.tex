@@ -349,15 +349,29 @@ It provides high-level APIs in Java, Scala, Python and R.
 Spark can be introduced more easily by describing its predecessor, MapReduce, and the advantages it offers. MapReduce offered a simple model for writing programs that could execute in parallel across hundreds of machines.
 MapReduce achieves nearly linear scalability as the data size increases. The execution time is maintained by adding more computers to handle the task.
 
-Spark preserves MapReduce's linear scalability and fault tolerance while extending it in three important ways. In MapReduce the intermediate results between the map and reduce tasks must be written into memory where as Spark is able to pass the results directly to the next step in the pipeline. Spark also treats the developers better by offering a rich set of transformations which enables users to represent complex pipelines in a few lines of code. (EXAMPLE?) Spark also introduces in-memory processing by introducing Resilient Distributed Dataset (RDD) abstraction which offers a way for developers to materialize any step in a processing pipeline and store it into memory. This means that future steps do not need to calculate the previous results again. Previously this kind of feature has not been available within distributed processing engines. \cite{ryza15}
+Spark preserves MapReduce's linear scalability and fault tolerance while extending it in three important ways.
+In MapReduce the intermediate results between the map and reduce tasks must be written into memory where as Spark is able to pass the results directly to the next step in the pipeline.
+Spark also treats the developers better by offering a rich set of transformations which enables users to represent complex pipelines in a few lines of code. (EXAMPLE?)
+Spark also introduces in-memory processing by introducing Resilient Distributed Dataset (RDD) abstraction which offers a way for developers to materialize any step in a processing pipeline and store it into memory. This means that future steps do not need to calculate the previous results again.
+Previously this kind of feature has not been available within distributed processing engines. \cite{ryza15}
 
-Spark programs can be written using Java, Scala, Python or R. However, using Spark with Scala instead of Java, Python or R has a couple of advantages to it. Performance overhead is reduced, since tasks such as transferring data across different layers or performing transformations for data may result in weaker performance. Spark is written with Scala, which denotes that user has always access to latest and greatest features of the framework. Spark philosophy is easier to understand when Spark is used with the language it was built with. There is still one, maybe the biggest benefit of using Scala with Spark, and it is the developing experience that comes with the fact that user is using the same language for everything. Importing data from database, data manipulation, shipping the code into clusters. \cite{ryza15}
+Spark programs can be written using Java, Scala, Python or R.
+However, using Spark with Scala instead of Java, Python or R has a couple of advantages to it.
+Performance overhead is reduced, since tasks such as transferring data across different layers or performing transformations for data may result in weaker performance.
+Spark is written with Scala, which denotes that user has always access to latest and greatest features of the framework.
+Spark philosophy is easier to understand when Spark is used with the language it was built with.
+There is still one, maybe the biggest benefit of using Scala with Spark, and it is the developing experience that comes with the fact that user is using the same language for everything.
+Importing data from database, data manipulation, shipping the code into clusters. \cite{ryza15}
 
-Spark is shipped with a read eval print loop (REPL). Usually when a application developed in REPL has matured enough, it is a good idea to move it into a compiled library (JAR). This way it is possible to prevent code and results from disappearing.
+Spark is shipped with a read eval print loop (REPL), which enables developers to test out things quickly in the console, without having to make the application self contained from the begin.
+Usually when a application developed in REPL has matured enough, it is a good idea to move it into a compiled library (JAR).
+This way it is possible to prevent code and results from disappearing.
 
 \section{Resilient Distributed Dataset (RDD)}
 
-RDD is an abstraction for a collection of objects in spark that can be distributed across multiple machines in a cluster. When a new RDD is created, nothing is actually done, it means that spark knows where the data is when the time comes to do something with it.
+RDD is an abstraction for a collection of objects in spark that can be distributed across multiple machines in a cluster.
+An important context to understand about RDDs is that they are lazy by nature.
+When a new RDD is created, nothing is actually done, it means that spark knows where the data is when the time comes to do something with it.
 
 RDD can be created in two ways: parallelizing an existing collection in the driver program or referencing an external dataset in an external storage system, such as a shared filesystem, HDFS, HBase or any data source offering a Hadoop InputFormat.?? \cite{spark-programming-guide}
 
@@ -367,10 +381,16 @@ Dataset, DS, is the replacement for RDD in Spark.
 
 \section{Matrix Factorization}
 
-Matrix factorization denotes a task in which a matrix is decomposed into a product of matrices. There are many different matrix decompositions. The following chapter will describe matrix factorization in general and the Alternating Least Squares algorithm which is the matrix factorization algorithm that is implemented in Spark. It is based on same idea as Netflix prize winner, matrix factorization models.
+Matrix factorization denotes a task in which a matrix is decomposed into a product of matrices.
+There are many different matrix decompositions.
+The following chapter will describe matrix factorization in general and the Alternating Least Squares algorithm which is the matrix factorization algorithm that is implemented in Spark.
+It is based on same idea as Netflix prize winner, matrix factorization models.
 
-Matrix factorization belongs to a vast class of algorithms called latent-factor
-models. Latent-factor models try to explain observed interactions between a large number of users and products through a relatively small number of unobserved, underlying reasons. For example, they can try to explain why people would buy a particular album out of endless possibilities by describing users and albums in terms of tastes which are not directly available as data. \cite{ryza15} A latent factor is not available for direct observation. For example health of a human being is a latent factor. Health can not be observed as a variable such as blood pressure.
+Matrix factorization belongs to a vast class of algorithms called latent-factor models.
+Latent-factor models try to explain observed interactions between a large number of users and products through a relatively small number of unobserved, underlying reasons.
+For example, they can try to explain why people would buy a particular album out of endless possibilities by describing users and albums in terms of tastes which are not directly available as data. \cite{ryza15}
+A latent factor is not available for direct observation. For example health of a human being is a latent factor.
+Health can not be observed as a variable such as blood pressure.
 
 \begin{figure}[h]
 	\caption{Matrix factorization \cite{ryza15}}
@@ -378,21 +398,34 @@ models. Latent-factor models try to explain observed interactions between a larg
 	\includegraphics[scale=0.8]{matrix_factorization}
 \end{figure}
 
-Matrix factorization algorithms treat the user and product data as if it was a large matrix A. Each entry in row i and column j represents a rating the user has given to a specific product. \cite{ryza15}
+Matrix factorization algorithms treat the user and product data as if it was a large matrix A.
+Each entry in row $i$ and column $j$ represents a rating the user has given to a specific product. \cite{ryza15}
 
-Usually $A$ is sparse, which denotes that most of the entries of $A$ are 0. This is due to the fact that usually only a few of all the possible user-product combinations exist.
+Usually $A$ is sparse, which denotes that most of the entries of $A$ are 0.
+This is due to the fact that usually only a few of all the possible user-product combinations exist.
 
-Matrix factorization models factor $A$ as the matrix product of two smaller matrices, $X$ and $Y$, which are quite tiny. Since $A$ has many rows and columns, both of them have many rows, but both have just a few columns $(k)$. The $k$ columns match to the latent factors that are being used to explain the interactions of the data. The factorization can only be approximate because $k$ is small. \cite{ryza15}
+Matrix factorization models factor $A$ as the matrix product of two smaller matrices, $X$ and $Y$, which are quite tiny.
+Since $A$ has many rows and columns, both of them have many rows, but both have just a few columns $(k)$. The $k$ columns match to the latent factors that are being used to explain the interactions of the data.
+The factorization can only be approximate because $k$ is small. \cite{ryza15}
 
-The standard approach to matrix factorization based collaborative filtering treats the entries in the user-product matrix as explicit preferences given by the user to the product, for example users giving ratings to movies. Implicit data denotes for example page views or a value representing if a user has listened to a artist. Explicit data means actual ratings that a user has given to a product. Spark ALS can handle both implicit and explicit data. \cite{spark14} \cite{ryza15}
+The standard approach to matrix factorization based collaborative filtering treats the entries in the user-product matrix as explicit preferences given by the user to the product, for example users giving ratings to movies.
+Implicit data denotes for example page views or a value representing if a user has listened to a artist. Explicit data means actual ratings that a user has given to a product.
+Spark ALS can handle both implicit and explicit data. \cite{spark14} \cite{ryza15}
 
-Usually many real-world use cases have access only to implicit feedback data such as views, clicks, purchases, likes or shares. However, instead of trying to model the matrix of ratings directly, the approach in Spark MLlib treats the data as numbers representing the strength of the observations such as the number of clicks, or the cumulative duration someone spent viewing a movie. Instead of explicit ratings, these numbers are related to the level of confidence in observed user preferences. Based on this data, the model tries to find latent factors that can be used to predict the expected preference of a user for an item. \cite{spark14}
+Usually many real-world use cases have access only to implicit feedback data such as views, clicks, purchases, likes or shares.
+However, instead of trying to model the matrix of ratings directly, the approach in Spark MLlib treats the data as numbers representing the strength of the observations such as the number of clicks, or the cumulative duration someone spent viewing a movie.
+Instead of explicit ratings, these numbers are related to the level of confidence in observed user preferences.
+Based on this data, the model tries to find latent factors that can be used to predict the expected preference of a user for an item. \cite{spark14}
 
-Sometimes these algorithms are referred to as matrix completion algorithms. This is because the original matrix $A$ may be sparse while the product $XY^T$ is dense. Hence, the product is only an approximation of $A$. \cite{ryza15} In this thesis, the original user-item matrix $A$ is actually very dense since we have a value in every entry of the matrix.
-
+Sometimes these algorithms are referred to as matrix completion algorithms.
+This is because the original matrix $A$ may be sparse while the product $XY^T$ is dense.
+Hence, the product is only an approximation of $A$. \cite{ryza15}
 \subsection{Alternatig Least Squares (ALS)}
 
-Collaborative filtering is commonly used for recommender systems. These techniques aim to fill in the missing entries of a user-item association matrix. Spark MLlib currently supports model-based collaborative filtering, in which users and products are described by a small set of latent factors that can be used to predict missing entries. Spark MLlib uses the Alternating Least Squares (ALS) algorithm to learn these latent factors. \cite{spark14}
+Collaborative filtering is commonly used for recommender systems.
+These techniques aim to fill in the missing entries of a user-item association matrix.
+Spark MLlib currently supports model-based collaborative filtering, in which users and products are described by a small set of latent factors that can be used to predict missing entries.
+Spark MLlib uses the Alternating Least Squares (ALS) algorithm to learn these latent factors. \cite{spark14}
 
 Spark ALS attempts to estimate the ratings matrix A as the product of two lower-rank matrices, $X$ and $Y$. \cite{als14}
 
@@ -400,17 +433,32 @@ Spark ALS attempts to estimate the ratings matrix A as the product of two lower-
 A = XY^T
 \end{equation}
 
-Typically these approximations are refered to as factor matrices. The general approach is iterative. During each iteration, one of the factor matrices is held constant, while the other is solved for using least squares. The newly-solved factor matrix is then held constant while solving for the other factor matrix. \cite{als14} Spark ALS enables massive parallelization since it can be done separately, it can be done in parallel which is an excellent feature for a large-scale computation algorithm. \cite{ryza15}
+Typically these approximations are refered to as factor matrices.
+The general approach is iterative.
+During each iteration, one of the factor matrices is held constant, while the other is solved for using least squares. The newly-solved factor matrix is then held constant while solving for the other factor matrix. \cite{als14}
+Spark ALS enables massive parallelization since it can be done separately, it can be done in parallel which is an excellent feature for a large-scale computation algorithm. \cite{ryza15}
 
-Spark ALS is a blocked implementation of the ALS factorization algorithm. Idea is to group the two sets of factors, referred to as $users$ and $products$, into blocks. Grouping is followed by reducing communication by only sending one copy of each user vector to each product block on each iteration. Only those user feature vectors are sent that are needed by the the product blocks. Reduced communication is achieved by precomputing some information about the ratings matrix to determine the out-links of each user and in-links of each product. Out-link denotes those blocks of products that the user will contribute to. In-link refers to the feature vectors that each product receives from each user block they depend on. This allows to send only an array of feature vectors between each user block and product block. Consequently the product block will find the users' ratings and update the products based on these messages. \cite{als14}
+Spark ALS is a blocked implementation of the ALS factorization algorithm.
+Idea is to group the two sets of factors, referred to as $users$ and $products$, into blocks.
+Grouping is followed by reducing communication by only sending one copy of each user vector to each product block on each iteration.
+Only those user feature vectors are sent that are needed by the the product blocks.
+Reduced communication is achieved by precomputing some information about the ratings matrix to determine the out-links of each user and in-links of each product.
+Out-link denotes those blocks of products that the user will contribute to.
+In-link refers to the feature vectors that each product receives from each user block they depend on.
+This allows to send only an array of feature vectors between each user block and product block.
+Consequently the product block will find the users' ratings and update the products based on these messages. \cite{als14}
 
-Essentially, instead of finding the low-rank approximations to the rating matrix $A$, it finds the approximations for a preference matrix $P$ where the elements of $P$ are 1 when r > 0 and 0 when r <= 0. The ratings then act as confidence values related to strength of indicated user preferences rather than explicit ratings given to items. \cite{als14}
+Essentially, instead of finding the low-rank approximations to the rating matrix $A$, it finds the approximations for a preference matrix $P$ where the elements of $P$ are $1$ when $r > 0$ and $0$ when $r <= 0$.
+The ratings then act as confidence values related to strength of indicated user preferences rather than explicit ratings given to items. \cite{als14}
 
 \begin{equation}
 A_iY(Y^T Y)^{-1} = X_i
 \end{equation}
 
-Alternating Least Squares operates by rotating between fixing one of the unknowns $u_i$ or $v_j$. While the other is fixed the other can be computed by solving the least-squares problem. This approach is useful because it turns the previous non-convex problem into a quadratic that can be solved optimally \cite{aberger14}. A general description of the algorithm for ALS for collaborative filtering taken from \cite{aberger14} is as follows:
+Alternating Least Squares operates by rotating between fixing one of the unknowns $u_i$ or $v_j$.
+While the other is fixed the other can be computed by solving the least-squares problem.
+This approach is useful because it turns the previous non-convex problem into a quadratic that can be solved optimally \cite{aberger14}.
+A general description of the algorithm for ALS for collaborative filtering taken from \cite{aberger14} is as follows:
 
 \begin{lstlisting}[caption=Alternating Least Squares algorithm \cite{aberger14}]
 
@@ -431,7 +479,6 @@ Minimizing the Root Mean Square Error RMSE function denotes a task in which line
 - MovieLens ml-latest-small dataset.
 
 - What is MovieLens?
-
 
 \chapter{Result}
 
