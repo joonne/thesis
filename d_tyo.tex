@@ -1,8 +1,5 @@
 %!TeX encoding = ISO-8859-1
-\documentclass[12pt,a4paper,english
-%,twoside,openright
-]{tutthesis}
-%\documentclass[12pt,a4paper,finnish]{tutthesis}
+\documentclass[12pt,a4paper,english]{tutthesis}
 
 \usepackage{mathtools}
 \usepackage{listings}
@@ -249,13 +246,15 @@ Furthermore, they also released data sets which, aside of recommendation, was al
 Recommendation system must have some sort of understanding about the items to be able to recommend something.
 To achieve its goal, the system must be able to predict the usefulness or at least compare the utility of some items and then decide the ones to recommend.
 The prediction step of the recommender can be illustrated by, for example, a simple non-personalized, recommendation algorithm that recommends only the most popular movies.
-The reasoning behind this approach is that when lacking more precise information about the user's preferences, a song liked by others is probably also liked by a general user, at least more than a randomly selected movie.
+The reasoning behind this approach is that when lacking more precise information about the user's preferences, a movie liked by others is probably also liked by a general user, at least more than a randomly selected movie.
 Thus, the utility of these popular songs can be seen reasonably high for a generic user. \cite{ricci11}
 
 The utility of the user $u$ for the item $i$ can be modeled as a real valued function $R(u,i)$ as is normally done in collaborative filtering by considering the ratings of items given by the users.
 Thus, the fundamental task of the collaborative filtering recommender is to predict the value of $R$ over pairs of users and items to compute an estimation for the true function $R$.
 Consequently, by computing this prediction for the user $u$ on a set of items, the system will recommend items with the largest predicted degree of utility.
 The amount of predicted items is usually much smaller than the whole amount of items, thus the RS is filtering the items that are recommended to users. \cite{ricci11}
+
+RSs vary in terms of the addressed domain, the knowledge used and especially how the recommendations are made, denoting the recommendation algorithm. This thesis will concentrate only on one class of recommendation techniques, collaborative filtering, since that is the one used in Apache Spark's MLlib.
 
 Collaborative Filtering Recommendation Systems are based on the collaboration of users.
 They aim at identifying patterns of user interests in order to make targeted recommendations \cite{aberger14}.
@@ -483,7 +482,6 @@ Minimizing the Root Mean Square Error RMSE function denotes a task in which line
 \chapter{Result}
 
 \chapter{Evaluation}
-\label{ch:concl}
 
 \section{Conclusion}
 
@@ -501,20 +499,14 @@ Lately, a number of service providers, like Telegram and Microsoft, have started
 
 Already for a long time, companies have had some sort of SMS that have been accepting feedback from customer or ordering a new data package for you mobile subscription. IRC channel bots have been around even longer. Idea is not new but now there are popular platforms for the bots. As any other idea, also a recommendation engine could be implemented in a way that it can be used via a bot. For example ElasticSearch forms a RESTful API so a bot could simply place queries against the API.
 
-%
 % The bibliography, i.e the list of references (3 options available)
-%
 \newpage
 
-\renewcommand{\bibname}{Bibliography}     % Otherwise bilingual babel uses Finnish ``Kirjallisutta''. Strange...
-%\renewcommand{\bibname}{L�hteet}         % Set Finnish header, remove this if using English
-%\addcontentsline{toc}{chapter}{L�hteet}  % Include this in TOC
-\addcontentsline{toc}{chapter}{\bibname}  % Include this in TOC
-
+\renewcommand{\bibname}{Bibliography}
+\addcontentsline{toc}{chapter}{\bibname}
 \bibliographystyle{IEEEtranS}
-
-\bibliography{thesis_refs}    % Insert {author,title,year...} info of your reference
-\markboth{\bibname}{\bibname} % Set page header
+\bibliography{thesis_refs}
+\markboth{\bibname}{\bibname}
 
 \end{document}
 
