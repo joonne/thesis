@@ -383,11 +383,10 @@ Each Spark job creates a DAG of task stages to be performed on the cluster.
 Compared to MapReduce, which creates a DAG with two predefined stages - Map and Reduce, DAGs created by Spark can contain any number of stages.
 This allows some jobs to complete faster than they would in MapReduce, with simpler jobs completing after just one stage, and more complex tasks completing a single run of many stages, rather than having to be split into multiple jobs. \cite{mapRSpark}
 
-\begin{figure}
+\begin{figure}[h]
+	\caption{Directed Acyclic Graph \cite{dag-image}}
 	\centering
-	\caption{Directed Acyclic Graph}
-	\def\svgwidth{\columnwidth}
-	\input{images/Topological_Ordering.pdf_tex}
+	\includegraphics[scale=1.0]{directed_acyclic_graph}
 \end{figure}
 
 \section{Dataset API}
@@ -471,7 +470,7 @@ DataFrames can be constructed from a range of sources such as structured data fi
 \begin{figure}[h]
 	\caption{DataFrame}
 	\centering
-	\includegraphics[scale=0.5]{dataframe}
+	\includegraphics[scale=1.0]{dataframe}
 \end{figure}
 
 \section{Matrix Factorization}
