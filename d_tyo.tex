@@ -1,5 +1,5 @@
 %!TeX encoding = ISO-8859-1
-\documentclass[12pt,a4paper,english]{tutthesis}
+\documentclass[12pt, a4paper, english]{tutthesis}
 
 \usepackage{mathtools}
 \usepackage{listings}
@@ -7,6 +7,7 @@
 \usepackage{graphicx}
 \graphicspath{ {images/} }
 \usepackage{lmodern}
+\usepackage{enumitem}
 
 % Ensure the correct Pdf size (not needed in all environments)
 \special{papersize=210mm,297mm}
@@ -336,16 +337,15 @@ The steps for every new user in user-based collaborative filtering are as follow
 
 \chapter{Apache Spark}
 
-- Driver
-
-At a high level, every Spark application consists of a driver program that runs the user's main function and executes various parallel operations on a cluster.
-
-- Executor
-
 Apache Spark is an open source framework that combines an engine for distributing programs across clusters of machines with an elegant model for writing programs. \cite{ryza15}
 Spark provides high-level APIs in Java, Scala, Python and R.
 
-Spark can be introduced more easily by describing its predecessor, MapReduce, and the advantages it offers. MapReduce offered a simple model for writing programs that could execute in parallel across hundreds of machines.
+At a high level, every Spark application consists of a driver and one or more executors.
+Driver is a program that runs the user's main function and executes various parallel operations on a cluster.
+An executor is one machine in a cluster.
+
+Spark can be introduced by describing its predecessor, MapReduce, and the advantages it offers.
+MapReduce offered a simple model for writing programs that could execute in parallel across hundreds of machines.
 MapReduce achieves nearly linear scalability as the data size increases. The execution time is maintained by adding more computers to handle the task.
 
 Spark preserves MapReduce's linear scalability and fault tolerance while extending it in three important ways.
@@ -368,13 +368,27 @@ This way it is possible to prevent code and results from disappearing.
 
 \section{Resilient Distributed Dataset (RDD)}
 
-A Resilient Distributed Dataset (RDD), is the basic abstraction in Spark.
-Essentially it is an immutable, partitioned collection of elements in Spark that can be distributed across multiple machines in a cluster. \cite{spark-rdd}
+A Resilient Distributed Dataset (RDD), is the main abstraction in Spark.
+Essentially it is an immutable, partitioned collection of elements that can be distributed across multiple machines in a cluster. \cite{spark-rdd}
 
 An important context to understand about RDDs is that they are lazy by nature.
 When a new RDD is created, nothing is actually done, it means that spark knows where the data is when the time comes to do something with it.
 
 RDD can be created in two ways: parallelizing an existing Scala collection in the driver program or referencing an external dataset in an external storage system, such as HDFS, HBase or any file system supported by Hadoop \cite{spark-programming-guide}.
+
+RDDs can be persisted into memory, which allows programmer to reuse them efficiently across parallel operations.
+RDDs are able to recover from node failures automatically, using Directed Acyclic Graph (DAG) engine.
+DAG supports cyclic data flow.
+Each Spark job creates a DAG of task stages to be performed on the cluster.
+Compared to MapReduce, which creates a DAG with two predefined stages - Map and Reduce, DAGs created by Spark can contain any number of stages.
+This allows some jobs to complete faster than they would in MapReduce, with simpler jobs completing after just one stage, and more complex tasks completing a single run of many stages, rather than having to be split into multiple jobs. \cite{mapRSpark}
+
+\begin{figure}
+	\centering
+	\caption{Directed Acyclic Graph}
+	\def\svgwidth{\columnwidth}
+	\input{images/Topological_Ordering.pdf_tex}
+\end{figure}
 
 \section{Dataset API}
 
@@ -396,7 +410,7 @@ This binary structure often has much lower memory footprint as well as are optim
 To understand the internal binary representation for data, use the schema function.
 
 Two ways typically exist to create a Dataset.
-The most common way is to make use of SparkSession's read function and point Spark to some files on storage systems:
+The most common way is to make use of the read function provided by SparkSession and point Spark to some files on storage systems:
 
 \lstset{
 	frame=0,
@@ -417,7 +431,16 @@ case class Person(id: BigInt, firstName: String, lastName: String)
 
 \end{lstlisting}
 
-If we would omit the casting with the $as$ then we would end up creating a DataFrame and the schema of that would be guessed by Spark.
+Case classes are normal Scala classes that are:
+
+\begin{itemize}
+	\item Immutable by default
+	\item Decomposable through pattern matching
+	\item Compared by structural equality instead of by reference
+	\item Succinct to instantiate and operate on
+\end{itemize}
+
+If we would omit the casting with keyword $as$ then we would end up creating a DataFrame and the schema of the created object would be guessed by Spark.
 
 SparkSession is the entry point to programming Spark with the Dataset and DataFrame API.
 Datasets can also be created through transformations available on existing Datasets:
