@@ -299,10 +299,24 @@ The following snippet presents the idea in IBCF for every new user.
 \begin{lstlisting}[caption=Item-Based Collaborative Filtering algorithm \cite{gorakala15}]
 
   1. For each two items, measure how similar they are in terms of having received similar ratings by similar users
+  
+	  items.foreach { item1 =>
+	    items.foreach { item2 =>
+	      val similarity = cosineSimilarity(item1, item2);
+	    }
+	  }
 
   2. For each item, identify the k-most similar items
+  
+	  val itemsSorted = sort(similarItems)
 
   3. For each user, identify the items that are most similar to the user's purchases
+  
+	  users.foreach { user =>
+	    user.purchases.foreach { purchase =>
+	      val mostSimilar = findSimilarItem(purchase)
+	    }
+	  }
   
 
 \end{lstlisting}
@@ -323,14 +337,31 @@ The steps for every new user in user-based collaborative filtering are as follow
 \begin{lstlisting}[caption=User-Based Collaborative Filtering algorithm \cite{gorakala15}]
 
   1. Measure how similar each user is to the new one. Like IBCF, popular similarity measures are correlation and cosine.
+  
+	case class Similarity(userId1: Int, userId2: Int, score: Int)
+  
+	val newUser: User = User("Adam", 31, purchases)
+	val similarities = users.map { user =>
+	  Similarity(newUser.id, user.id, cosineSimilarity(user, newUser)
+	}
 
-  2. Identify the most similar users. The options are:
-	  Take account of the top k users (k-nearest_neighbors)
-	  Take account of the users whose similarity is above a defined threshold
+  2. Identify the most similar users. The options are: Take account of the top k users (k-nearest_neighbors) Take account of the users whose similarity is above a defined threshold
+
+	val mostSimilarUsers = similarities.filter { user => user.score > 0.8
+	}
 
   3. Rate the items purchased by the most similar users. The rating is the average rating among similar users and the approaches are:
-	  Average rating
-	  Weighted average rating, using the similarities as weights
+  Average rating
+  Weighted average rating, using the similarities as weights
+   
+  mostSimilarUsers.map { user =>
+    user.purchases.map { purchase =>
+      val purchases = mostSimilarUsers.map { usr =>
+        usr.purchases.filter(p => p.id === purchase.id)
+      }
+      purchases.sum() / purchases.size
+    }
+  }
 
   4. Pick the top-rated items.
 \end{lstlisting}
@@ -514,6 +545,7 @@ Based on this data, the model tries to find latent factors that can be used to p
 Sometimes these algorithms are referred to as matrix completion algorithms.
 This is because the original matrix $A$ may be sparse while the product $XY^T$ is dense.
 Hence, the product is only an approximation of $A$. \cite{ryza15}
+
 \subsection{Alternatig Least Squares (ALS)}
 
 Collaborative filtering is commonly used for recommender systems.
@@ -527,7 +559,7 @@ Spark ALS attempts to estimate the ratings matrix A as the product of two lower-
 A = XY^T
 \end{equation}
 
-Typically these approximations are refered to as factor matrices.
+Typically these approximations are referred to as factor matrices.
 The general approach is iterative.
 During each iteration, one of the factor matrices is held constant, while the other is solved for using least squares. The newly-solved factor matrix is then held constant while solving for the other factor matrix. \cite{als14}
 Spark ALS enables massive parallelization since it can be done separately, it can be done in parallel which is an excellent feature for a large-scale computation algorithm. \cite{ryza15}
@@ -570,11 +602,15 @@ Minimizing the Root Mean Square Error RMSE function denotes a task in which line
 
 \chapter{Implementation}
 
-- MovieLens ml-latest-small dataset.
+- Scala? What is Scala?
+
+- MovieLens ml-latest-small dataset. Describe the dataset.
 
 - What is MovieLens?
 
 - We used RDD based API since dataset API is not yet available on MLlib.
+
+- Loading data can be done with dataset API but the recommendation with ALS needs to be done with RDDs still.
 
 \chapter{Result}
 
@@ -592,7 +628,8 @@ In the end the most difficult thing was to find the right approach for this task
 
 Actual parallelization?
 
-Study MLlib again when Dataset API can be used with MLlib.
+Study MLlib again when Dataset API can be used with MLlib. -> Was studied already and Dataset API is much better. Something was failing and could not get to work.
+-> Could still provide examples of changed code?
 
 Lately, a number of service providers, like Telegram and Microsoft, have started to introduce bot frameworks for their services. A bot is a web service that uses a conversational format to interact with users. Users can start conversations with the bot from any channel the bot is configured to work on. Conversations can be designed to be freeform, natural language interactions or more guided ones where the user is provided choices or actions. It is possible to utilize simple text strings or something more complex such as rich cards that contain text, images, and action buttons. \cite{bots16}
 
