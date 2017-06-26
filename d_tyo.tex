@@ -208,7 +208,7 @@ Recommendations can also be non-personalized and usually these are much simpler 
 A simple ranked top-ten list of items is an example of non-personalized recommendation.
 Ranking is done by predicting the most suitable items based on the user's preferences and constraints.
 To complete this task, RS needs to collect these preferences from users.
-They might be explicitly expressed ratings for products or interpreted from user actions such as clicks and page viewsFor example, RS could consider navigation to a product page as an implicit evidence of preference for the items in that page\cite{ricci11}
+They might be explicitly expressed ratings for products or interpreted from user actions such as clicks and page views. For example, RS could consider navigation to a product page as an implicit evidence of preference for the items in that page. \cite{ricci11}
 
 Development of RSs initiated from a rather simple observation: people usually tend to trust recommendations provided by others in making routine decisions.
 For example, it is common to rely on peer feedback when selecting a book to read or rely on the reviews the movie critics have writtenFirst RSs tried to mimic this behavior by applying algorithms to leverage recommendations from the community to an active user looking for recommendations. Recommendations were for users with similar tastes. This approach is essentially collaborative-filtering and the idea behind it is that if users liked similar items in the past, they are likely to consider recommendations from these same users relevant. \cite{ricci11}
@@ -220,7 +220,7 @@ The availability of choices had begun to decrease users well-being, instead of p
 While choice is good, more choice is not always better. \cite{ricci11}
 
 Recently, RSs have proved to be an effective cure for the information overload problem at hand.
-RS addresses this phenomenon by offering new, previously unknown items that are likely to be relevant to the users current task.
+RSs addresses this phenomenon by offering new, previously unknown items that are likely to be relevant to the current task of the user.
 When a user requests for recommendations, RSs generate recommendations by using knowledge and data about the users, available items and previous transactions present in the recommender database.
 After browsing the provided recommendations, she may accept them or not thus providing implicit and explicit feedback to the recommender.
 This new information can later on be used when generating new recommendations upon the next user-system interactions. \cite{ricci11}
@@ -230,7 +230,7 @@ They became an independent research area in the mid-1990s. Recently, the interes
 Evidence can be found for example from such highly rated Internet sites as Amazon.com, YouTube, Netflix and IMDB in which RSs are playing an important role.
 Another example are conferences and journal issues dedicated to RS research and development such as RecSys and AI Communications (2008), consecutively. \cite{ricci11}
 
-Two primary purposes exist for a RS: first is to aid the service provider somehow and the other is to produce value to the user of the service.
+Two primary purposes exist for a RS: first is to aid the service provider somehow and the second is to produce value to the user of the service.
 Thus, a RS must balance between the needs of service provider and the customer \cite{ricci11}.
 For example, a service provider might introduce a RS to get help in tasks such as increasing the number of items sold, selling more diverse items, increasing user satisfaction, increasing user loyalty or understanding better what the user wants \cite{ricci11}.
 In addition, a number of different functions exist that the user might expect a recommendation system to offer. Some of these are similar to the ones mentioned above, thus considered as core functions.
@@ -239,7 +239,7 @@ For instance, a user may want a RS to recommend a sequence of items, aid in brow
 GroupLens, BookLens and MovieLens were pioneers in RSs.
 Furthermore, they also released data sets which, aside of recommendation, was also pioneering in the field. Data sets were not that common for benchmarking or just trying out new technologies. \cite{aggarwal16}
 
-% TODO: how to include this?
+% TODO: how to include this? Privacy concerns in RSs ? Worth exploring?
 %A Recommendation engine system or part of it can also be acquired via a competition such as the Netflix prize competition held in 2007, 2008 and 2009. As a result, Netflix's algorithm was beaten by 10.05\%\ . Sequels were canceled due to privacy concerns. Two people were apparently able to reveal the identities of users by matching the rating data to those of Internet Movie Database (IMDB) thus finding out the identities of IMDB users. Netflix (Netflix Prize competition, winner used RBM) \cite{bell06} \cite{koren09}.
 
 \section{Recommendation techniques}
@@ -277,14 +277,16 @@ Cold start denotes that a relatively large amount of data is required in order t
 Sparsity means that the number of items typically exceeds the number of users.
 This makes the relations extremely sparse since most users have rated or purchased only a small subset of the total items. \cite{aberger14}
 
-Amazon.com, the biggest Internet retailer in the United States, has previously been using item-to-item collaborative filtering method.
-However, the current status of Amazon recommendation seems to be unknown to the public, which, in fact, is better for the business.
-In their implementation the algorithm builds a table containing similar items by finding ones that users tend to purchase together.
-The algorithm then finds items similar to each of the user's purchases and ratings, combines those items, and returns the most popular or correlated items. \cite{linden03}
+\subsection{Memory-based collaborative filtering}
+
+Memory-based or neighborhood collaborative filtering
+
+In memory-based methods the user-item ratings stored in the system are directly accessed to predict ratings for new items.
+This can be done in two ways known as user-based or item-based recommendation.
 
 The following sections describe user-based collaborative filtering and item-based collaborative filtering.
 
-\subsection{Item-based collaborative filtering}
+\subsubsection{Item-based collaborative filtering}
 
 Item-based collaborative filtering (IBCF) starts by finding similar items from the user's purchases \cite{gorakala15}.
 Next step is to model the preferences of a user to an item based on ratings of similar items by the same user \cite{ricci11}.
@@ -298,30 +300,34 @@ The following snippet presents the idea in IBCF for every new user.
 
 \begin{lstlisting}[caption=Item-Based Collaborative Filtering algorithm \cite{gorakala15}]
 
-  1. For each two items, measure how similar they are in terms of having received similar ratings by similar users
-  
-	  items.foreach { item1 =>
-	    items.foreach { item2 =>
-	      val similarity = cosineSimilarity(item1, item2);
-	    }
-	  }
+1. For each two items, measure how similar they are in terms of having received similar ratings by similar users
 
-  2. For each item, identify the k-most similar items
-  
-	  val itemsSorted = sort(similarItems)
+val similarItems = items.foreach { item1 =>
+items.foreach { item2 =>
+val similarity = cosineSimilarity(item1, item2);
+}
+}
 
-  3. For each user, identify the items that are most similar to the user's purchases
-  
-	  users.foreach { user =>
-	    user.purchases.foreach { purchase =>
-	      val mostSimilar = findSimilarItem(purchase)
-	    }
-	  }
-  
+2. For each item, identify the k-most similar items
+
+val itemsSorted = sort(similarItems)
+
+3. For each user, identify the items that are most similar to the user's purchases
+
+users.foreach { user =>
+user.purchases.foreach { purchase =>
+val mostSimilar = findSimilarItem(purchase)
+}
+}
 
 \end{lstlisting}
 
-\subsection{User-based collaborative filtering}
+Amazon.com, the biggest Internet retailer in the United States, has previously been using item-to-item collaborative filtering method.
+However, the current status of Amazon recommendation seems to be unknown to the public, which, in fact, is better for the business.
+In their implementation the algorithm builds a table containing similar items by finding ones that users tend to purchase together.
+The algorithm then finds items similar to each of the user's purchases and ratings, combines those items, and returns the most popular or correlated items. \cite{linden03}
+
+\subsubsection{User-based collaborative filtering}
 
 User-based collaborative filtering (UBCF) starts by finding the most similar users, rate items purchased by similar users, pick top rated items.
 The similarity in taste of two users is calculated based on the similarity in the rating history of the users \cite{ricci11}.
@@ -336,35 +342,44 @@ The steps for every new user in user-based collaborative filtering are as follow
 
 \begin{lstlisting}[caption=User-Based Collaborative Filtering algorithm \cite{gorakala15}]
 
-  1. Measure how similar each user is to the new one. Like IBCF, popular similarity measures are correlation and cosine.
-  
-	case class Similarity(userId1: Int, userId2: Int, score: Int)
-  
-	val newUser: User = User("Adam", 31, purchases)
-	val similarities = users.map { user =>
-	  Similarity(newUser.id, user.id, cosineSimilarity(user, newUser)
-	}
+1. Measure how similar each user is to the new one. Like IBCF, popular similarity measures are correlation and cosine.
 
-  2. Identify the most similar users. The options are: Take account of the top k users (k-nearest_neighbors) Take account of the users whose similarity is above a defined threshold
+case class Similarity(userId1: Int, userId2: Int, score: Int)
 
-	val mostSimilarUsers = similarities.filter { user => user.score > 0.8
-	}
+val newUser: User = User("Adam", 31, purchases)
+val similarities = users.map { user =>
+Similarity(newUser.id, user.id, cosineSimilarity(user, newUser)
+}
 
-  3. Rate the items purchased by the most similar users. The rating is the average rating among similar users and the approaches are:
-  Average rating
-  Weighted average rating, using the similarities as weights
-   
-  mostSimilarUsers.map { user =>
-    user.purchases.map { purchase =>
-      val purchases = mostSimilarUsers.map { usr =>
-        usr.purchases.filter(p => p.id === purchase.id)
-      }
-      purchases.sum() / purchases.size
-    }
-  }
+2. Identify the most similar users. The options are: Take account of the top k users (k-nearest_neighbors) Take account of the users whose similarity is above a defined threshold
 
-  4. Pick the top-rated items.
+val mostSimilarUsers = similarities.filter(_.score > 0.8)
+
+3. Rate the items purchased by the most similar users. The rating is the average rating among similar users and the approaches are:
+Average rating
+Weighted average rating, using the similarities as weights
+
+val ratedItems = mostSimilarUsers.map { user =>
+user.purchases.map { purchase =>
+val purchases = mostSimilarUsers.map { usr =>
+usr.purchases.filter(_.id === purchase.id)
+}
+purchases.sum() / purchases.size
+}
+}
+
+4. Pick the top-rated items.
+
+val topRatedItems = ratedItems.take(10)
 \end{lstlisting}
+
+\subsection{Model-based collaborative filtering}
+
+In contrast to memory-based systems, which use the stored ratings directly in the prediction, model-based approaches use these ratings to learn a predictive model.
+The general idea is to model the user-item interactions with factors representing latent characteristics of the users and items in the system, like the preference class of users and the category class of items.
+This model is then trained using the available data, and later used to predict ratings of users for new items. \cite{ricci11}
+
+Alternate Least Squares is an example of model-based collaborative filtering algorithm, it is presented in the next chapter.
 
 \chapter{Apache Spark}
 
@@ -546,7 +561,7 @@ Sometimes these algorithms are referred to as matrix completion algorithms.
 This is because the original matrix $A$ may be sparse while the product $XY^T$ is dense.
 Hence, the product is only an approximation of $A$. \cite{ryza15}
 
-\subsection{Alternatig Least Squares (ALS)}
+\subsection{Alternating Least Squares (ALS)}
 
 Collaborative filtering is commonly used for recommender systems.
 These techniques aim to fill in the missing entries of a user-item association matrix.
@@ -604,17 +619,45 @@ Minimizing the Root Mean Square Error RMSE function denotes a task in which line
 
 - Scala? What is Scala?
 
-- MovieLens ml-latest-small dataset. Describe the dataset.
+GroupLens Research has collected and made available rating data sets from the MovieLens web site.
+The data sets were collected over various periods of time, depending on the size of the set.
+MovieLens ml-latest-small dataset is a collection of 100,000 ratings to 9,000 movies by 700 users.
+The downside of these datasets is that they will change over time thus they are not suitable for reporting research results.
+The current version, released 10/2016 is available in the project repository of this thesis.
+This dataset was chosen in order to be able to review movies that we have actually seen.
+MovieLens ml-latest-small dataset consists of $movies.csv$ and $ratings.csv$ files.
 
-- What is MovieLens?
+\begin{tabular}{lll}
+	movieId & title & genres \\ \hline
+	1 & Toy Story (1995) & Adventure|Animation|Children \\
+	2 & Jumanji (1995) & Adventure|Children|Fantasy \\
+	3 & Grumpier Old Men (1995) & Comedy|Romance \\
+	4 & Waiting to Exhale (1995) & Comedy|Drama|Romance \\
+	5 & Father of the Bride Part II (1995) & Comedy \\
+	6 & Heat (1995) & Action|Crime|Thriller \\
+	7 & Sabrina (1995) & Comedy|Romance \\
+	8 & Tom and Huck (1995) & Adventure|Children \\
+	9 & Sudden Death (1995) & Action \\
+	10 & GoldenEye (1995) & Action|Adventure|Thriller \\
+\end{tabular}
 
-- We used RDD based API since dataset API is not yet available on MLlib.
-
-- Loading data can be done with dataset API but the recommendation with ALS needs to be done with RDDs still.
+We used RDD based API since dataset API is not yet fully functional in collaborative filtering tasks.
+Loading data can be done with dataset API but the recommendation with ALS needs to be done still with RDD based API. Dataset API brings numerous improvements such as easier data loading.
 
 \chapter{Result}
 
 \chapter{Evaluation}
+
+We are going to evaluate our model against a non personalized recommendation built on Apache Pig. Apache Pig is a platform for analyzing large data sets. It consists of a high-level language for expressing data analysis programs coupled with infrastructure for evaluating these programs.
+A significant property of Pig programs is that their structure is able to handle substantial parallelization, which in turns enables them to handle very large data sets. \cite{pig17}
+
+At the present time, Pig's infrastructure layer consists of a compiler that produces sequences of Map-Reduce programs, for which large-scale parallel implementations already exist. Pig's language layer currently consists of a textual language called Pig Latin, which has the following key properties:
+
+Ease of programming. It is trivial to achieve parallel execution of simple, "embarrassingly parallel" data analysis tasks. Complex tasks comprised of multiple interrelated data transformations are explicitly encoded as data flow sequences, making them easy to write, understand, and maintain.
+Optimization opportunities. The way in which tasks are encoded permits the system to optimize their execution automatically, allowing the user to focus on semantics rather than efficiency.
+Extensibility. Users can create their own functions to do special-purpose processing. \cite{pig17}
+
+The implementation is ported to a newer version of the MovieLens dataset but otherwise the code is reused as it is.
 
 \section{Conclusion}
 
