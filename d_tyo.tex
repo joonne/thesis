@@ -487,7 +487,15 @@ Case classes are normal Scala classes that are:
 
 If we would omit the casting with keyword $as$ then we would end up creating a DataFrame and the schema of the created object would be guessed by Spark.
 
-SparkSession is the entry point to programming Spark with the Dataset and DataFrame API.
+\begin{lstlisting}[caption=Creating a SparkSession]
+val spark = SparkSession
+  .builder
+  .appName("MovieLensALS")
+  .config("spark.executor.memory", "2g")
+  .getOrCreate()
+\end{lstlisting}
+
+SparkSession is the entry point to programming Spark with the Dataset and DataFrame API. In the above snippet we create a $SparkSession$ by chaining calls to the builder method, which creates a SparkSession.Builder object for constructing a SparkSession. 
 Datasets can also be created through transformations available on existing Datasets:
 
 \begin{lstlisting}[caption=Creating a new Dataset through a transformation]
@@ -641,8 +649,41 @@ MovieLens ml-latest-small dataset consists of $movies.csv$ and $ratings.csv$ fil
 	10 & GoldenEye (1995) & Action|Adventure|Thriller \\
 \end{tabular}
 
+\begin{tabular}{llll}
+	userId & movieId & rating & timestamp \\ \hline
+	1 & 31 & 2.5 & 1260759144 \\
+	1 & 1029 & 3.0 & 1260759179 \\
+	1 & 1061 & 3.0 & 1260759182 \\
+	1 & 1129 & 2.0 & 1260759185 \\
+	1 & 1172 & 4.0 & 1260759205 \\
+	1 & 1263 & 2.0 & 1260759151 \\
+	1 & 1287 & 2.0 & 1260759187 \\
+	1 & 1293 & 2.0 & 1260759148 \\
+	1 & 1339 & 3.5 & 1260759125 \\
+\end{tabular}
+
 We used RDD based API since dataset API is not yet fully functional in collaborative filtering tasks.
 Loading data can be done with dataset API but the recommendation with ALS needs to be done still with RDD based API. Dataset API brings numerous improvements such as easier data loading.
+
+\section{MovieLensRecommendation.scala}
+
+\begin{lstlisting}[caption=Loading ratings with Dataset API]
+val ratings = spark.read.csv("ml-latest-small/ratings.csv")
+  .filter(arr => arr(0) != "userId")
+  .map { fields =>
+   	Rating(fields(0).asInstanceOf[String].toInt, fields(1).asInstanceOf[String].toInt, fields(2).asInstanceOf[String].toFloat, fields(3).asInstanceOf[String].toLong % 10)
+  }
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Loading ratings with RDD API]
+val ratings = sc.textFile("ml-latest-small/ratings.csv")
+  .filter(x => !isHeader("userId", x))
+  .map { line =>
+    val fields = line.split(",")
+    // format: (timestamp % 10, Rating(userId, movieId, rating))
+    (fields(3).toLong % 10, Rating(fields(0).toInt, fields(1).toInt, fields(2).toDouble))
+  }
+\end{lstlisting}
 
 \chapter{Result}
 
