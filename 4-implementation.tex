@@ -1,0 +1,77 @@
+\documentclass[main.tex]{thesis.tex}
+\begin{document}
+
+\chapter{Implementation}
+
+- Scala? What is Scala?
+
+GroupLens Research has collected and made available rating data sets from the MovieLens web site.
+The data sets were collected over various periods of time, depending on the size of the set.
+MovieLens ml-latest-small dataset is a collection of 100,000 ratings to 9,000 movies by 700 users.
+The downside of these datasets is that they will change over time thus they are not suitable for reporting research results.
+The current version, released 10/2016 is available in the project repository of this thesis.
+This dataset was chosen in order to be able to review movies that we have actually seen.
+MovieLens ml-latest-small dataset consists of $movies.csv$ and $ratings.csv$ files.
+
+\begin{tabular}{lll}
+	movieId & title & genres \\ \hline
+	1 & Toy Story (1995) & Adventure|Animation|Children \\
+	2 & Jumanji (1995) & Adventure|Children|Fantasy \\
+	3 & Grumpier Old Men (1995) & Comedy|Romance \\
+	4 & Waiting to Exhale (1995) & Comedy|Drama|Romance \\
+	5 & Father of the Bride Part II (1995) & Comedy \\
+	6 & Heat (1995) & Action|Crime|Thriller \\
+	7 & Sabrina (1995) & Comedy|Romance \\
+	8 & Tom and Huck (1995) & Adventure|Children \\
+	9 & Sudden Death (1995) & Action \\
+	10 & GoldenEye (1995) & Action|Adventure|Thriller \\
+\end{tabular}
+
+\begin{tabular}{llll}
+	userId & movieId & rating & timestamp \\ \hline
+	1 & 31 & 2.5 & 1260759144 \\
+	1 & 1029 & 3.0 & 1260759179 \\
+	1 & 1061 & 3.0 & 1260759182 \\
+	1 & 1129 & 2.0 & 1260759185 \\
+	1 & 1172 & 4.0 & 1260759205 \\
+	1 & 1263 & 2.0 & 1260759151 \\
+	1 & 1287 & 2.0 & 1260759187 \\
+	1 & 1293 & 2.0 & 1260759148 \\
+	1 & 1339 & 3.5 & 1260759125 \\
+\end{tabular}
+
+We used RDD based API since dataset API is not yet fully functional in collaborative filtering tasks.
+Loading data can be done with dataset API but the recommendation with ALS needs to be done still with RDD based API. Dataset API brings numerous improvements such as easier data loading.
+
+\section{MovieLensRecommendation.scala}
+
+First task, when writing a self contained spark application is to make a correct project structure and have a $<PROJECT_NAME>.sbt$ file which describes the dependencies of the application. A self contained spark application refers to a shippable jar (Java ARchive) file that can be distributed to a spark cluster and it contains your code and all the dependencies.
+
+Applications can be launched on a cluster with the spark-submit. It can use all of Spark's supported cluster managers through a uniform interface so you don't have to configure your application specially for each one.
+
+\begin{lstlisting}[caption=Creating assembly jar with sbt,language=sh]
+sbt package
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Launch an application on a cluster,language=sh]
+spark-submit --class "MovieLensALS" --master local[4] movielens-recommendations_2.11-1.0.jar
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Loading ratings with RDD API]
+val ratings = sc.textFile("ml-latest-small/ratings.csv")
+  .filter(x => !isHeader("userId", x))
+  .map { line =>
+    val fields = line.split(",")
+    (fields(3).toLong % 10, Rating(fields(0).toInt, fields(1).toInt, fields(2).toDouble))
+  }
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Loading ratings with Dataset API]
+val ratings = spark.read.csv("ml-latest-small/ratings.csv")
+  .filter(arr => arr(0) != "userId")
+  .map { fields =>
+   	Rating(fields(0).asInstanceOf[String].toInt, fields(1).asInstanceOf[String].toInt, fields(2).asInstanceOf[String].toFloat, fields(3).asInstanceOf[String].toLong % 10)
+  }
+\end{lstlisting}
+
+\end{document}

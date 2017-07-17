@@ -1,0 +1,38 @@
+\documentclass[main.tex]{thesis.tex}
+\begin{document}
+
+\chapter{Evaluation}
+
+We are going to evaluate our model against a non personalized recommendation built on Apache Pig. Apache Pig is a platform for analyzing large data sets. It consists of a high-level language for expressing data analysis programs coupled with infrastructure for evaluating these programs.
+A significant property of Pig programs is that their structure is able to handle substantial parallelization, which in turns enables them to handle very large data sets. \cite{pig17}
+
+At the present time, Pig's infrastructure layer consists of a compiler that produces sequences of Map-Reduce programs, for which large-scale parallel implementations already exist. Pig's language layer currently consists of a textual language called Pig Latin, which has the following key properties:
+
+Ease of programming. It is trivial to achieve parallel execution of simple, "embarrassingly parallel" data analysis tasks. Complex tasks comprised of multiple interrelated data transformations are explicitly encoded as data flow sequences, making them easy to write, understand, and maintain.
+Optimization opportunities. The way in which tasks are encoded permits the system to optimize their execution automatically, allowing the user to focus on semantics rather than efficiency.
+Extensibility. Users can create their own functions to do special-purpose processing. \cite{pig17}
+
+The implementation is ported to a newer version of the MovieLens dataset but otherwise the code is reused as it is.
+
+Using bigger dataset, providing more personal ratings could help.
+
+\section{Conclusion}
+
+There are a number of possible implementations for a recommendation engine. This was selected because Apache Spark could be a good tool to know in future and in addition learning Scala programming was another thing that was considered.
+
+Existing recommendation or analytic engines should be evaluated before making a decision about the recommendation engine.
+
+In the end the most difficult thing was to find the right approach for this task. By trial and error the right combination of technologies and an actual working example was found.
+
+\section{Future work}
+
+Actual parallelization?
+
+Study MLlib again when Dataset API can be used with MLlib. -> Was studied already and Dataset API is much better. Something was failing and could not get to work.
+-> Could still provide examples of changed code?
+
+Lately, a number of service providers, like Telegram and Microsoft, have started to introduce bot frameworks for their services. A bot is a web service that uses a conversational format to interact with users. Users can start conversations with the bot from any channel the bot is configured to work on. Conversations can be designed to be freeform, natural language interactions or more guided ones where the user is provided choices or actions. It is possible to utilize simple text strings or something more complex such as rich cards that contain text, images, and action buttons. \cite{bots16}
+
+Already for a long time, companies have had some sort of SMS that have been accepting feedback from customer or ordering a new data package for you mobile subscription. IRC channel bots have been around even longer. Idea is not new but now there are popular platforms for the bots. As any other idea, also a recommendation engine could be implemented in a way that it can be used via a bot. For example ElasticSearch forms a RESTful API so a bot could simply place queries against the API.
+
+\end{document}

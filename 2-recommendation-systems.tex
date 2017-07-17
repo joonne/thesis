@@ -1,0 +1,192 @@
+\documentclass[main.tex]{thesis.tex}
+\begin{document}
+
+\chapter{Recommendation Systems}
+
+Recommendation denotes a task in which items are recommended to users.
+The most simple version of recommendation is from peer to peer, completely without computers.
+However, humans can only recommend effectively those items they have personally experienced.
+This is where recommendation systems (RSs) become useful as they can potentially offer recommendations from thousands of different items.
+Recommender systems are a set of techniques and software tools that provide suggestions to users about potentially useful items.
+Item denotes the general subject that the system recommends to users.
+Recommendation systems are usually intended to recommend only specific kind of items such as books or movies. \cite{ricci11}
+
+Recommendation systems are often targeted to aid customers in decision making when the amount of all items is overwhelming.
+Usually the recommendations are personalized, which implies that the recommendations are different for different users or groups of users.
+Recommendations can also be non-personalized and usually these are much simpler to generate.
+A simple ranked top-ten list of items is an example of non-personalized recommendation.
+Ranking is done by predicting the most suitable items based on the user's preferences and constraints.
+To complete this task, RS needs to collect these preferences from users.
+They might be explicitly expressed ratings for products or interpreted from user actions such as clicks and page views. For example, RS could consider navigation to a product page as an implicit evidence of preference for the items in that page. \cite{ricci11}
+
+Development of RSs initiated from a rather simple observation: people usually tend to trust recommendations provided by others in making routine decisions.
+For example, it is common to rely on peer feedback when selecting a book to read or rely on the reviews the movie critics have writtenFirst RSs tried to mimic this behavior by applying algorithms to leverage recommendations from the community to an active user looking for recommendations. Recommendations were for users with similar tastes. This approach is essentially collaborative-filtering and the idea behind it is that if users liked similar items in the past, they are likely to consider recommendations from these same users relevant. \cite{ricci11}
+
+Along with the development of e-commerce sites, a need for recommendations emerged to limit the amount of alternatives.
+Users were finding it more and more difficult to find the correct choices from the vast range of items the sites were offering.
+As the variety of information in the Web has explosively grown constantly overwhelmed users, it has led them to make poor decisions.
+The availability of choices had begun to decrease users well-being, instead of producing benefit.
+While choice is good, more choice is not always better. \cite{ricci11}
+
+Recently, RSs have proved to be an effective cure for the information overload problem at hand.
+RSs addresses this phenomenon by offering new, previously unknown items that are likely to be relevant to the current task of the user.
+When a user requests for recommendations, RSs generate recommendations by using knowledge and data about the users, available items and previous transactions present in the recommender database.
+After browsing the provided recommendations, she may accept them or not thus providing implicit and explicit feedback to the recommender.
+This new information can later on be used when generating new recommendations upon the next user-system interactions. \cite{ricci11}
+
+Compared to research in the classical fields of information systems such as databases and search engines, study of recommender systems is relatively new.
+They became an independent research area in the mid-1990s. Recently, the interest towards recommendation systems has dramatically increased.
+Evidence can be found for example from such highly rated Internet sites as Amazon.com, YouTube, Netflix and IMDB in which RSs are playing an important role.
+Another example are conferences and journal issues dedicated to RS research and development such as RecSys and AI Communications (2008), consecutively. \cite{ricci11}
+
+Two primary purposes exist for a RS: first is to aid the service provider somehow and the second is to produce value to the user of the service.
+Thus, a RS must balance between the needs of service provider and the customer \cite{ricci11}.
+For example, a service provider might introduce a RS to get help in tasks such as increasing the number of items sold, selling more diverse items, increasing user satisfaction, increasing user loyalty or understanding better what the user wants \cite{ricci11}.
+In addition, a number of different functions exist that the user might expect a recommendation system to offer. Some of these are similar to the ones mentioned above, thus considered as core functions.
+For instance, a user may want a RS to recommend a sequence of items, aid in browsing or enable user to influence others users. Influencing might also be malicious. \cite{ricci11}
+
+GroupLens, BookLens and MovieLens were pioneers in RSs.
+Furthermore, they also released data sets which, aside of recommendation, was also pioneering in the field. Data sets were not that common for benchmarking or just trying out new technologies. \cite{aggarwal16}
+
+% TODO: how to include this? Privacy concerns in RSs ? Worth exploring?
+%A Recommendation engine system or part of it can also be acquired via a competition such as the Netflix prize competition held in 2007, 2008 and 2009. As a result, Netflix's algorithm was beaten by 10.05\%\ . Sequels were canceled due to privacy concerns. Two people were apparently able to reveal the identities of users by matching the rating data to those of Internet Movie Database (IMDB) thus finding out the identities of IMDB users. Netflix (Netflix Prize competition, winner used RBM) \cite{bell06} \cite{koren09}.
+
+\section{Recommendation techniques}
+
+Recommendation system must have some sort of understanding about the items to be able to recommend something.
+To achieve its goal, the system must be able to predict the usefulness or at least compare the utility of some items and then decide the ones to recommend.
+The prediction step of the recommender can be illustrated by, for example, a simple non-personalized, recommendation algorithm that recommends only the most popular movies.
+The reasoning behind this approach is that when lacking more precise information about the user's preferences, a movie liked by others is probably also liked by a general user, at least more than a randomly selected movie.
+Thus, the utility of these popular songs can be seen reasonably high for a generic user. \cite{ricci11}
+
+The utility of the user $u$ for the item $i$ can be modeled as a real valued function $R(u,i)$ as is normally done in collaborative filtering by considering the ratings of items given by the users.
+Thus, the fundamental task of the collaborative filtering recommender is to predict the value of $R$ over pairs of users and items to compute an estimation for the true function $R$.
+Consequently, by computing this prediction for the user $u$ on a set of items, the system will recommend items with the largest predicted degree of utility.
+The amount of predicted items is usually much smaller than the whole amount of items, thus the RS is filtering the items that are recommended to users. \cite{ricci11}
+
+RSs vary in terms of the addressed domain, the knowledge used and especially how the recommendations are made, denoting the recommendation algorithm \cite{ricci11}.
+This thesis will concentrate only on one class of recommendation techniques, collaborative filtering, since that is the one used in Apache Spark's MLlib.
+
+Collaborative Filtering Recommendation Systems are based on the collaboration of users.
+They aim at identifying patterns of user interests in order to make targeted recommendations \cite{aberger14}.
+The original implementation of this approach recommends to the active user those items that other similar users in the sense of tastes have liked in the past \cite{ricci11}.
+First a user provides ratings for items.
+Next the method will find recommendations based on other users that have purchased similar items or based on items that are the most similar to the user's purchases.
+Collaborative filtering can be divided into two sub categories which are item-based collaborative filtering and user-based collaborative filtering.
+Collaborative filtering has been studied the most thus being the most popular and widely implemented technique in recommendation systems \cite{gorakala15} \cite{ricci11} \cite{burke02}.
+
+Collaborative filtering analyzes relationships between users and interdependencies among products to identify new user-item associations. \cite{korenBellVolinsky09}
+For example, deciding that two users may both like the same song because they play many other same songs is an example of collaborative filtering. \cite{ryza15}
+
+Collaborative filtering algorithms suffer from the new user and new item problems \cite{gorakala15}.
+This originates to the fact that the recommendation is based only on user's recommendations on items.
+If user has not given any reviews, the algorithm is not able to produce any recommendations either.
+Other issues of collaborative filtering algorithms are cold start and sparsity.
+Cold start denotes that a relatively large amount of data is required in order to be able to provide accurate recommendations for a user.
+Sparsity means that the number of items typically exceeds the number of users.
+This makes the relations extremely sparse since most users have rated or purchased only a small subset of the total items. \cite{aberger14}
+
+\subsection{Memory-based collaborative filtering}
+
+Memory-based or neighborhood collaborative filtering
+
+In memory-based methods the user-item ratings stored in the system are directly accessed to predict ratings for new items.
+This can be done in two ways known as user-based or item-based recommendation.
+
+The following sections describe user-based collaborative filtering and item-based collaborative filtering.
+
+\subsubsection{Item-based collaborative filtering}
+
+Item-based collaborative filtering (IBCF) starts by finding similar items from the user's purchases \cite{gorakala15}.
+Next step is to model the preferences of a user to an item based on ratings of similar items by the same user \cite{ricci11}.
+The following snippet presents the idea in IBCF for every new user.
+
+\lstset{
+	columns=flexible,
+	frame=single,
+	breaklines=true
+}
+
+\begin{lstlisting}[caption=Item-Based Collaborative Filtering algorithm \cite{gorakala15}]
+
+1. For each two items, measure how similar they are in terms of having received similar ratings by similar users
+
+val similarItems = items.foreach { item1 =>
+items.foreach { item2 =>
+val similarity = cosineSimilarity(item1, item2);
+}
+}
+
+2. For each item, identify the k-most similar items
+
+val itemsSorted = sort(similarItems)
+
+3. For each user, identify the items that are most similar to the user's purchases
+
+users.foreach { user =>
+user.purchases.foreach { purchase =>
+val mostSimilar = findSimilarItem(purchase)
+}
+}
+
+\end{lstlisting}
+
+Amazon.com, the biggest Internet retailer in the United States, has previously been using item-to-item collaborative filtering method.
+In their implementation the algorithm builds a table containing similar items by finding ones that users tend to purchase together.
+The algorithm then finds items similar to each of the user's purchases and ratings, combines those items, and returns the most popular or correlated items. \cite{linden03}
+
+\subsubsection{User-based collaborative filtering}
+
+User-based collaborative filtering (UBCF) starts by finding the most similar users, rate items purchased by similar users, pick top rated items.
+The similarity in taste of two users is calculated based on the similarity in the rating history of the users \cite{ricci11}.
+
+The steps for every new user in user-based collaborative filtering are as follows:
+
+\lstset{
+	columns=flexible,
+	frame=single,
+	breaklines=true
+}
+
+\begin{lstlisting}[caption=User-Based Collaborative Filtering algorithm \cite{gorakala15}]
+
+1. Measure how similar each user is to the new one. Like IBCF, popular similarity measures are correlation and cosine.
+
+case class Similarity(userId1: Int, userId2: Int, score: Int)
+
+val newUser: User = User("Adam", 31, purchases)
+val similarities = users.map { user =>
+Similarity(newUser.id, user.id, cosineSimilarity(user, newUser)
+}
+
+2. Identify the most similar users. The options are: Take account of the top k users (k-nearest_neighbors) Take account of the users whose similarity is above a defined threshold
+
+val mostSimilarUsers = similarities.filter(_.score > 0.8)
+
+3. Rate the items purchased by the most similar users. The rating is the average rating among similar users and the approaches are:
+Average rating
+Weighted average rating, using the similarities as weights
+
+val ratedItems = mostSimilarUsers.map { user =>
+user.purchases.map { purchase =>
+val purchases = mostSimilarUsers.map { usr =>
+usr.purchases.filter(_.id === purchase.id)
+}
+purchases.sum() / purchases.size
+}
+}
+
+4. Pick the top-rated items.
+
+val topRatedItems = ratedItems.take(10)
+\end{lstlisting}
+
+\subsection{Model-based collaborative filtering}
+
+In contrast to memory-based systems, which use the stored ratings directly in the prediction, model-based approaches use these ratings to learn a predictive model.
+The general idea is to model the user-item interactions with factors representing latent characteristics of the users and items in the system, like the preference class of users and the category class of items.
+This model is then trained using the available data, and later used to predict ratings of users for new items. \cite{ricci11}
+
+Alternating Least Squares is an example of model-based collaborative filtering algorithm, it is presented in the next chapter.
+
+\end{document}

@@ -2,4 +2,4 @@
 
 Master of Science thesis
 
-[download pdf](https://bitbucket.org/joonne/thesis/raw/master/d_tyo.pdf)
+[download pdf](https://bitbucket.org/joonne/thesis/raw/master/thesis.pdf)
