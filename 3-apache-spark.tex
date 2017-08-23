@@ -76,7 +76,27 @@ This binary structure often has much lower memory footprint as well as is optimi
 To understand the internal binary representation for data, use the $schema$ function. \cite{spark-dataset}
 
 Two ways typically exist to create a Dataset.
-The most common way is to make use of the read function provided by SparkSession and point Spark to some files on the storage system:
+The most common way is to make use of the read function provided by SparkSession and point Spark to some files on the storage system. Such as the following $json$ file.
+
+\lstset{
+	string=[s]{"}{"},
+	stringstyle=\color{blue},
+	comment=[l]{:},
+	commentstyle=\color{black},
+}
+
+\begin{lstlisting}[caption=Example JSON file]
+
+[{
+  "name": "Matt",
+  "salary": 5400
+}, {
+  "name": "George",
+  "salary": 6000
+}]
+
+\end{lstlisting}
+
 
 \lstset{
 	frame=0,
@@ -153,13 +173,20 @@ peopleWithDoubleSalary.explain
 
 \section{DataFrame API}
 
-Picture about rdd vs dataset vs dataframe ?
-
 A DataFrame is essentially a Dataset that is organized into named columns.
-In Scala, a DataFrame is represented by a Dataset of Rows.
-It is conceptually equivalent to a table in a relational database or a data frame in R/Python, but it has richer optimizations under the hood.
+It is conceptually equivalent to a table in a relational database or a data frame in R or Python, but it has richer optimizations under the hood.
 DataFrames can be constructed from a range of sources such as structured data files, tables in Hive, external databases, or existing RDDs.
+The DataFrame API is available in Scala, Java, Python, and R.
+In the Scala API a DataFrame is represented by a Dataset of Rows, it essentially is simply a type alias of Dataset[Row].
 \cite{spark-sql-programming-guide}
+
+\begin{lstlisting}[caption=Creating a new DataFrame by using read function]
+
+val people = spark.read.json("./people.json")
+
+\end{lstlisting}
+
+When creating a DataFrame, the schema of the 
 
 \begin{figure}[h]
 	\caption{DataFrame}
