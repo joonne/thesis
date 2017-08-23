@@ -12,24 +12,26 @@ An executor is one machine in a cluster.
 
 Spark can be introduced by describing its predecessor, MapReduce, and the advantages it offers.
 MapReduce offered a simple model for writing programs that could execute in parallel across hundreds of machines.
-MapReduce achieves nearly linear scalability as the data size increases. The execution time is maintained by adding more computers to handle the task.
+MapReduce achieves nearly linear scalability as the data size increases.
+The execution time is maintained by adding more computers to handle the task.
 
 Spark preserves MapReduce's linear scalability and fault tolerance while extending it in three important ways.
-In MapReduce the intermediate results between the map and reduce tasks must be written into memory where as Spark is able to pass the results directly to the next step in the pipeline.
-Spark also treats the developers better by offering a rich set of transformations which enables users to represent complex pipelines in a few lines of code. (EXAMPLE?)
-Spark also introduces in-memory processing by introducing Resilient Distributed Dataset (RDD) abstraction which offers a way for developers to materialize any step in a processing pipeline and store it into memory. This means that future steps do not need to calculate the previous results again.
+First, in MapReduce the intermediate results between the map and reduce tasks must be written into memory where as Spark is able to pass the results directly to the next step in the pipeline.
+Second, Spark treats the developers better by offering a rich set of transformations which enables users to represent complex pipelines in a few lines of code. (EXAMPLE?)
+Third, Spark introduces in-memory processing by offering the Resilient Distributed Dataset (RDD) abstraction which offers a way for developers to materialize any step in a processing pipeline and store it into memory.
+This means that future steps do not need to calculate the previous results again and they can continue a any intermediate step that the developer wants.
 Previously this kind of feature has not been available within distributed processing engines. \cite{ryza15}
 
 Spark programs can be written using Java, Scala, Python or R.
 However, using Spark with Scala instead of Java, Python or R has a couple of advantages to it.
 Performance overhead is reduced, since tasks such as transferring data across different layers or performing transformations for data may result in weaker performance.
-Spark is written with Scala, which denotes that user has always access to latest and greatest features of the framework.
-Spark philosophy is easier to understand when Spark is used with the language it was built with.
-There is still one, maybe the biggest benefit of using Scala with Spark, and it is the developing experience that comes with the fact that user is using the same language for everything.
+Spark is written with Scala, which  has the implication that user has always access to latest and greatest features of the framework.
+Spark philosophy becomes easier to understand when Spark is used with the language it was built with.
+There is still one, maybe the biggest, benefit of using Scala with Spark, and it is the developer experience that comes with the fact that developer is using the same language for everything.
 Importing data from database, data manipulation, shipping the code into clusters. \cite{ryza15}
 
 Spark is shipped with a read eval print loop (REPL), which enables developers to test out things quickly in the console, without having to make the application self contained from the begin.
-Usually when a application developed in REPL has matured enough, it is a good idea to move it into a compiled library (JAR).
+Usually when an application developed in REPL has matured enough, it is a good idea to move it into a compiled library (JAR).
 This way it is possible to prevent code and results from disappearing.
 
 \section{Resilient Distributed Dataset (RDD)}
@@ -56,8 +58,7 @@ This allows some jobs to complete faster than they would in MapReduce, with simp
 \end{figure}
 
 \section{Dataset API}
-
-Dataset, DS, is the replacement for RDD in Spark.
+Dataset (DS) is the replacement for RDD in Spark.
 It is a strongly typed collection of domain-specific objects that can be transformed in parallel using functional or relational operations.
 Operations available on Datasets are divided into transformations and actions.
 Transformations are operations such as map, filter, select and aggregate that produce new Datasets.
@@ -66,20 +67,21 @@ Actions are operations such as count, show, or writing data out to file systems 
 Datasets are lazy by nature, which refers to that computations are only triggered when an action is invoked.
 A Dataset essentially represents a logical plan that describes the computation required to produce the data.
 Upon an action invocation, the query optimizer of Spark optimizes the logical plan and generates a physical plan for efficient execution in a parallel and distributed manner.
-The logical plan as well as the optimized physical plan can be explored by using the explain function. \cite{spark-dataset}
+The logical plan as well as the optimized physical plan can be explored by using the $explain$ function. \cite{spark-dataset}
 
 To efficiently support domain-specific objects, an Encoder is required.
 The encoder maps the domain specific type T to Spark's internal type system.
 For example, given a class Person with two fields, name (string) and age (int), an encoder is used to tell Spark to generate code at runtime to serialize the Person object into a binary structure.
-This binary structure often has much lower memory footprint as well as are optimized for efficiency in data processing (e.g. in a columnar format).
-To understand the internal binary representation for data, use the schema function.
+This binary structure often has much lower memory footprint as well as is optimized for efficiency in data processing (e.g. in a columnar format).
+To understand the internal binary representation for data, use the $schema$ function. \cite{spark-dataset}
 
 Two ways typically exist to create a Dataset.
-The most common way is to make use of the read function provided by SparkSession and point Spark to some files on storage systems:
+The most common way is to make use of the read function provided by SparkSession and point Spark to some files on the storage system:
 
 \lstset{
 	frame=0,
-	language=Scala
+	language=Scala,
+	breaklines=true,
 }
 
 \begin{lstlisting}[caption=Creating a new Dataset by using read function]
@@ -115,7 +117,7 @@ val spark = SparkSession
   .getOrCreate()
 \end{lstlisting}
 
-SparkSession is the entry point to programming Spark with the Dataset and DataFrame API. In the above snippet we create a $SparkSession$ by chaining calls to the builder method, which creates a SparkSession.Builder object for constructing a SparkSession. 
+SparkSession is the entry point to programming Spark with the Dataset and DataFrame API. In the above snippet we create a $SparkSession$ by chaining calls to the builder method, which creates a SparkSession. Builder object for constructing a SparkSession. 
 Datasets can also be created through transformations available on existing Datasets:
 
 \begin{lstlisting}[caption=Creating a new Dataset through a transformation]
@@ -130,6 +132,24 @@ Datasets are similar to RDDs as they also provide strong typing and the ability 
 Serialization denotes a task in which an object is turned into bytes thus reducing the memory footprint of the object.
 In general, serialization is needed for processing or transmitting over the network.
 While both encoders and standard serialization are responsible for turning an object into bytes, encoders are generated dynamically by code. They are using a format that allows Spark to perform many operations such as filtering, sorting and hashing without the need of deserializing the bytes back into an object. \cite{spark-programming-guide}
+
+In the following listing, we create a new Dataset by reading a $json$ file from the file system. Next we create another Dataset through a transformation. We make use of the $copy$ method of Scala case class to clone an object, since we had declared the $people$ Dataset to be immutable. Finally, we display the physical plan by running the $explain$ function on the newly created Dataset.
+
+\begin{lstlisting}[caption=Displaying the logical and physical plan of a Dataset]
+
+val people = spark.read.json("./people.json").as[Person]
+val peopleWithDoubleSalary = people.map { person => 
+	person.copy(salary = person.salary * 2)
+}
+peopleWithDoubleSalary.explain
+
+== Physical Plan ==
+*SerializeFromObject [staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, assertnotnull(input[0, $line62.$read$$iw$$iw$Person, true], top level Product input object).name, true) AS name#212, staticinvoke(class org.apache.spark.sql.types.Decimal$, DecimalType(38,0), apply, assertnotnull(input[0, $line62.$read$$iw$$iw$Person, true], top level Product input object).salary, true) AS salary#213]
++- *MapElements <function1>, obj#211: $line62.$read$$iw$$iw$Person
++- *DeserializeToObject newInstance(class $line62.$read$$iw$$iw$Person), obj#210: $line62.$read$$iw$$iw$Person
++- *FileScan json [name#200,salary#201L] Batched: false, Format: JSON, Location: InMemoryFileIndex[file:/home/joonne/Documents/GitHub/thesis-code/people.json], PartitionFilters: [], PushedFilters: [], ReadSchema: struct<name:string,salary:bigint>
+
+\end{lstlisting}
 
 \section{DataFrame API}
 
