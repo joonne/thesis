@@ -351,7 +351,7 @@
 % the document. Usually the chapter number and name, like
 % '1. Introduction'. These marks can be used in headers.
 %
-% For theses with over 80 pages, use option 'twoside' ´for
+% For theses with over 80 pages, use option 'twoside' ï¿½for
 % documentclass.  This part is copied from classes.pdf
 % http://tex.loria.fr/ctan-doc/macros/latex/base/classes.pdf 
 %

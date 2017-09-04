@@ -1,5 +1,4 @@
-%!TeX encoding = ISO-8859-1
-\documentclass[12pt, a4paper, english]{tutthesis}
+\documentclass[12pt,a4paper,english]{tutthesis}
 
 \usepackage{mathtools}
 \usepackage{listings}
@@ -16,9 +15,9 @@
 
 % Define your basic information
 \author{Jonne Petteri Pihlanen}
-\title{Building a Recommendation Engine with Apache Spark}      % primary title (for front page)
-\titleB{Suosittelijajärjestelmän rakentaminen Apache Sparkilla} % translated title for abstract
-\thesistype{Master of Science thesis} % or Bachelor of Science, Laboratory Report... 
+\title{Suosittelijajärjestelmän rakentaminen Apache Sparkilla}      % primary title (for front page)
+\titleB{Building a Recommendation Engine with Apache Spark} % translated title for abstract
+\thesistype{Diplomityö} % or Bachelor of Science, Laboratory Report... 
 \examiner{????} % without title Prof., Dr., MSc or such
 
 % Special trick to use internal macros outside the cls file
@@ -32,7 +31,7 @@
   pdfkeywords={recommmendation}
 }
 
-\usepackage[english]{babel}
+\usepackage[finnish]{babel}
 
 \pagenumbering{Roman}
 \pagestyle{headings}
@@ -78,7 +77,7 @@
 \chapter*{Abstract}
 
 \begin{spacing}{1.0}
-         {\bf \textsf{\MakeUppercase{\@author}}}: \@title\\   % use \@titleB when thesis is in Finnish
+         {\bf \textsf{\MakeUppercase{\@author}}}: \@titleB\\   % use \@titleB when thesis is in Finnish
          \textsf{Tampere University of Technology}\\
          \textsf{\@thesistype, xx pages} \\
          \textsf{September 2016}\\
@@ -132,7 +131,7 @@ Jonne Pihlanen
 %
 
 \renewcommand\contentsname{Table of Contents} % Set English name (otherwise bilingual babel might break this), 2014-09-01
-%\renewcommand\contentsname{Sisï¿½llys}         % Set Finnish name
+\renewcommand\contentsname{Sisällys}         % Set Finnish name
 \setcounter{tocdepth}{3}                      % How many header level are included
 \tableofcontents                              % Create TOC
 
@@ -152,11 +151,8 @@ Jonne Pihlanen
 % You don't have to align these with whitespaces, but it makes the
 % .tex file more readable
 \begin{termlist}
-	\item [Recommendation Engine]	System that tries to predict the items that a user woud like
-	\item [Collaborative]			Users collaborate with each other to recommend items
 	\item [Spark] 					Fast and general engine for large-scale data processing
 	\item [Information retrieval (IR)]	Activity of obtaining relevant information resources from a collection of information resources.
-	\item [SDK] Software Development Kit
 \end{termlist}
 
 % Leave the backside of abbreviation list empty in twoside mode
@@ -171,17 +167,17 @@ Jonne Pihlanen
                               % 'Luku' in page headers (in 'twoside'
                               % mode)
 
-\subfile{1-introduction.tex}
+\subfile{1-johdanto.tex}
 
-\subfile{2-recommendation-systems.tex}
+\subfile{2-suosittelijajarjestelmat.tex}
 
-\subfile{3-apache-spark.tex}
+%\subfile{3-apache-spark.tex}
 
-\subfile{4-implementation.tex}
+% \subfile{4-implementation.tex}
 
-\subfile{5-result.tex}
+%\subfile{5-result.tex}
 
-\subfile{6-evaluation.tex}
+%\subfile{6-evaluation.tex}
 
 % The bibliography, i.e the list of references (3 options available)
 \newpage
