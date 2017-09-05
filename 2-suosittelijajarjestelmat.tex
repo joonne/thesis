@@ -65,19 +65,16 @@ Uranuurtavan tutkimuksen lisäksi nämä sivustot julkaisivat aineistoja, joka ei o
 
 \section{Suositustekniikat}
 
-Recommendation system must have some sort of understanding about the items to be able to recommend something.
-To achieve its goal, the system must be able to predict the usefulness or at least compare the utility of some items and then decide the ones to recommend.
-The prediction step of the recommender can be illustrated by, for example, a simple non-personalized, recommendation algorithm that recommends only the most popular movies.
-The reasoning behind this approach is that when lacking more precise information about the user's preferences, a movie liked by others is probably also liked by a general user, at least more than a randomly selected movie.
-Thus, the utility of these popular songs can be seen reasonably high for a generic user. \cite{ricci11}
-
 Suosittelujärjestelmällä täytyy olla jonkunlainen ymmärrys tuotteista, jotta se pystyy suosittelemaan jotain.
 Tämän mahdollistamiseksi, järjestelmän täytyy pystyä ennustamaan tuotteen käytännöllisyys tai ainakin verrata tuotteiden hyödyllisyyttä ja tämän perusteella päättää suositeltavat tuotteet.
+Ennustamista voidaan luonnostella yksinkertaisella ei-personoidulla suosittelualgoritmilla joka suosittelee vain suosituimpia elokuvia.
+Tätä lähestymistapaa voidaan perustella sillä, että tarkemman tiedon puuttuessa käyttäjän mieltymyksistä, elokuva josta muutkin ovat pitäneet on todennäköisesti myös keskivertokäyttäjän mieleen, ainakin enemmän kuin satunaisesti valikoitu elokuva.
+Suosittujen elokuvien voidaan siis katsoa olevan kohtuullisen osuvia suosituksia keskivertokäyttäjälle. \cite{ricci11}
 
-The utility of the user $u$ for the item $i$ can be modeled as a real valued function $R(u,i)$ as is normally done in collaborative filtering by considering the ratings of items given by the users.
-Thus, the fundamental task of the collaborative filtering recommender is to predict the value of $R$ over pairs of users and items to compute an estimation for the true function $R$.
-Consequently, by computing this prediction for the user $u$ on a set of items, the system will recommend items with the largest predicted degree of utility.
-The amount of predicted items is usually much smaller than the whole amount of items, thus the RS is filtering the items that are recommended to users. \cite{ricci11}
+Tuotteen $i$ hyödyllisyyttä käyttäjälle $u$ voidaan mallintaa reaaliarvoisella funktiolla $R(u,i)$, kuten yleensä tehdään yhteisösuodatuksessa ottamalla huomioon käyttäjien antamat arviot tuotteista.
+Yhteisösuodatus suosittelijan perustehtävä on ennustaa $R$:n arvoa käyttäjä-tuote pareille ja laskea arvio todelliselle funktiolle $R$.
+Laskiessaan tätä ennustetta käyttäjälle $u$ tuotejoukolle, järjestelmä suosittelee tuotteita joilla on suurin ennustettu hyödyllisyys.
+Ennustettujen tuotteiden määrä on usein paljon pienempi kuin tuotteiden koko määrä, joten voidaan sanoa että suosittelijajärjestelmä suodattaa käyttäjälle suositeltavat tuotteet. \cite{ricci11}
 
 RSs vary in terms of the addressed domain, the knowledge used and especially how the recommendations are made, denoting the recommendation algorithm \cite{ricci11}.
 This thesis will concentrate only on one class of recommendation techniques, collaborative filtering, since that is the one used in Apache Spark's MLlib.
