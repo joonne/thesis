@@ -41,7 +41,7 @@ Verrattuna klassisten tietojärjestelmien, kuten tietokantojen ja hakukoneiden, t
 Suositteljiajärjestelmistä tuli itsenäisiä tutkimusalueita 90-luvun puolivälissä.
 Viimeaikoina mielenkiinto suosittelujärjestelmiä kohtaan on kasvanut merkittävästi.
 Esimerkkinä suuren profiilin verkkosivustot kuten Amazon.com, YouTube, Netflix sekä IMDB, joissa suosittelujärjestelmillä on iso rooli.
-Oma lukunsa ovat myös vain suosittelujärjestelmien tutkimiseen ja kehittämiseen tarkoitetut konferenssit kuten RecSys ja AI Communications (2008). \cite{ricci}
+Oma lukunsa ovat myös vain suosittelujärjestelmien tutkimiseen ja kehittämiseen tarkoitetut konferenssit kuten RecSys ja AI Communications (2008). \cite{ricci11}
 
 Suosittelujärjestelmällä voidaan ajatella olevan kaksi päätarkoitusta.
 Ensimmäinen on avustaa palveluntarjoajaa.
@@ -76,42 +76,41 @@ Yhteisösuodatus suosittelijan perustehtävä on ennustaa $R$:n arvoa käyttäjä-tuot
 Laskiessaan tätä ennustetta käyttäjälle $u$ tuotejoukolle, järjestelmä suosittelee tuotteita joilla on suurin ennustettu hyödyllisyys.
 Ennustettujen tuotteiden määrä on usein paljon pienempi kuin tuotteiden koko määrä, joten voidaan sanoa että suosittelijajärjestelmä suodattaa käyttäjälle suositeltavat tuotteet. \cite{ricci11}
 
-RSs vary in terms of the addressed domain, the knowledge used and especially how the recommendations are made, denoting the recommendation algorithm \cite{ricci11}.
-This thesis will concentrate only on one class of recommendation techniques, collaborative filtering, since that is the one used in Apache Spark's MLlib.
+Suosittelijajärjestelmät eroavat toisistaan kohdistetun toimialan, käytetyn tiedon ja erityisesti siinä kuinka suositukset tehdään, jolla tarkoitetaan suosittelualgoritmia \cite{ricci11}.
+Tässä työssä keskitytään vain yhteen suosittelutekniikoiden luokkkaan, yhteisölliseen suodatukseen, sillä tätä menetelmää käytetään Apache Sparkin MLlib kirjastossa.
 
-Collaborative Filtering Recommendation Systems are based on the collaboration of users.
-They aim at identifying patterns of user interests in order to make targeted recommendations \cite{aberger14}.
-The original implementation of this approach recommends to the active user those items that other similar users in the sense of tastes have liked in the past \cite{ricci11}.
-First a user provides ratings for items.
-Next the method will find recommendations based on other users that have purchased similar items or based on items that are the most similar to the user's purchases.
-Collaborative filtering can be divided into two sub categories which are item-based collaborative filtering and user-based collaborative filtering.
-Collaborative filtering has been studied the most thus being the most popular and widely implemented technique in recommendation systems \cite{gorakala15} \cite{ricci11} \cite{burke02}.
+Yhteisöllistä suodatusta käyttävät suosittelijajärjestelmät perustuvat käyttäjien yhteistyöhön.
+Niiden tavoitteena on tunnistaa kuvioita käyttäjän mielenkiinnoista voidakseen tehdä suunnattuja suosituksia \cite{aberger14}.
+Tämän lähestymistavan alkuperäisessä toteutuksessa suositellaan aktiiviselle käyttäjälle niitä tuotteita joita muut samankaltaiset mieltymyksen omaavat käyttäjät ovat pitäneet aiemmin \cite{ricci11}.
+Käyttäjä arvostelee tuotteita.
+Seuraavaksi algoritmi etsii suosituksia perustuen käyttäjiin, jotka ovat ostaneet samanlaisia tuotteita tai perustuen tuotteisiin, jotka ovat eniten samanlaisia käyttäjän ostoshistoriaan verrattuna.
+Yhteisösuodatus voidaan jakaa kahteen kategoriaan, jotka ovat tuotepohjainen- ja käyttäjäpohjainen yhteisösuodatus.
+Yhteisösuodatusta on eniten käytetty ja toteutettu tekniikka suositusjärjestelmissä \cite{gorakala15} \cite{ricci11} \cite{burke02}.
 
-Collaborative filtering analyzes relationships between users and interdependencies among products to identify new user-item associations. \cite{korenBellVolinsky09}
-For example, deciding that two users may both like the same song because they play many other same songs is an example of collaborative filtering. \cite{ryza15}
+Yhteisöllinen suodatus analysoi käyttäjien välisiä suhteita ja tuotteiden välisiä riippuvuuksia tunnistaakseen uusia käyttäjä-tuote assosiaatioita \cite{korenBellVolinsky09}.
+Päätelmä siitä, että käyttäjät voisivat pitää samasta laulusta koska molemmat kuuntelevat muita samankaltaisia lauluja on esimerkki yhteisöllisestä suodatuksesta \cite{ryza15}.
 
-Collaborative filtering algorithms suffer from the new user and new item problems \cite{gorakala15}.
-This originates to the fact that the recommendation is based only on user's recommendations on items.
-If user has not given any reviews, the algorithm is not able to produce any recommendations either.
-Other issues of collaborative filtering algorithms are cold start and sparsity.
-Cold start denotes that a relatively large amount of data is required in order to be able to provide accurate recommendations for a user.
-Sparsity means that the number of items typically exceeds the number of users.
-This makes the relations extremely sparse since most users have rated or purchased only a small subset of the total items. \cite{aberger14}
+Koska yhteisöllisessä suodatuksessa suosittelu perustuu pelkästään käyttäjän arvosteluihin tuotteesta, yhteisöllinen suodatus kärsii ongelmista jotka tunnetaan nimillä uusi käyttäjäongelma ja uusi tuoteongelma \cite{gorakala15}.
+Ellei käyttäjä ole arvostellut yhtään tuotetta, algoritmi ei kykene tuottamaan myöskään yhtään suositusta.
+Muita yhteisöllisen suodatuksen haasteita ovat kylmä aloitus sekä niukkuus (sparsity).
+Kylmällä aloituksella tarkoitetaan sitä, että tarkkojen suositusten tuottamiseen tarvitaan tyypillisesti suuri määrä dataa.
+Niukkuudella tarkoitetaan sitä, että tuotteiden määrä ylittää usein käyttäjien määrän.
+Tästä johtuen suhteiden määrä on todella niukka, sillä useat käyttäjät ovat arvostelleet tai ostaneet vain murto-osan tuotteiden koko määrästä. \cite{aberger14}
 
-\subsection{Memory-based collaborative filtering}
+\subsection{Muistiperustainen yhteisöllinen suodatus}
 
-Memory-based or neighborhood collaborative filtering
+Muistiperustaississa metodeissa käyttäjä-tuote suosituksia käytetään suoraan uusien tuotteiden ennustamiseksi.
+Tämä voidaan toteuttaa kahdella tavalla, käyttäjäpohjaisena suositteluna tai tuotepohjaisena suositteluna.
 
-In memory-based methods the user-item ratings stored in the system are directly accessed to predict ratings for new items.
-This can be done in two ways known as user-based or item-based recommendation.
+Seuraavat kappaleet kuvaavat käyttäjäpohjaista yhteisösuodatusta ja tuotepohjaista yhteisösuodatusta.
 
-The following sections describe user-based collaborative filtering and item-based collaborative filtering.
-
-\subsubsection{Item-based collaborative filtering}
+\subsubsection{Tuotepohjainen yhteisösuodatus}
 
 Item-based collaborative filtering (IBCF) starts by finding similar items from the user's purchases \cite{gorakala15}.
 Next step is to model the preferences of a user to an item based on ratings of similar items by the same user \cite{ricci11}.
 The following snippet presents the idea in IBCF for every new user.
+
+Tuotepohjainen yhteisösuodatus (Item-based collaborative filtering, IBCF) aloittaa etsimällä
 
 \lstset{
 	columns=flexible,
