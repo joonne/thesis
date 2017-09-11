@@ -106,11 +106,9 @@ Seuraavat kappaleet kuvaavat käyttäjäpohjaista yhteisösuodatusta ja tuotepohjais
 
 \subsubsection{Tuotepohjainen yhteisösuodatus}
 
-Item-based collaborative filtering (IBCF) starts by finding similar items from the user's purchases \cite{gorakala15}.
-Next step is to model the preferences of a user to an item based on ratings of similar items by the same user \cite{ricci11}.
-The following snippet presents the idea in IBCF for every new user.
-
-Tuotepohjainen yhteisösuodatus (Item-based collaborative filtering, IBCF) aloittaa etsimällä
+Tuotepohjainen yhteisösuodatus (Item-based collaborative filtering, IBCF) aloittaa etsimällä samankaltaisia tuotteita käyttäjän ostoshistoriasta \cite{gorakala15}.
+Seuraavaksi mallinnetaan käyttäjän mieltymykset tuotteelle perustuen saman käyttäjän tekemiin arvosteluihin \cite{ricci11}.
+Alla oleva koodinpätkä esittelee ICBF:n idean jokaiselle uudelle käyttäjälle.
 
 \lstset{
 	columns=flexible,
@@ -118,86 +116,95 @@ Tuotepohjainen yhteisösuodatus (Item-based collaborative filtering, IBCF) aloitt
 	breaklines=true
 }
 
-\begin{lstlisting}[caption=Item-Based Collaborative Filtering algorithm \cite{gorakala15}]
+\begin{lstlisting}[caption=Tuotepohjainen yhteisösuodatus algoritmi \cite{gorakala15}]
 
 1. For each two items, measure how similar they are in terms of having received similar ratings by similar users
 
+1. Jokaiselle kahdelle tuotteelle, mittaa kuinka samankaltaisia ne ovat sen suhteen, kuinka samankaltaisia arvioita ne ovat saaneet samankaltaisilta käyttäjiltä.
+
 val similarItems = items.foreach { item1 =>
-items.foreach { item2 =>
-val similarity = cosineSimilarity(item1, item2);
-}
+	items.foreach { item2 =>
+		val similarity = cosineSimilarity(item1, item2);
+	}
 }
 
 2. For each item, identify the k-most similar items
+
+2. Tunnistaa k samankaltaisinta tuotetta jokaiselle tuotteelle
 
 val itemsSorted = sort(similarItems)
 
 3. For each user, identify the items that are most similar to the user's purchases
 
+3. Jokaiselle käyttäjälle, tunnista tuotteet jotka ovat eniten samankaltaisia käyttäjän ostoshistorian kanssa.
+
 users.foreach { user =>
-user.purchases.foreach { purchase =>
-val mostSimilar = findSimilarItem(purchase)
-}
+	user.purchases.foreach { purchase =>
+		val mostSimilar = findSimilarItem(purchase)
+	}
 }
 
 \end{lstlisting}
 
-Amazon.com, the biggest Internet retailer in the United States, has previously been using item-to-item collaborative filtering method.
-In their implementation the algorithm builds a table containing similar items by finding ones that users tend to purchase together.
-The algorithm then finds items similar to each of the user's purchases and ratings, combines those items, and returns the most popular or correlated items. \cite{linden03}
+Amazon.com:in, Amerikan suurin internetkauppa, on aiemmin tiedetty käyttävät tuote-tuotteeseen yhteisösuodatusta.
+Tässä toteutuksessa algoritmi rakentaa samankaltaisten tuotteiden taulun etsimällä tuotteita joita käyttäjät tapaavat ostaa yhdessä.
+Seuraavaksi algoritmi etsii käyttäjän ostoshistoriaa ja arvosteluita vastaavat tuotteet, yhdistää nämä tuotteet ja palauttaa suosituimmat tai eniten korreloivat tuotteet. \cite{linden03}
 
-\subsubsection{User-based collaborative filtering}
+\subsubsection{Käyttäjäpohjainen yhteisösuodatus}
 
-User-based collaborative filtering (UBCF) starts by finding the most similar users, rate items purchased by similar users, pick top rated items.
-The similarity in taste of two users is calculated based on the similarity in the rating history of the users \cite{ricci11}.
+Tuotepohjainen yhteisösuodatus (User-based collaborative filtering, UBCF) aloittaa etsimällä samankaltaisimmat käyttäjät.
+Seuraava askel on arvostella samankaltaisten käyttäjien ostamat tuotteet.
+Lopuksi valitaan parhaan arvosanan saaneet tuotteet.
+Samankaltaisuus saadaan laskettua vertaamalla käyttäjien ostoshistorioiden samankaltaisuutta. \cite{ricci11}
 
-The steps for every new user in user-based collaborative filtering are as follows:
+Askeleet jokaiselle uudelle käyttäjälle käyttäjäpohjaisessa yhteisösuodatuksessa ovat:
 
 \lstset{
 	columns=flexible,
 	frame=single,
+	keywords={val}
 	breaklines=true
 }
 
-\begin{lstlisting}[caption=User-Based Collaborative Filtering algorithm \cite{gorakala15}]
+\begin{lstlisting}[caption=Käyttäjäpohjainen yhteisösuodatus algoritmi \cite{gorakala15}]
 
-1. Measure how similar each user is to the new one. Like IBCF, popular similarity measures are correlation and cosine.
+1. Mittaa jokaisen käyttäjän samankaltaisuus uuteen käyttäjään. Kuten IBCF:ssä, suosittuja samankaltaisuusarvioita ovat korrelaatio sekä kosinimitta.
 
 case class Similarity(userId1: Int, userId2: Int, score: Int)
 
 val newUser: User = User("Adam", 31, purchases)
 val similarities = users.map { user =>
-Similarity(newUser.id, user.id, cosineSimilarity(user, newUser)
+	Similarity(newUser.id, user.id, cosineSimilarity(user, newUser)
 }
 
-2. Identify the most similar users. The options are: Take account of the top k users (k-nearest_neighbors) Take account of the users whose similarity is above a defined threshold
+2. Tunnista samankaltaisimmat käyttäjät. Vaihtoehtoja on kaksi: Voidaan valita joko parhaat k käyttäjää (k-nearest neighbors) tai voidaan valita käyttäjät, joiden samankaltaisuus ylittää tietyn kynnysarvon.
 
 val mostSimilarUsers = similarities.filter(_.score > 0.8)
 
-3. Rate the items purchased by the most similar users. The rating is the average rating among similar users and the approaches are:
-Average rating
-Weighted average rating, using the similarities as weights
+3. Arvostele samankaltaisimpien käyttäjien ostamat tuotteet. Arvostelu saadaan joko keskiarvona kaikista tai painotettuna keskiarvona, käyttäen samankaltaisuuksia painoina.
 
 val ratedItems = mostSimilarUsers.map { user =>
-user.purchases.map { purchase =>
-val purchases = mostSimilarUsers.map { usr =>
-usr.purchases.filter(_.id === purchase.id)
-}
-purchases.sum() / purchases.size
-}
+	user.purchases.map { purchase =>
+		val purchases = mostSimilarUsers.map { usr =>
+			usr.purchases.filter(_.id === purchase.id)
+		}
+	purchases.sum() / purchases.size
+	}
 }
 
-4. Pick the top-rated items.
+4. Valitse parhaiten arvostellut tuotteet.
 
 val topRatedItems = ratedItems.take(10)
+
 \end{lstlisting}
 
-\subsection{Model-based collaborative filtering}
+\subsection{Mallipohjainen yhteisösuodatus}
 
-In contrast to memory-based systems, which use the stored ratings directly in the prediction, model-based approaches use these ratings to learn a predictive model.
-The general idea is to model the user-item interactions with factors representing latent characteristics of the users and items in the system, like the preference class of users and the category class of items.
-This model is then trained using the available data, and later used to predict ratings of users for new items. \cite{ricci11}
+Muistipohjaiseen yhteisösuodatuksen käyttäessä tallennettuja suosituksia suoraan ennustamisen apuna, mallipohjaisissa lähestymistavoissa näitä arvosteluita käytetään ennustavan mallin oppimiseen.
+Perusajatus on mallintaa käyttäjä-tuote vuorovaikutuksia tekijöillä jotka edustavat käyttäjien ja tuotteiden piileviä ominaisuuksia (latent factors) järjestelmässä.
+Piileviä ominaisuuksia ovat esimerkiksi käyttäjän mieltymykset ja tuotteiden kategoriat.
+Tämä malli opetetaan käyttämällä saatavilla olevaa dataa ja myöhemmin käytetään ennustamaan käyttäjien arvioita uusille tuotteille. \cite{ricci11}
 
-Alternating Least Squares is an example of model-based collaborative filtering algorithm, it is presented in the next chapter.
+Vaihtelevat pienimmät neliöt (Alternating Least Squares, ALS) algoritmi on esimerkki mallipohjaisesta yhteisösuodatusalgoritmista ja se esitetään seuraavassa luvussa.
 
 \end{document}
