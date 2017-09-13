@@ -15,44 +15,48 @@ MapReduce tarjosi yksinkertaisen mallin ohjelmien kirjoittamiseen ja pystyi suor
 MapReduce skaalautuu lähes lineaarisesti datan koon kasvaessa.
 Suoritusaikaa hallitaan lisäämällä lisää tietokoneita suorittamaan tehtävää. 
 
-Spark preserves MapReduce's linear scalability and fault tolerance while extending it in three important ways.
-First, in MapReduce the intermediate results between the map and reduce tasks must be written into memory where as Spark is able to pass the results directly to the next step in the pipeline.
-Second, Spark treats the developers better by offering a rich set of transformations which enables users to represent complex pipelines in a few lines of code. (EXAMPLE?)
-Third, Spark introduces in-memory processing by offering the Resilient Distributed Dataset (RDD) abstraction which offers a way for developers to materialize any step in a processing pipeline and store it into memory.
-This means that future steps do not need to calculate the previous results again and they can continue a any intermediate step that the developer wants.
-Previously this kind of feature has not been available within distributed processing engines. \cite{ryza15}
-
 Apache Spark säilyttää MapReduce:n lineaarisen skaalautuvuuden ja vikasietokyvyn mutta laajentaa sitä kolmella merkittävällä tavalla.
 Ensiksi, MapReducessa map- ja reduce-tehtävien väliset tulokset täytyy kirjoittaa levylle kun taas Spark kykenee välittämään tulokset suoraan putkiston seuraavalle vaiheelle.
+Toiseksi, Apache Spark kohtelee kehittäjiä paremmin tarjoamalla rikkaan joukon muunnoksia (transformations) joiden avulla voidaan muutamalla koodirivillä ilmaista monimutkaisia putkistoja. (ESIMERKKI?)
+Kolmanneksi, Spark esittelee muistissa tapahtuvan prosessoinnin tarjoamalla abstraktion nimeltä Resilient Distributed Dataset (RDD). RDD tarjoaa kehittäjälle mahdollisuuden materialisoida minkä tahansa askeleen liukuhihnassa ja tallentaa sen muistiin.
+Tämä tarkoittaa sitä, että tulevien askelien ei tarvitse laskea aiempia tuloksia uudelleen ja tällöin on mahdollista jatkaa juuri käyttäjän haluamasta askeleesta.
+Aiemmin tämänkaltaista ominaisuutta ei ole ollut saatavilla hajautetun laskennan järjestelmissä. \cite{ryza15}
 
-Spark programs can be written using Java, Scala, Python or R.
-However, using Spark with Scala instead of Java, Python or R has a couple of advantages to it.
-Performance overhead is reduced, since tasks such as transferring data across different layers or performing transformations for data may result in weaker performance.
-Spark is written with Scala, which  has the implication that user has always access to latest and greatest features of the framework.
-Spark philosophy becomes easier to understand when Spark is used with the language it was built with.
-There is still one, maybe the biggest, benefit of using Scala with Spark, and it is the developer experience that comes with the fact that developer is using the same language for everything.
-Importing data from database, data manipulation, shipping the code into clusters. \cite{ryza15}
+Spark ohjelmia voidaan kirjottaa Java, Scala, Python tai R ohjelmointikielellä.
+Scalan käyttämisellä saavutetaan kuitenkin muutamia etuja, joita muut kielet eivät tarjoa.
+Tehokkuus paranee, sillä tehtävät kuten datan siirtäminen eri kerrosten välillä tai muunnosten suorittaminen datalle saattaa johtaa heikompaan tehokkuuteen.
+Spark on kirjoitettu Scala-ohjelmointikielellä, joten viimeisimmät ja parhaimmat ominaisuudet ovat aina käytössä.
+Spark ohjelmoinnin filosofia on helpompi ymmärtää kun Sparkia käytetään kielellä, jolla se on rakennettu.
+Suurin hyöty jonka Scalan käyttäminen tarjoaa, on kuitenkin kehittäjäkokemus joka tulee saman ohjelmointikielen käyttämisestä kaikkeen.
+Datan tuonti, manipulointi ja koodin lähettäminen klustereihin hoituvat samalla kielellä. \cite{ryza15}
 
-Spark is shipped with a read eval print loop (REPL), which enables developers to test out things quickly in the console, without having to make the application self contained from the begin.
-Usually when an application developed in REPL has matured enough, it is a good idea to move it into a compiled library (JAR).
-This way it is possible to prevent code and results from disappearing.
+Spark-jakelun mukana toimitetaan luku-evaluointi-tulostus-silmukka, komentorivityökalu, (Read eval print loop, REPL), joka mahdollistaa uusien asioiden nopean testailun konsolissa, eikä sovelluksista tarvitse rakentaa itsenäisiä (self-contained) alusta asti.
+Usein kun REPLissä kehitetty sovelluksen tai sovelluksen osan voidaan katsoa olevan tarpeeksi valmis, on järkevää tehdä siitä koottu kirjasto (JAR).
+Näin varmistutaan etteivät koodi tai tulokset pääse katoamaan, vaikkakin REPL tarjoaa samantapaisen muistin komentohistoriasta kuin perinteinen komentorivikin.
+
+SELITYS JAR:ISTA JA EHKÄ JVM:STÄ?
 
 \section{Resilient Distributed Dataset (RDD)}
 
-A Resilient Distributed Dataset (RDD), is the main abstraction in Spark.
-Essentially it is an immutable, partitioned collection of elements that can be distributed across multiple machines in a cluster. \cite{spark-rdd}
+Resilient Distributed Dataset (RDD) on Sparkin tarjoama pääabstraktio.
+RDD on muuttumaton, osioitu elementtikokoelma joka voidaan hajauttaa klusterin useiden koneiden välillä. \cite{spark-rdd}
 
-An important context to understand about RDDs is that they are lazy by nature.
-When a new RDD is created, nothing is actually done, it means that spark knows where the data is when the time comes to do something with it.
+Tärkeä yksityiskohta ymmärtää RDD:stä on että ne ovat laiskasti evaluoituvia.
+Laiska evaluaatio (lazy evaluation) on evaluointi taktiikka, jossa lausekkeen evaluointia viivytetään siihen asti kun sen arvoa tarvitaan.
+Kun uusi RDD luodaan, mitään ei oikeasti vielä tapahdu.
+Spark tietää missä data sijaitsee tai miten data saadaan laskettua kun tulee aika tehdä sille jotain.
 
-RDD can be created in two ways: parallelizing an existing Scala collection in the driver program or referencing an external dataset in an external storage system, such as HDFS, HBase or any file system supported by Hadoop \cite{spark-programming-guide}.
+RDD voidaan luoda kahdella tavalla.
+Olemassaoleva Scala kokoelma voidaan rinnakkaistaa (parallelize).
+Toinen keino on viitata ulkoiseen aineistoon ulkoisessa varastointijärjestelmässä kuten HDFS:sä, HBase:ssa tai missä tahansa Hadoopin tuntemassa tiedostojärjestelmässä. \cite{spark-programming-guide}
 
-RDDs can be persisted into memory, which allows programmer to reuse them efficiently across parallel operations.
-RDDs are able to recover from node failures automatically, using Directed Acyclic Graph (DAG) engine.
-DAG supports cyclic data flow.
-Each Spark job creates a DAG of task stages to be performed on the cluster.
-Compared to MapReduce, which creates a DAG with two predefined stages - Map and Reduce, DAGs created by Spark can contain any number of stages.
-This allows some jobs to complete faster than they would in MapReduce, with simpler jobs completing after just one stage, and more complex tasks completing a single run of many stages, rather than having to be split into multiple jobs. \cite{mapRSpark}
+RDD:t voidaan tallentaa muistiin, jolloin ohjelmistokehittäjä voi uudelleenkäyttää niitä tehokkaasti rinnakkaisissa operaatioissa.
+RDD:t voivat palautua solmuvirheistä automaattisesti käyttäen Directed Acyclic Graph (DAD) moottoria.
+DAG tukee syklistä datavirtaa.
+Jokaista Spark työtä kohti luodaan DAG klusterissa suoritettavan tehtävän tasoista.
+Verrattuna MapReduceen, joka luo DAGin kahdesta ennaltamäärätystä tilasta (Map ja Reduce), Sparkin luomat DAGit voivat sisältää minkä tahansa määrän tasoja.
+Tästä syystä jotkin työt voivat valmistua nopeammin kuin ne valmistuisivat MapReducessa.
+Yksinkertaisimmat työt voivat valmistua vain yhden tason jälkeen ja monimutkaisemmat tehtävät valmistuvat yhden monitasoisen ajon jälkeen, ilman että niitä täytyy pilkkoa useampiin töihin. \cite{mapRSpark}
 
 \begin{figure}[h]
 	\caption{Directed Acyclic Graph \cite{dag-image}}
@@ -61,11 +65,12 @@ This allows some jobs to complete faster than they would in MapReduce, with simp
 \end{figure}
 
 \section{Dataset API}
-Dataset (DS) is the replacement for RDD in Spark.
-It is a strongly typed collection of domain-specific objects that can be transformed in parallel using functional or relational operations.
-Operations available on Datasets are divided into transformations and actions.
-Transformations are operations such as map, filter, select and aggregate that produce new Datasets.
-Actions are operations such as count, show, or writing data out to file systems that trigger computation and return results. \cite{spark-dataset}
+Dataset (DS) on RDD:n korvaaja Sparkissa.
+DS on vahvasti tyypitetty kokoelma aluespesifisiä objekteja jotka voidaan muuntaa rinnakkain käyttäen funktionaalisia tai relaatio-operaatioita.
+Dataset:ille olemassa olevat operaatiot on jaettu muunnoksiin ja toimiin.
+Muunnokset ovat operaatioita, jotka luovat uusia Datasettejä, kuten map, filter, select, aggregate.
+Toimet ovat operaatioita jotka laukaisevat laskentaa ja palauttavat tuloksia.
+Toimia ovat esimerkiksi count, show tai datan kirjoittaminen tiedostojärjestelmään. \cite{spark-dataset}
 
 Datasets are lazy by nature, which refers to that computations are only triggered when an action is invoked.
 A Dataset essentially represents a logical plan that describes the computation required to produce the data.
