@@ -65,6 +65,7 @@ Yksinkertaisimmat tyˆt voivat valmistua vain yhden tason j‰lkeen ja monimutkaise
 \end{figure}
 
 \section{Dataset API}
+
 Dataset (DS) on RDD:n korvaaja Sparkissa.
 DS on vahvasti tyypitetty kokoelma aluespesifisi‰ objekteja jotka voidaan muuntaa rinnakkain k‰ytt‰en funktionaalisia tai relaatio-operaatioita.
 Dataset:ille olemassa olevat operaatiot on jaettu muunnoksiin ja toimiin.
@@ -72,19 +73,24 @@ Muunnokset ovat operaatioita, jotka luovat uusia Datasettej‰, kuten map, filter,
 Toimet ovat operaatioita jotka laukaisevat laskentaa ja palauttavat tuloksia.
 Toimia ovat esimerkiksi count, show tai datan kirjoittaminen tiedostoj‰rjestelm‰‰n. \cite{spark-dataset}
 
-Datasets are lazy by nature, which refers to that computations are only triggered when an action is invoked.
-A Dataset essentially represents a logical plan that describes the computation required to produce the data.
-Upon an action invocation, the query optimizer of Spark optimizes the logical plan and generates a physical plan for efficient execution in a parallel and distributed manner.
-The logical plan as well as the optimized physical plan can be explored by using the $explain$ function. \cite{spark-dataset}
+Dataset-instanssit ovat laiskoja luonteeltaan, jolla tarkoitetaan sit‰, ett‰ laskenta aloitetaan vasta kun toimintoa kutsutaan.
+Dataset on pohjimmiltaan looginen suunnitelma, jolla kuvataan datan tuottamiseen tarvittava laskenta.
+Toimea kutsuttaessa, Sparkin kyselyoptimoija (query optimizer) optimoi loogisen suunnitelman ja generoi fyysisen suunnitelman.
+Fyysinen suunnitelma takaa rinnakkaisesti ja hajautetusti tapahtuvan tehokkaan suorituksen.
+Loogista suunnitelmaa, kuten myˆs optimoitu fyysist‰ suunnitelmaa, voidaan tutkia k‰ytt‰m‰ll‰ DS:n $explain$ funktiota. \cite{spark-dataset}
 
-To efficiently support domain-specific objects, an Encoder is required.
-The encoder maps the domain specific type T to Spark's internal type system.
-For example, given a class Person with two fields, name (string) and age (int), an encoder is used to tell Spark to generate code at runtime to serialize the Person object into a binary structure.
-This binary structure often has much lower memory footprint as well as is optimized for efficiency in data processing (e.g. in a columnar format).
-To understand the internal binary representation for data, use the $schema$ function. \cite{spark-dataset}
+Domain-spesifisten olioiden tehokkaaseen tukemiseen tarvitaan enkooderia.
+Enkooderilla tarkoitetaan ohjelmaa, joka muuntaa tietoa jonkin algoritmin mukaisesti ja t‰ss‰ tapauksessa sit‰ k‰ytet‰‰n yhdist‰m‰‰n domain-spesifinen tyyppi $T$ Sparkin sis‰iseen tyyppij‰rjestelm‰‰n.
+Enkooderia voidaan k‰ytt‰‰ esimerkiksi luokan $Person$, joka sis‰lt‰‰ kent‰t nimi (merkkijono) ja ik‰ (kokonaisluku), kertomaan Sparkille generoi koodia ajon aikana joka serialisoi $Person$ olion bin‰‰rirakenteeksi.
+Generoidulla bin‰‰rirakenteella on usein pienempi muistijalanj‰lki ja se on myˆs optimoitu tehokkaaseen dataprosessointiin.
+Datan bin‰‰riesitys voidaan tarkistaa k‰ytt‰m‰ll‰ DS:n tarjoamaa $schema$ funktiota. \cite{spark-dataset}
 
 Two ways typically exist to create a Dataset.
-The most common way is to make use of the read function provided by SparkSession and point Spark to some files on the storage system. Such as the following $json$ file.
+The most common way is to make use of the read function provided by SparkSession and point Spark to some files on the storage system.
+Such as the following $json$ file.
+
+Dataset voidaan luoda tyypillisesti kahdella eri tavalla.
+Yleisin tapa on k‰ytt‰‰ $SparkSession$:in tarjoamaa $read$ funktiota ja osoittaa Spark joihinkin tiedostoihin tiedostoj‰rjestelm‰ss‰, kuten seuraavaan $json$ tiedostoon.
 
 \lstset{
 	string=[s]{"}{"},
@@ -93,7 +99,7 @@ The most common way is to make use of the read function provided by SparkSession
 	commentstyle=\color{black},
 }
 
-\begin{lstlisting}[caption=Example JSON file]
+\begin{lstlisting}[caption=Esimerkki JSON tiedosto]
 
 [{
   "name": "Matt",
@@ -112,47 +118,50 @@ The most common way is to make use of the read function provided by SparkSession
 	breaklines=true,
 }
 
-\begin{lstlisting}[caption=Creating a new Dataset by using read function]
-
-val people = spark.read.json("./people.json").as[Person]
-
-\end{lstlisting}
-
-where $Person$ would be a Scala case class, for example:
-
-\begin{lstlisting}[caption=Definition of case class Person]
-
-case class Person(id: BigInt, firstName: String, lastName: String)
-
-\end{lstlisting}
-
-Case classes are normal Scala classes that are:
-
-\begin{itemize}
-	\item Immutable by default
-	\item Decomposable through pattern matching
-	\item Compared by structural equality instead of by reference
-	\item Succinct to instantiate and operate on
-\end{itemize}
-
-If we would omit the casting with keyword $as$ then we would end up creating a DataFrame and the schema of the created object would be guessed by Spark.
-
-\begin{lstlisting}[caption=Creating a SparkSession]
-val spark = SparkSession
-  .builder
-  .appName("MovieLensALS")
-  .config("spark.executor.memory", "2g")
-  .getOrCreate()
-\end{lstlisting}
-
-SparkSession is the entry point to programming Spark with the Dataset and DataFrame API. In the above snippet we create a $SparkSession$ by chaining calls to the builder method, which creates a SparkSession. Builder object for constructing a SparkSession. 
-Datasets can also be created through transformations available on existing Datasets:
+Dataset voidaan luoda myˆs tekem‰ll‰ muutoksia olemassaoleville Dataset olioille:
 
 \begin{lstlisting}[caption=Creating a new Dataset through a transformation]
 
 val names = people.map(_.name)
 
 \end{lstlisting}
+\\
+\begin{lstlisting}[caption=Uuden Dataset olion luominen k‰ytt‰en read funktiota]
+
+val people = spark.read.json("./people.json").as[Person]
+
+\end{lstlisting}
+
+jossa $Person$ olisi Scala case-luokka, esimerkiksi:
+
+\begin{lstlisting}[caption=case class Person]
+
+case class Person(id: BigInt, firstName: String, lastName: String)
+
+\end{lstlisting}
+
+Case-luokat ovat tavallisia Scala-luokkia jotka ovat:
+
+\begin{itemize}
+	\item Oletustarvoisesti muuttumattomia (immutable)
+	\item Hajoitettavia (decomposable) hahmonsovitusta hyv‰ksik‰ytt‰en
+	\item Vertailtavissa viitteiden sijasta rakenteellisen samankaltaisuuden mukaan
+	\item Lyhyit‰ luoda (instantiate) ja k‰ytt‰‰
+\end{itemize}
+
+Mik‰li tyyppimuunnos (casting) j‰tett‰isiin tekem‰tt‰, p‰‰dytt‰isiin luomaan DataFrame olio, jonka sis‰inen mallin (schema) Spark pyrkisi arvaamaan.
+Tyyppimuunnos tehd‰‰n k‰ytt‰m‰ll‰ $as$ avainsanaa.
+
+\begin{lstlisting}[caption=SparkSession kontekstin luominen]
+val spark = SparkSession
+.builder
+.appName("MovieLensALS")
+.config("spark.executor.memory", "2g")
+.getOrCreate()
+\end{lstlisting}
+
+SparkSession on Spark ohjelmoinnin aloituspiste, kun halutaan k‰ytt‰‰ Dataset ja Dataframe rajapintoja.
+Yll‰olevassa koodinp‰tk‰ss‰ luodaan $SparkSession$ ketjuttamalla rakentaja metodin kutsuja.
 
 \cite{spark-dataset}
 
@@ -160,6 +169,10 @@ Datasets are similar to RDDs as they also provide strong typing and the ability 
 Serialization denotes a task in which an object is turned into bytes thus reducing the memory footprint of the object.
 In general, serialization is needed for processing or transmitting over the network.
 While both encoders and standard serialization are responsible for turning an object into bytes, encoders are generated dynamically by code. They are using a format that allows Spark to perform many operations such as filtering, sorting and hashing without the need of deserializing the bytes back into an object. \cite{spark-programming-guide}
+
+Dataset oliot ovat samankaltaisia kuin RDD:t, sill‰ nekin tarjoavat vahvan tyypityksen ja mahdollisuuden k‰ytt‰‰ voimakkaita lambda-funktioita \cite{spark-sql-programming-guide}.
+Lambda-funktioita avustaa Spark SQL:n optimoitu suoritusmoottori \cite{spark-sql-programming-guide}.
+Perinteisen serialisoinnin, kuten Java serialisoinnin, 
 
 In the following listing, we create a new Dataset by reading a $json$ file from the file system. Next we create another Dataset through a transformation. We make use of the $copy$ method of Scala case class to clone an object, since we had declared the $people$ Dataset to be immutable. Finally, we display the physical plan by running the $explain$ function on the newly created Dataset.
 
