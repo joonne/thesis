@@ -125,7 +125,7 @@ Dataset voidaan luoda myös tekemällä muutoksia olemassaoleville Dataset olioille
 val names = people.map(_.name)
 
 \end{lstlisting}
-\\
+
 \begin{lstlisting}[caption=Uuden Dataset olion luominen käyttäen read funktiota]
 
 val people = spark.read.json("./people.json").as[Person]
@@ -165,18 +165,20 @@ Ylläolevassa koodinpätkässä luodaan $SparkSession$ ketjuttamalla rakentaja metod
 
 \cite{spark-dataset}
 
-Datasets are similar to RDDs as they also provide strong typing and the ability to use powerful lambda functions \cite{spark-sql-programming-guide}. These are accompanied with the benefits of Spark SQL's optimized execution engine \cite{spark-sql-programming-guide}. However, instead of using standard serialization like Java serialization they use a specialized Encoder to serialize the objects.
-Serialization denotes a task in which an object is turned into bytes thus reducing the memory footprint of the object.
-In general, serialization is needed for processing or transmitting over the network.
-While both encoders and standard serialization are responsible for turning an object into bytes, encoders are generated dynamically by code. They are using a format that allows Spark to perform many operations such as filtering, sorting and hashing without the need of deserializing the bytes back into an object. \cite{spark-programming-guide}
-
 Dataset oliot ovat samankaltaisia kuin RDD:t, sillä nekin tarjoavat vahvan tyypityksen ja mahdollisuuden käyttää voimakkaita lambda-funktioita \cite{spark-sql-programming-guide}.
 Lambda-funktioita avustaa Spark SQL:n optimoitu suoritusmoottori \cite{spark-sql-programming-guide}.
-Perinteisen serialisoinnin, kuten Java serialisoinnin, 
+Perinteisen serialisoinnin, kuten Java serialisoinnin, sijaan, käytetään erikoistunutta enkooderia olioiden serialisointiin.
+Serialisaatiolla tarkoitetaan olion muuntamista tavuiksi, jolloin olion muistijalanjälki pienenee.
+Yleisesti serialisointia tarvitaan datan prosessointiin tai verkon yli lähettämiseen.
+Molempia, sekä enkoodereita ja serialisointia käytetään olioiden muuntamiseen tavuiksi, mutta koodi luo enkooderit dynaamisesti.
+Enkooderit käyttävät sellaista muotoa, että Spark kykenee suorittamaan monenlaisia operaatioita, kuten suodattamista, järjestämistä ja hajautusta (hashing), ilman että tavuja tarvitsee deserialisoida takaisin objektiksi. \cite{spark-programming-guide}
 
-In the following listing, we create a new Dataset by reading a $json$ file from the file system. Next we create another Dataset through a transformation. We make use of the $copy$ method of Scala case class to clone an object, since we had declared the $people$ Dataset to be immutable. Finally, we display the physical plan by running the $explain$ function on the newly created Dataset.
+Seuraavassa koodilistauksessa luodaan uusi Datase lukemalla $json$ tiedosto tiedostojärjestelmästä.
+Seuraavaksi luodaan uusi Dataset muunnoksen kautta.
+Objektin kloonaamiseksi käytetään case luokan $copy$ metodia, koska $people$ Dataset oli määritelty muuttumattomaksi.
+Lopuksi fyysinen suunnitelma tulostetaan konsoliin käyttämällä $explain$ funktiota uudelle Dataset objektille.
 
-\begin{lstlisting}[caption=Displaying the logical and physical plan of a Dataset]
+\begin{lstlisting}[caption=Dataset olion loogisen ja fyysisen suunnitelman näyttäminen]
 
 val people = spark.read.json("./people.json").as[Person]
 val peopleWithDoubleSalary = people.map { person => 
@@ -200,6 +202,10 @@ DataFrames can be constructed from a range of sources such as structured data fi
 The DataFrame API is available in Scala, Java, Python, and R.
 In the Scala API a DataFrame is represented by a Dataset of Rows, it essentially is simply a type alias of Dataset[Row].
 \cite{spark-sql-programming-guide}
+
+DataFrame on pohjimmiltaan nimettyihin sarakkeisiin järjestetty Dataset.
+Se on käsitteellisesti yhtenevä relaatiotietokannan taulun tai R/Python kielten tietokehyksen (data frame) kanssa, mutta DataFrame omaa rikkaammat optimoinnit konepellin alla.
+DataFrame voidaan rakentaa
 
 \begin{lstlisting}[caption=Creating a new DataFrame by using read function]
 
