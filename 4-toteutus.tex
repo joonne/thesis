@@ -1,0 +1,220 @@
+\documentclass[main.tex]{thesis.tex}
+\begin{document}
+
+\chapter{Toteutus}
+
+GroupLens Research on kerännyt ja laittanut saataville arvioaineistoja MovieLens sivustolta.
+Aineistot on kerätty useiden aikajaksojen aikana, riippuen aineston koosta.
+MovieLens ml-latest-small aineisto sisältää 100 000 arviota, jotka ovat antaneet 700 käyttäjää 9000 elokuvalle.
+Näiden aineistojen haittapuolena on, että ne muuttuvat ajan myötä, eivätkä näin ollen ole sopivia tutkimustulosten raportointiin.
+Nykyinen, lokakuussa 2016 julkistettu versio on saatavilla projektin versionhallinnassa.
+Tämä aineisto valittiin, jottai voitaisiin antaa arvioita elokuville, jotka on oikeasti nähty ja myös laitteiston vuoksi.
+MovieLens ml-latest-small aineisto koostuu $movies.csv$ and $ratings.csv$ tiedostoista.
+
+\begin{tabular}{lll}
+	movieId & title & genres \\ \hline
+	1 & Toy Story (1995) & Adventure|Animation|Children \\
+	2 & Jumanji (1995) & Adventure|Children|Fantasy \\
+	3 & Grumpier Old Men (1995) & Comedy|Romance \\
+	4 & Waiting to Exhale (1995) & Comedy|Drama|Romance \\
+	5 & Father of the Bride Part II (1995) & Comedy \\
+	6 & Heat (1995) & Action|Crime|Thriller \\
+	7 & Sabrina (1995) & Comedy|Romance \\
+	8 & Tom and Huck (1995) & Adventure|Children \\
+	9 & Sudden Death (1995) & Action \\
+	10 & GoldenEye (1995) & Action|Adventure|Thriller \\
+\end{tabular}
+
+\begin{tabular}{llll}
+	userId & movieId & rating & timestamp \\ \hline
+	1 & 31 & 2.5 & 1260759144 \\
+	1 & 1029 & 3.0 & 1260759179 \\
+	1 & 1061 & 3.0 & 1260759182 \\
+	1 & 1129 & 2.0 & 1260759185 \\
+	1 & 1172 & 4.0 & 1260759205 \\
+	1 & 1263 & 2.0 & 1260759151 \\
+	1 & 1287 & 2.0 & 1260759187 \\
+	1 & 1293 & 2.0 & 1260759148 \\
+	1 & 1339 & 3.5 & 1260759125 \\
+\end{tabular}
+
+Toteutuksessa käytettiin RDD-pohjaista rajapintaa, sillä dataset-pohjainen rajapinta ei ole vielä täysin toiminnallinen yhteisöllisen suodatuksen tehtävissä.
+Aineiston lataaminen voidaan tehdä dataset rajapintaa hyödyntäen, mutta varsinaisen suositus täytyy tehdä RDD rajapintaa käyttäen.
+Dataset rajapinta tarjoaa useita parannuksia, kuten esimerkiksi yksinkertaisemman tiedon lataamisen.
+
+\section{MovieLensRecommendation.scala}
+
+Ensimmäinen askel itsenäisen spark sovelluksen rakentamisessa on tehdä oikeanlainen kansiorakenne ja tehdä $<PROJEKTI>.sbt$ niminen tiedosto, jossa kuvaillaan sovelluksen riippuvuudet.
+Itsenäinen spark sovellus tarkoittaa käyttövalmista $jar$ tiedostoa (Java ARchive) joka voidaan jakaa spark klusterille ja se sisältää koodin ja kaikki riippuvuudet.
+
+Sovelluksia voidaan ottaa käyttöön klusterissa spark-submit työkalun avulla.
+Spark-submit mahdollistaa Sparkin kaikkien tuettujen klusterinhoitajien käyttämisen yhteinäisen käyttöliittymän kautta, joten käyttäjän ei tarvitse määrittää sovellusta toimimaan erikseen kaikkien kanssa.
+
+\begin{lstlisting}[caption=Kokoonpano jar-tiedoston tekeminen sbt työkalulla,language=sh]
+sbt package
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Sovelluksen käyttöönotto klusterissa,language=sh]
+spark-submit --class "MovieLensALS" --master local[4] movielens-recommendations_2.11-1.0.jar
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Suositusten lataaminen RDD rajapintaa käyttäen]
+val ratings = sc.textFile("ml-latest-small/ratings.csv")
+  .filter(x => !isHeader("userId", x))
+  .map { line =>
+    val fields = line.split(",")
+    (fields(3).toLong % 10, Rating(fields(0).toInt, fields(1).toInt, fields(2).toDouble))
+  }
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Suositusten lataaminen dataset rajapintaa käyttäen]
+val ratings = spark.read.csv("ml-latest-small/ratings.csv")
+  .filter(arr => arr(0) != "userId")
+  .map { fields =>
+   	Rating(fields(0).asInstanceOf[String].toInt, fields(1).asInstanceOf[String].toInt, fields(2).asInstanceOf[String].toFloat, fields(3).asInstanceOf[String].toLong % 10)
+  }
+\end{lstlisting}
+
+\lstset {
+	language=Scala,
+	basicstyle=\footnotesize,
+	numbers=left,
+	stepnumber=1,
+	showstringspaces=false,
+	tabsize=1,
+	breaklines=true,
+	breakatwhitespace=false,
+}
+
+\begin{lstlisting}[caption=MovieLensALS.scala]
+import org.apache.spark.mllib.recommendation._
+
+object MovieLensALS {
+	def main(args: Array[String]) {
+
+	val conf = new SparkConf()
+		.setAppName("MovieLensALS")
+		.set("spark.executor.memory", "4g")
+	val sc = new SparkContext(conf)
+
+	/* load personal ratings */
+	val personalRatings = Source.fromFile("personalRatings.txt")
+		.getLines()
+		.map { line =>
+				val fields = line.split(",")
+				Rating(fields(0).toInt, fields(1).toInt, fields(2).toDouble)
+		}.toSeq
+	
+	val personalRatingsRDD = sc.parallelize(personalRatings, 1)
+	
+	/* load ratings and movie titles */
+	
+	val ratings = sc.textFile("ml-latest-small/ratings.csv")
+		.filter(x => !isHeader("userId", x))
+		.map { line =>
+				val fields = line.split(",")
+				/* format: (timestamp % 10, Rating(userId, movieId, rating)) */
+				(fields(3).toLong % 10, Rating(fields(0).toInt, fields(1).toInt, fields(2).toDouble))
+		}
+	
+	val movies = sc.textFile("ml-latest-small/movies.csv")
+		.filter(x => !isHeader("movieId", x))
+		.map { line =>
+				val fields = line.split(",")
+				// format: (movieId, movieName)
+				(fields(0).toInt, fields(1))
+		}.collect().toMap
+	
+	val numRatings = ratings.count
+	val numUsers = ratings.map(_._2.user).distinct.count
+	val numMovies = ratings.map(_._2.product).distinct.count
+	
+	println(s"Got $numRatings ratings from $numUsers users on $numMovies movies.")
+	
+	val numPartitions = 4
+	val training = ratings.filter(x => x._1 < 6)
+	.values
+	.union(personalRatingsRDD)
+	.repartition(numPartitions)
+	.cache()
+	val validation = ratings.filter(x => x._1 >= 6 && x._1 < 8)
+	.values
+	.repartition(numPartitions)
+	.cache()
+	val test = ratings.filter(x => x._1 >= 8).values.cache()
+	
+	val numTraining = training.count()
+	val numValidation = validation.count()
+	val numTest = test.count()
+	
+	println(s"Training: $numTraining, validation: $numValidation, test: $numTest")
+	
+	// TRAINING
+	
+	val ranks = List(8, 12)
+	val lambdas = List(1.0, 10.0)
+	val numIters = List(10, 20)
+	var bestModel: Option[MatrixFactorizationModel] = None
+	var bestValidationRmse = Double.MaxValue
+	var bestRank = 0
+	var bestLambda = -1.0
+	var bestNumIter = -1
+	for (rank <- ranks; lambda <- lambdas; numIter <- numIters) {
+	val model = ALS.train(training, rank, numIter, lambda)
+	val validationRmse = computeRmse(model, validation, numValidation)
+	println(s"RMSE (validation) = $validationRmse for the model trained with rank = $rank, lambda = $lambda, and numIter = $numIter.")
+	if (validationRmse < bestValidationRmse) {
+	bestModel = Some(model)
+	bestValidationRmse = validationRmse
+	bestRank = rank
+	bestLambda = lambda
+	bestNumIter = numIter
+	}
+	}
+	
+	val testRmse = computeRmse(bestModel.get, test, numTest)
+	
+	println(s"The best model was trained with rank = $bestRank and lambda = $bestLambda and numIter = $bestNumIter and its RMSE on the test set is $testRmse .")
+	
+	val myRatedMovieIds = personalRatings.map(_.product).toSet
+	val candidates = sc.parallelize(movies.keys.filter(!myRatedMovieIds.contains(_)).toSeq)
+	val recommendations = bestModel.get
+	.predict(candidates.map((0, _)))
+	.collect()
+	.sortBy(- _.rating)
+	.take(10)
+	
+	var i = 1
+	println("Movies recommended for you:")
+	recommendations.foreach { r =>
+	println("%2d".format(i) + ": " + movies(r.product))
+	i += 1
+	}
+	
+	// clean up
+	sc.stop()
+	}
+	
+	def isHeader(headerId: String, line: String): Boolean = line.contains(headerId)
+	
+	/** Compute RMSE (Root Mean Squared Error). */
+	def computeRmse(model: MatrixFactorizationModel, data: RDD[Rating], n: Long): Double = {
+	val predictions: RDD[Rating] = model.predict(data.map(x => (x.user, x.product)))
+	val predictionsAndRatings = predictions.map(x => ((x.user, x.product), x.rating))
+	.join(data.map(x => ((x.user, x.product), x.rating)))
+	.values
+	math.sqrt(predictionsAndRatings.map(x => (x._1 - x._2) * (x._1 - x._2)).reduce(_ + _) / n)
+	}
+}
+\end{lstlisting}
+
+Rivillä 1 tuodaan saataville kaikki recommendation paketin sisältämät kentät tai metodit käyttäen $import$ avainsanaa.
+Rivillä 3 määritellään MovieLensALS niminen objekti.
+Objekti on nimetty instanssi joka sisältää jäseniä kuten kenttiä (field) sekä metodeita (method).
+Rivillä 4 on määritelty $main$ funktio tarkoittaa sitä, että määritelty objekti $MovieLensALS$ on ohjelman aloituspiste (entry point) sillä $main$ funktio sisältää tietynlaisen allekirjoituksen eli tietynlaiset parametrit.
+Riveillä 6-9 luodaan $SparkConf$ objekti, jonka avulla luodaan ohjelman käyttöön uusi $SparkContext$ objekti. $SparkContext$ objektin avulla päästään käsiksi Sparkin sisäisiin toiminnallisuuksiin.
+Riveillä 11-17 ladataan henkilökohtaiset suositukset tekstitiedostosta nimeltä $personalRatings.txt$, pilkotaan tiedoston rivit pilkun kohdalta ja luodaan uusia $Rating$ objekteja yhtä monta, kuin tiedostossa on rivejä.
+Rivillä 19 ladatut suositukset muutetaan vielä RDD (Resilient Distributed Dataset) muotoiseksi käyttäen $sc.parallelize$ funktiota.
+Funktiolle annettava toinen parametri tarkoittaa hajautuksen määrää, eli kuinka monelle solmulle klusterissa tiedosto halutaan hajauttaa.
+
+\end{document}

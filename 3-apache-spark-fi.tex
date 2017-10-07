@@ -196,24 +196,19 @@ peopleWithDoubleSalary.explain
 
 \section{DataFrame API}
 
-A DataFrame is essentially a Dataset that is organized into named columns.
-It is conceptually equivalent to a table in a relational database or a data frame in R or Python, but it has richer optimizations under the hood.
-DataFrames can be constructed from a range of sources such as structured data files, tables in Hive, external databases, or existing RDDs.
-The DataFrame API is available in Scala, Java, Python, and R.
-In the Scala API a DataFrame is represented by a Dataset of Rows, it essentially is simply a type alias of Dataset[Row].
-\cite{spark-sql-programming-guide}
-
 DataFrame on pohjimmiltaan nimettyihin sarakkeisiin järjestetty Dataset.
 Se on käsitteellisesti yhtenevä relaatiotietokannan taulun tai R/Python kielten tietokehyksen (data frame) kanssa, mutta DataFrame omaa rikkaammat optimoinnit konepellin alla.
-DataFrame voidaan rakentaa
+DataFrame voidaan rakentaa useammalla tavalla, kuten esimerkiksi jäsennellyistä tiedostoista, Hive tauluista, ulkoisista tietokannoista tai olemassaolevista RDD olioista.
+DataFrame rajapinta on saatavilla Scala, Java, Python ja R -ohjelmointikielille.
+Scala rajapinnassa DataFrame on riveistä rakentuva Dataset, se on siis yksinkertaisesti tyyppialias Dataset[Row]. \cite{spark-programming-guide}
 
-\begin{lstlisting}[caption=Creating a new DataFrame by using read function]
+\begin{lstlisting}[caption=DataFrame luominen käyttäen read funktiota]
 
 val people = spark.read.json("./people.json")
 
 \end{lstlisting}
 
-When creating a DataFrame, the schema of the 
+DataFrame objektia luotaessa, Spark arvaa luodun objektin sisäisen mallin.
 
 \begin{figure}[h]
 	\caption{DataFrame}
@@ -221,18 +216,18 @@ When creating a DataFrame, the schema of the
 	\includegraphics[scale=1.0]{dataframe}
 \end{figure}
 
-\section{Matrix Factorization}
+\section{Matriisin tekijöihinjako}
 
-Matrix factorization denotes a task in which a matrix is decomposed into a product of matrices.
-There are many different matrix decompositions.
-The following chapter will describe matrix factorization in general and the Alternating Least Squares algorithm which is the matrix factorization algorithm that is implemented in Spark.
-It is based on same idea as Netflix prize winner, matrix factorization models.
+Matriisin tekijöihinjako on toimi, jossa matriisi hajoitetaan matriisien tuloksi.
+Matriisi voidaan hajoittaa tekijöihinsä usealla eri tavalla.
+Seuraava kappale kuvailee matriisin tekijöihinjakoa yleisellä tasolla sekä vuorottelevien pienenmpien neliöiden (Alternating Least Squares, ALS) algoritmia. ALS on Sparkin toteuttama matriisin tekijöihinjako algoritmi ja se perustuu samalle ajatukselle Netflix prize kilpailun voittajan, matriisin tekijöihinjako mallin kanssa.
 
-Matrix factorization belongs to a vast class of algorithms called latent-factor models.
-Latent-factor models try to explain observed interactions between a large number of users and products through a relatively small number of unobserved, underlying reasons.
-For example, they can try to explain why people would buy a particular album out of endless possibilities by describing users and albums in terms of tastes which are not directly available as data. \cite{ryza15}
-A latent factor is not available for direct observation. For example health of a human being is a latent factor.
-Health can not be observed as a variable such as blood pressure.
+Matriisin tekijöihinjako kuuluu suureen algoritmien luokkaan nimeltä piilevien tekijöiden mallit (Latent-factor models).
+Piilevien tekijöiden mallit yrittävät selittää usean käyttäjän ja tuotteen välillä havaittuja vuorovaikutuksia käyttämällä suhteellisen pientä määrää havaitsemattomia, piileviä syitä.
+Voidaan esimerkiksi yrittää selittää miksi ihminen ostaisi tietyn albumin lukemattomien mahdolisuuksien joukosta kuvailemalla käyttäjiä ja tuotteita mieltymysten perusteella, joista ei ole mahdollista saada tietoa. \cite{ryza15}
+Piilevää tekijää ei ole mahdollista tarkastella sellaisenaan.
+Ihmisen terveys on esimerkki piilevästä tekijästä, sillä
+sitä ei ole mahdollista mitata kuten esimerkiksi verenpainetta.
 
 \begin{figure}[h]
 	\caption{Matrix factorization \cite{ryza15}}
@@ -240,81 +235,86 @@ Health can not be observed as a variable such as blood pressure.
 	\includegraphics[scale=0.8]{matrix_factorization}
 \end{figure}
 
-Matrix factorization algorithms treat the user and product data as if it was a large matrix A.
-Each entry in row $i$ and column $j$ represents a rating the user has given to a specific product. \cite{ryza15}
+Matriisin tekijöihinjako algoritmit käsittelevät käyttäjä- ja tuotetietoja suurena matriisina A.
+Jokainen rivissä $i$ sekä sarakkeessa $j$ sijaitseva kohta esittää arvostelua jonka käyttäjä on antanut tietylle tuotteelle. \cite{ryza15}
 
-Usually $A$ is sparse, which denotes that most of the entries of $A$ are 0.
-This is due to the fact that usually only a few of all the possible user-product combinations exist.
+Yleensä $A$ on harva (sparse), jolla tarkoitetaan että useimmat $A$:n alkiot sisältävät 0.
+Tämä johtuu siitä, että usein vain muutama käyttäjä-tuote kombinaatio on olemassa kaikista mahdollisuuksista.
 
-Matrix factorization models factor $A$ as the matrix product of two smaller matrices, $X$ and $Y$, which are quite tiny.
-Since $A$ has many rows and columns, both of them have many rows, but both have just a few columns $(k)$. The $k$ columns match to the latent factors that are being used to explain the interactions of the data.
-The factorization can only be approximate because $k$ is small. \cite{ryza15}
+Matriisin tekijöihinjako mallintaa $A$:n kahden pienemmän matriisin $X$ ja $Y$ tulona, jotka ovat varsin pieniä.
+Koska $A$:ssa on monta riviä ja saraketta, $X$ ja $Y$ sisältävät paljon rivejä mutta vain muutaman $(k)$ sarakkeen.
+Nämä $k$ saraketta vastaavat piileviä tekijöitä joita käytetään kuvailemaan tiedossa sijaitsevia vuorovaikutuksia.
+Hajotelma (factorization) on ainoastaan arvio, sillä $k$ on pieni. \cite{ryza15}
 
-The standard approach to matrix factorization based collaborative filtering treats the entries in the user-product matrix as explicit preferences given by the user to the product, for example users giving ratings to movies.
-Implicit data denotes for example page views or a value representing if a user has listened to a artist. Explicit data means actual ratings that a user has given to a product.
-Spark ALS can handle both implicit and explicit data. \cite{spark14} \cite{ryza15}
+Tavanomainen lähestymistapa matriisin tekijöihinjakoon perustuvassa yhteisöllisessä suodatuksessa on kohdella käyttäjä-tuote matriisin alkioita käyttäjien antamina täsmällisinä arvosteluina.
+Eksplisiittistä tietoa on esimerkiksi käyttäjän antama arvio tuotteelle.
+Spark ALS kykenee käsittelemään sekä implisiittistä että eksplisiittistä tietoa.
+Implisiittistä tietoa on esimerkiksi sivujen katselukerrat tai tieto siitä, onko käyttäjä kuunnellut tiettyä artistia.
+\cite{spark14} \cite{ryza15}
 
-Usually many real-world use cases have access only to implicit feedback data such as views, clicks, purchases, likes or shares.
-However, instead of trying to model the matrix of ratings directly, the approach in Spark MLlib treats the data as numbers representing the strength of the observations such as the number of clicks, or the cumulative duration someone spent viewing a movie.
-Instead of explicit ratings, these numbers are related to the level of confidence in observed user preferences.
-Based on this data, the model tries to find latent factors that can be used to predict the expected preference of a user for an item. \cite{spark14}
+Usein monissa tosielämän käyttötapauksissa on käytettävissä ainoastaan implisiittistä tieto kuten katselukerrat, klikkaukset, ostos, tykkäykset tai jakamiset.
+Spark MLlib kohtelee tietoa numeroina jotka esittävät havaintojen vahvuutta kuten klikkausten määrä tai kumulatiivinen aika joka käytetään elokuvan katseluun, sen sijaan että mallinnettaisiin arviomatriisia suoraan.
+Ekplisiittisten arvioioiden sijaan, nämä numerot liittyvät havaittujen käyttäjämieltymysten varmuuteen.
+Tämän tiedon perusteella malli koettaa etsiä piileviä tekijöitä joiden avulla voidaan ennustaa käyttäjän odotettu arvio tuotteelle. \cite{spark14}
 
-Sometimes these algorithms are referred to as matrix completion algorithms.
-This is because the original matrix $A$ may be sparse while the product $XY^T$ is dense.
-Hence, the product is only an approximation of $A$. \cite{ryza15}
+Näihin algoritmeihin viitataan joskus matriisin täyttö algoritmeina.
+Tämä johtuu siitä että alkuperäinen matriisi $A$ saattaa olla harva vaikka matriisitulo $XY^T$ on tiheä.
+Vaikka tulosmatriisi sisältää arvon kaikille alkioille, se on kuitenkin vain arvio $A$:sta. \cite{ryza15}
 
 \subsection{Alternating Least Squares (ALS)}
 
-Collaborative filtering is commonly used for recommender systems.
-These techniques aim to fill in the missing entries of a user-item association matrix.
-Spark MLlib currently supports model-based collaborative filtering, in which users and products are described by a small set of latent factors that can be used to predict missing entries.
-Spark MLlib uses the Alternating Least Squares (ALS) algorithm to learn these latent factors. \cite{spark14}
+Yhteisöllistä suodatusta käytetään usein suosittelijajärjestelmissä.
+Nämä tekniikat pyrkivät täyttämään käyttäjä-tuote assosiaatiomatriisin puuttuvat kohdat.
+Spark MLlib tukee mallipohjaista yhteisösuodatusta, jossa käyttäjiä ja tuotteita kuvaillaan pienellä määrällä piileviä tekijöitä, joita voidaan käyttää puuttuvien kohtien ennustamiseen.
+Spark MLlib käyttää vaihtelevien pienimpien neliöiden (Alternating Least Squares, ALS) algoritmia näiden piilevien tekijöiden oppimiseen. \cite{spark14}
 
-Spark ALS attempts to estimate the ratings matrix A as the product of two lower-rank matrices, $X$ and $Y$. \cite{als14}
+Spark ALS yrittää arvioida arvostelumatriisin $A$ kahden alemman arvon matriisin, $X$ ja $Y$, tulona. \cite{als14}
 
 \begin{equation}
 A = XY^T
 \end{equation}
 
-Typically these approximations are referred to as factor matrices.
-The general approach is iterative.
-During each iteration, one of the factor matrices is held constant, while the other is solved for using least squares. The newly-solved factor matrix is then held constant while solving for the other factor matrix. \cite{als14}
-Spark ALS enables massive parallelization since it can be done separately, it can be done in parallel which is an excellent feature for a large-scale computation algorithm. \cite{ryza15}
+Tyypillisesti näihin arvioihin viitataan tekijämatriiseina.
+Perinteinen lähestymistapa on iteratiivinen.
+Jokaisen iteraation aikana, toista tekijämatriisia pidetään vakiona ja toinen ratkaistaan käyttäen pienimpien summien algoritmia.
+Juuri ratkaistua tekijämatriisia pidetään vuorostaan vakiona kun ratkaistaan toista tekijämatriisia. \cite{als14}
+Spark ALS mahdollistaa massiivisen rinnakkaistamisen sillä algoritmia voidaan suorittaa erikseen.
+Tämä on erinomainen ominaisuus laajamittaiselle (large-scale) laskenta-algoritmille. \cite{ryza15}
 
-Spark ALS is a blocked implementation of the ALS factorization algorithm.
-Idea is to group the two sets of factors, referred to as $users$ and $products$, into blocks.
-Grouping is followed by reducing communication by only sending one copy of each user vector to each product block on each iteration.
-Only those user feature vectors are sent that are needed by the the product blocks.
-Reduced communication is achieved by precomputing some information about the ratings matrix to determine the out-links of each user and in-links of each product.
-Out-link denotes those blocks of products that the user will contribute to.
-In-link refers to the feature vectors that each product receives from each user block they depend on.
-This allows to send only an array of feature vectors between each user block and product block.
-Consequently the product block will find the users' ratings and update the products based on these messages. \cite{als14}
+Spark ALS on lohkotettu versio ALS tekijöihinjako algoritmista.
+Ajatuksena on ryhmittää kaksi tekijäryhmää, $käyttäjät$ ja $tuotteet$, lohkoihin.
+Ryhmittämistä seuraa kommunikaation vähentäminen lähettämällä jokaiseen tuotelohkoon vain yksi kopio jokaisesta käyttäjävektorista iteraation aikana.
+Vain ne käyttäjä vektorit lähetetään, joita tarvitaan tuotelohkoissa.
+Vähennetty kommunikaatio saavutetaan valmiiksi laskemalla joitain tietoja suositusmatriisista jotta voidaan päätellä jokaisen käyttäjän ulostulot ja jokaisen tuotteen sisääntulot.
+Ulostulolla tarkoitetaan niitä tuotelohkoja, joihin käyttäjä tulee myötävaikuttamaan.
+Sisääntulolla tarkoitetaan niitä ominaisuusvektoreita jotka jokainen tuote ottaa vastaan niiltä käyttäjälohkoilta joista ne ovat riippuvaisia.
+Tämä mahdollistaa sen, että voidaan lähettää vain taulukollisen ominaisuusvektoreita jokaisen käyttäjä- ja tuotelohkon välillä.
+Vastaavasti tuotelohko löytää käyttäjän arviot ja päivittää tuotteita näiden viestien perusteella. \cite{als14}
 
-Essentially, instead of finding the low-rank approximations to the rating matrix $A$, it finds the approximations for a preference matrix $P$ where the elements of $P$ are $1$ when $r > 0$ and $0$ when $r <= 0$.
-The ratings then act as confidence values related to strength of indicated user preferences rather than explicit ratings given to items. \cite{als14}
+Sen sijaan että etsittäisiin, alemman tason arviot suositusmatriisille $A$, etsitäänkin arviot mieltymysmatriisi $P$:lle, jossa $P$:n alkiot saavat arvon 1 kun $r > 0$ ja arvon 0 kun $r< = 0$.
+Eksplisiittisen tuotearvion sijaan arvostelut kuvaavat käyttäjän mieltymyksen vahvuuden luottamusarvoa. \cite{als14}
 
 \begin{equation}
 A_iY(Y^T Y)^{-1} = X_i
 \end{equation}
 
-Alternating Least Squares operates by rotating between fixing one of the unknowns $u_i$ or $v_j$.
-While the other is fixed the other can be computed by solving the least-squares problem.
-This approach is useful because it turns the previous non-convex problem into a quadratic that can be solved optimally \cite{aberger14}.
-A general description of the algorithm for ALS for collaborative filtering taken from \cite{aberger14} is as follows:
+ALS operoi kiinnittämällä yhden tuntemattomista $u_i$ ja $v_j$ ja vaihtelemalla tätä kiinnittämistä.
+Kun toinen on kiinnitetty, toinen voidaan laskea ratkaisemalla pienimpien neliöiden ongelma.
+Tämä lähestymistapa on hyödyllinen, koska se muuttaa aiemman, ei-konveksin, ongelman kvadraattiseksi, eli neliömäiseksi, jolloin se voidaan ratkaista optimaalisesti. \cite{aberger14}
+Alla on \cite{aberger14} mukainen yleinen kuvaus ALS algoritmista:
 
-\begin{lstlisting}[caption=Alternating Least Squares algorithm \cite{aberger14}]
+\begin{lstlisting}[caption=Vaihtelevien pienimpien neliöiden algoritmi (ALS) \cite{aberger14}]
 
-1. Initialize matrix V by assigning the average rating for that movie as the first row, and small random numbers for the remaining entries.
+1. Alusta matriisi V asettamalla ensimmäiseksi riviksi elokuvan keskimääräinen arvio ja pieni satunnaisluku jäljelläoleviin alkioihin.
 
-2. Fix V, solve U by minimizing the RMSE function.
+2. Kiinnitä V, ratkaise U minimoimalla RMSE funktio.
 
-3. Fix U, solve V by minimizing the RMSE function.
+3. Kiinnitä U, ratkaise V minimoimalla RMSE funktio.
 
-4. Repeat Steps 2 and 3 until convergence.
+4. Toista askeleita 2 ja 3 konvergenssiin asti.
 
 \end{lstlisting}
 
-Minimizing the Root Mean Square Error RMSE function denotes a task in which line is plotted. EXPLAIN RMSE.
+RMSE (Root Mean Square Error) funktion minimoinnilla tarkoitetaan toimea, jossa
 
 \end{document}
