@@ -108,7 +108,6 @@ object MovieLensALS {
 	val personalRatingsRDD = sc.parallelize(personalRatings, 1)
 	
 	/* load ratings and movie titles */
-	
 	val ratings = sc.textFile("ml-latest-small/ratings.csv")
 		.filter(x => !isHeader("userId", x))
 		.map { line =>
@@ -216,5 +215,15 @@ Riveillä 6-9 luodaan $SparkConf$ objekti, jonka avulla luodaan ohjelman käyttöön
 Riveillä 11-17 ladataan henkilökohtaiset suositukset tekstitiedostosta nimeltä $personalRatings.txt$, pilkotaan tiedoston rivit pilkun kohdalta ja luodaan uusia $Rating$ objekteja yhtä monta, kuin tiedostossa on rivejä.
 Rivillä 19 ladatut suositukset muutetaan vielä RDD (Resilient Distributed Dataset) muotoiseksi käyttäen $sc.parallelize$ funktiota.
 Funktiolle annettava toinen parametri tarkoittaa hajautuksen määrää, eli kuinka monelle solmulle klusterissa tiedosto halutaan hajauttaa.
+Riveillä 22-36 luodaan RDD oliot $ratings$ ja $movies$ lataamalla kaksi erillistä csv tiedostoa.
+Tiedostoista suodatetaan ensin pois otsikkorivit käyttäen $isHeader$ apufunktiota.
+Tämän jälkeen tiedosto käydään läpi rivi kerrallaan ja pätkitään pilkulla erotetut arvot taulukkoon käyttäen Scalan String luokan sisäänrakennettua $split$ funktiota.
+Tämän jälkeen taulukossa olevista arvoista muodostetaan Tupleja.
+Riveillä 44-54 valmistellaan opetus, validaatio sekä testidatat.
+Rivillä 47 opetusdataan lisätään omat henkilökohtaiset arvostelut käyttäen RDD:n union funktiota.
+Riveillä 64-83 suoritetaan varsinainen mallin opetus.
+Riveillä 89-102 haetaan henkilökohtaiset suositukset käyttämällä mallin $predict$ metodia, joka ottaa parametrinaan mahdollisien elokuvien joukon.
+Mahdollisilla elokuvilla tarkoitetaan elokuvia joita käyttäjä ei ole vielä nähnyt, eli ne eivät sisälly $personalRatings$ muuttujan sisältämiin elokuviin.
+Rivillä 105 kutsutaan lopuksi $sparkContext$ objektin stop funktiota, jolla kerrotaan että laskenta on suoritettu loppuun.
 
 \end{document}

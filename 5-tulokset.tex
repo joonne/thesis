@@ -1,0 +1,61 @@
+\documentclass[main.tex]{thesis.tex}
+\begin{document}
+
+\chapter{Tulokset}
+
+\begin{tabular}{llll}
+	userId & movieId & movieName & rating \\ \hline
+	0 & 112897 & The Expendables 3 (2014) & 4.0 \\
+	0 & 116887 & Exodus: Gods and Kings (2014) & 4.0 \\
+	0 & 117529 & Jurassic World (2015) & 4.0 \\
+	0 & 118696 & The Hobbit: The Battle of the Five Armies (2014) & 4.5 \\
+	0 & 128520 & The Wedding Ringer (2015) & 4.5 \\
+	0 & 122882 & Mad Max: Fury Road (2015) & 4.0 \\
+	0 & 122886 & Star Wars: Episode VII - The Force Awakens (2015) & 4.5 \\
+	0 & 131013 & Get Hard (2015) & 4.0 \\
+	0 & 132796 & San Andreas (2015) & 3.0 \\
+	0 & 136305 & Sharknado 3: Oh Hell No! (2015) & 1.0 \\
+	0 & 136598 & Vacation (2015) & 4.0 \\
+	0 & 137595 & Magic Mike XXL (2015) & 1.0 \\
+	0 & 138208 & The Walk (2015) & 2.0 \\
+	0 & 140523 & "Visit, The (2015)" & 3.5 \\
+	0 & 146656 & Creed (2015) & 4.0 \\
+	0 & 148626 & "Big Short, The (2015)" & 4.5 \\
+	0 & 149532 & Marco Polo: One Hundred Eyes (2015) & 4.5 \\
+	0 & 150548 & Sherlock: The Abominable Bride (2016) & 4.5 \\
+	0 & 156609 & Neighbors 2: Sorority Rising (2016) & 3.5 \\
+	0 & 159093 & Now You See Me 2 (2016) & 4.0 \\
+	0 & 160271 & Central Intelligence (2016) & 4.0 \\
+\end{tabular}
+
+\begin{lstlisting}[caption=Suositellut elokuvat, language=sh]
+1: Am Ende eiens viel zu kurzen Tages (Death of a superhero) (2011)
+2: Prisoner of the Mountains (Kavkazsky plennik) (1996)
+3: Funeral in Berlin (1966)
+4: Caveman (1981)
+5: Dream With the Fishes (1997)
+6: Erik the Viking (1989)
+7: Dead Man's Shoes (2004)
+8: Excision (2012)
+9: Mifune's Last Song (Mifunes sidste sang) (1999)
+10: Maelström (2000)
+\end{lstlisting}
+
+Koska valmiita personoituja suosittelujärjestelmiä ei vaikuttanut olevan saatavilla, tuloksia vertaillaan ei-personoituihin, Apache Pig järjestelmällä saatuihin tuloksiin.
+Apache Pig on suurten datasettien analysointiin tarkoitettu alusta, joka sisältää korkean tason kielen data-analyysi sovellusten ilmaisemiseen sekä infrastruktuurin näiden ohjelmien käyttämiseen.
+Pig ohjelmien merkittävä piirre on se, että niiden rakenne mahdollistaa merkittävän rinnakkaistamisen, joka puolestaan mahdollistaa todella suurten datasettien käsittelyn. \cite{pig17}
+
+Tällä hetkellä Pig:n infrastruktuurikerros koostuu kääntäjästä joka tuottaa Map-Reduce ohjelmien pätkiä, joille suurimittaiset rinnakkaiset toteutukset löytyvät valmiina.
+Pig:n kielikerros koostuu kielestä nimeltä Pig Lating, jolla on seuraavat ominaisuudet:
+
+Ease of programming. It is trivial to achieve parallel execution of simple, "embarrassingly parallel" data analysis tasks. Complex tasks comprised of multiple interrelated data transformations are explicitly encoded as data flow sequences, making them easy to write, understand, and maintain.
+Optimization opportunities. The way in which tasks are encoded permits the system to optimize their execution automatically, allowing the user to focus on semantics rather than efficiency.
+Extensibility. Users can create their own functions to do special-purpose processing. \cite{pig17}
+
+Ohjelmoinnin helppous. Rinnakkaisten ohjelmien kirjoittaminen on helppoa.
+
+The implementation is ported to a newer version of the MovieLens dataset but otherwise the code is reused as it is.
+
+Using bigger dataset, providing more personal ratings could help.
+
+\end{document}
