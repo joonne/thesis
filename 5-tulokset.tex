@@ -38,24 +38,26 @@
 7: Dead Man's Shoes (2004)
 8: Excision (2012)
 9: Mifune's Last Song (Mifunes sidste sang) (1999)
-10: Maelstr√∂m (2000)
+10: Maelstrˆm (2000)
 \end{lstlisting}
 
-Koska valmiita personoituja suositteluj√§rjestelmi√§ ei vaikuttanut olevan saatavilla, tuloksia vertaillaan ei-personoituihin, Apache Pig j√§rjestelm√§ll√§ saatuihin tuloksiin.
-Apache Pig on suurten datasettien analysointiin tarkoitettu alusta, joka sis√§lt√§√§ korkean tason kielen data-analyysi sovellusten ilmaisemiseen sek√§ infrastruktuurin n√§iden ohjelmien k√§ytt√§miseen.
-Pig ohjelmien merkitt√§v√§ piirre on se, ett√§ niiden rakenne mahdollistaa merkitt√§v√§n rinnakkaistamisen, joka puolestaan mahdollistaa todella suurten datasettien k√§sittelyn. \cite{pig17}
+Koska valmiita personoituja suositteluj‰rjestelmi‰ ei vaikuttanut olevan saatavilla, tuloksia vertaillaan ei-personoituihin, Apache Pig j‰rjestelm‰ll‰ saatuihin tuloksiin.
+Apache Pig on suurten datasettien analysointiin tarkoitettu alusta, joka sis‰lt‰‰ korkean tason kielen data-analyysi sovellusten ilmaisemiseen sek‰ infrastruktuurin n‰iden ohjelmien k‰ytt‰miseen.
+Pig ohjelmien merkitt‰v‰ piirre on se, ett‰ niiden rakenne mahdollistaa merkitt‰v‰n rinnakkaistamisen, joka puolestaan mahdollistaa todella suurten datasettien k‰sittelyn. \cite{pig17}
 
-T√§ll√§ hetkell√§ Pig:n infrastruktuurikerros koostuu k√§√§nt√§j√§st√§ joka tuottaa Map-Reduce ohjelmien p√§tki√§, joille suurimittaiset rinnakkaiset toteutukset l√∂ytyv√§t valmiina.
-Pig:n kielikerros koostuu kielest√§ nimelt√§ Pig Lating, jolla on seuraavat ominaisuudet:
+T‰ll‰ hetkell‰ Pig:n infrastruktuurikerros koostuu k‰‰nt‰j‰st‰ joka tuottaa Map-Reduce ohjelmien p‰tki‰, joille suurimittaiset rinnakkaiset toteutukset lˆytyv‰t valmiina.
+Pig:n kielikerros koostuu kielest‰ nimelt‰ Pig Latin, jolla on seuraavat ominaisuudet:
 
-Ease of programming. It is trivial to achieve parallel execution of simple, "embarrassingly parallel" data analysis tasks. Complex tasks comprised of multiple interrelated data transformations are explicitly encoded as data flow sequences, making them easy to write, understand, and maintain.
-Optimization opportunities. The way in which tasks are encoded permits the system to optimize their execution automatically, allowing the user to focus on semantics rather than efficiency.
-Extensibility. Users can create their own functions to do special-purpose processing. \cite{pig17}
+Ohjelmoinnin helppous.
+Rinnakkaisesti suoritettavien data-analyysi ohjelmien kirjoittaminen on helppoa.
+Monimutkaiset, useista toisistaan riippuvista datamuunnokset enkoodataan eksplisiittisesti data virtaus (flow) sekvenssein‰, jolloin niiden kirjoittaminen, ymm‰rt‰minen ja hallinta helpottuu.
+Optimointimahdollisuudet.
+Tapa, jolla teht‰v‰t enkoodataan mahdollistaa suorituksen automaattisen optimoinnin, antaen k‰ytt‰j‰n keskitty‰ semantiikkaan tehokkuuden sijaan.
+Laajennettavuus.
+K‰ytt‰j‰t voivat luoda omia funktioitaan erikoisk‰yttˆiseen prosessointiin. \cite{pig17}
 
-Ohjelmoinnin helppous. Rinnakkaisten ohjelmien kirjoittaminen on helppoa.
+Toteutus on portattu uudemmalle MovieLens datasetin versiolle, mutta muutoin koodi on uudelleen k‰ytetty alkuper‰isess‰ muodossaan.
 
-The implementation is ported to a newer version of the MovieLens dataset but otherwise the code is reused as it is.
-
-Using bigger dataset, providing more personal ratings could help.
+Suuremman datasetin k‰ytt‰minen, sek‰ isomman arvostelum‰‰r‰n tarjoaminen j‰rjestelm‰lle voisi parantaa tuloksia.
 
 \end{document}

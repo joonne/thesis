@@ -3,25 +3,35 @@
 
 \chapter{Yhteenveto}
 
-TÃ¤ssÃ¤ kappaleessa esitetÃ¤Ã¤n yhteenveto.
+Tässä kappaleessa esitetään yhteenveto.
 
-\section{Conclusion}
+\section{Johtopäätökset}
 
-There are a number of possible implementations for a recommendation engine. This was selected because Apache Spark could be a good tool to know in future and in addition learning Scala programming was another thing that was considered.
+Suosittelujärjestelmän rakentamiseen on olemassa monia mahdollisia toteutusvaihtoehtoja, kuten SQL ja ElasticSearch.
+Apache Spark vaikutti mielenkiintoiselta opiskelukohteelta ja tulevaisuuden kannalta hyödylliseltä.
+Scala ohjelmoinnin oppiminen vaikutti myöskin teknologian valintaan.
 
-Existing recommendation or analytic engines should be evaluated before making a decision about the recommendation engine.
+Olemassaolevien suosittelujärjestelmien tai analytiikkajärjestelmien evaluointi tulisi suorittaa ennen suosittelujärjestelmän valintaa.
 
-In the end the most difficult thing was to find the right approach for this task. By trial and error the right combination of technologies and an actual working example was found.
+Lopulta kaikista vaikein asia oli löytää oikea lähestymistapa tähän kyseiseen tehtävään.
+Yrittämisen ja lukuisten epäonnistumisien jälkeen oikea teknologioiden joukko sekä varsinainen toimiva esimerkki löydettiin.
 
-\section{Future work}
+\section{Tulevaa työtä}
 
-Actual parallelization?
+Mikäli käytettävissä oleva laitteisto sallisi, olisi mahdollista rinnakkaistaa suoritusta sekä samalla kasvattaa käytettävän datasetin kokoa.
 
-Study MLlib again when Dataset API can be used with MLlib. -> Was studied already and Dataset API is much better. Something was failing and could not get to work.
--> Could still provide examples of changed code?
+MLlib kirjastoa voitaisiin tutkia uudestaan siinä vaiheessa, kun Dataset rajapintaa voidaan käyttää MLlib:n kanssa.
+Toteutusta yritettiin myös Dataset rajapintaa hyväksikäyttäen, mutta kaikki toiminnallisuudet eivät olleet vielä käytössä.
 
-Lately, a number of service providers, like Telegram and Microsoft, have started to introduce bot frameworks for their services. A bot is a web service that uses a conversational format to interact with users. Users can start conversations with the bot from any channel the bot is configured to work on. Conversations can be designed to be freeform, natural language interactions or more guided ones where the user is provided choices or actions. It is possible to utilize simple text strings or something more complex such as rich cards that contain text, images, and action buttons. \cite{bots16}
+Viimeaikoina useat palveluntarjoajat, kuten Telegram ja Microsoft, ovat esitelleet bot sovelluskehyksiä palveluihinsa.
+Botti on web-palvelu, joka keskustelee käyttäjien kanssa pikaviesti kanavalla.
+Käyttäjät voivat aloittaa keskustelun botin kanssa missä tahansa kanavalla, jota bot on määritety kuuntelemaan.
+Keskustelut voivat olla vapaamuotoisia tai ne voivat koostua tietyistä, ennaltamäärätyistä valinnoista. \cite{bots16}
 
-Already for a long time, companies have had some sort of SMS that have been accepting feedback from customer or ordering a new data package for you mobile subscription. IRC channel bots have been around even longer. Idea is not new but now there are popular platforms for the bots. As any other idea, also a recommendation engine could be implemented in a way that it can be used via a bot. For example ElasticSearch forms a RESTful API so a bot could simply place queries against the API.
+Pitkän aikaa, yrityksillä on ollut jonkinlainen tekstiviestipalvelu, jonka avulla asiakkailta on kyselty palautetta esimerkiksi uuden puhelinliittymän tilauksesta.
+IRC-kanavilla botteja on ollut olemassa vieläkin pidempään.
+Ajatus ei ole uusi, mutta nyt boteille on olemassa suosittuja alustoja.
+Kuten mikä tahansa ajatus, myös suosittelujärjestelmä voitaisiin toteuttaa botin avulla käytettäväksi.
+Esimerkiksi ElasticSearch muodostaa RESTful rajapinnan jota vasten botti voisi ajaa kyselyitä.
 
 \end{document}
