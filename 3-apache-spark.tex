@@ -27,11 +27,11 @@ Scalan käyttämisellä saavutetaan kuitenkin muutamia etuja, joita muut kielet eiv
 Tehokkuus paranee, sillä tehtävät kuten datan siirtäminen eri kerrosten välillä tai muunnosten suorittaminen datalle saattaa johtaa heikompaan tehokkuuteen.
 Spark on kirjoitettu Scala-ohjelmointikielellä, joten viimeisimmät ja parhaimmat ominaisuudet ovat aina käytössä.
 Spark ohjelmoinnin filosofia on helpompi ymmärtää kun Sparkia käytetään kielellä, jolla se on rakennettu.
-Suurin hyöty jonka Scalan käyttäminen tarjoaa, on kuitenkin kehittäjäkokemus joka tulee saman ohjelmointikielen käyttämisestä kaikkeen.
+Suurin hyöty, jonka Scalan käyttäminen tarjoaa, on kuitenkin kehittäjäkokemus joka tulee saman ohjelmointikielen käyttämisestä kaikkeen.
 Datan tuonti, manipulointi ja koodin lähettäminen klustereihin hoituvat samalla kielellä. \cite{ryza15}
 
 Spark-jakelun mukana toimitetaan luku-evaluointi-tulostus-silmukka, komentorivityökalu, (Read eval print loop, REPL), joka mahdollistaa uusien asioiden nopean testailun konsolissa, eikä sovelluksista tarvitse rakentaa itsenäisiä (self-contained) alusta asti.
-Usein kun REPLissä kehitetty sovelluksen tai sovelluksen osan voidaan katsoa olevan tarpeeksi valmis, on järkevää tehdä siitä koottu kirjasto (JAR).
+Kun REPLissä kehitetyn sovelluksen tai sovelluksen osan voidaan katsoa olevan tarpeeksi valmis, on järkevää tehdä siitä koottu kirjasto (JAR).
 Näin varmistutaan etteivät koodi tai tulokset pääse katoamaan, vaikkakin REPL tarjoaa samantapaisen muistin komentohistoriasta kuin perinteinen komentorivikin.
 
 SELITYS JAR:ISTA JA EHKÄ JVM:STÄ?
@@ -39,7 +39,7 @@ SELITYS JAR:ISTA JA EHKÄ JVM:STÄ?
 \section{Resilient Distributed Dataset (RDD)}
 
 Resilient Distributed Dataset (RDD) on Sparkin tarjoama pääabstraktio.
-RDD on muuttumaton, osioitu elementtikokoelma joka voidaan hajauttaa klusterin useiden koneiden välillä. \cite{spark-rdd}
+RDD on muuttumaton, osioitu elementtikokoelma, joka voidaan hajauttaa klusterin useiden koneiden välillä. \cite{spark-rdd}
 
 Tärkeä yksityiskohta ymmärtää RDD:stä on että ne ovat laiskasti evaluoituvia.
 Laiska evaluaatio (lazy evaluation) on evaluointi taktiikka, jossa lausekkeen evaluointia viivytetään siihen asti kun sen arvoa tarvitaan.
