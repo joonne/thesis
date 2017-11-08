@@ -85,10 +85,6 @@ Enkooderia voidaan käyttää esimerkiksi luokan $Person$, joka sisältää kentät nim
 Generoidulla binäärirakenteella on usein pienempi muistijalanjälki ja se on myös optimoitu tehokkaaseen dataprosessointiin.
 Datan binääriesitys voidaan tarkistaa käyttämällä DS:n tarjoamaa $schema$ funktiota. \cite{spark-dataset}
 
-Two ways typically exist to create a Dataset.
-The most common way is to make use of the read function provided by SparkSession and point Spark to some files on the storage system.
-Such as the following $json$ file.
-
 Dataset voidaan luoda tyypillisesti kahdella eri tavalla.
 Yleisin tapa on käyttää $SparkSession$:in tarjoamaa $read$ funktiota ja osoittaa Spark joihinkin tiedostoihin tiedostojärjestelmässä, kuten seuraavaan $json$ tiedostoon.
 
@@ -315,6 +311,21 @@ Alla on \cite{aberger14} mukainen yleinen kuvaus ALS algoritmista:
 
 \end{lstlisting}
 
+RMSE (Root Mean Square Error) metriikkaa käytetään yleisesti regressioalgoritmien avulla luotujen mallien evaluointiin.
+Läheinen metriikka on MSE (Mean Square Error).
+Regressioalgoritmien yhteydessä virheellä tarkoitetaan havainnon todellisen sekä ennustetun numeroarvon välistä eroa.
+Kuten nimi viittaa, MSE on virheiden neliöiden keskiarvo.
+Se voidaan laskea neliöimällä jokaisen havainnon virhe ja laskemalla virheiden neliöiden keskiarvo.
+RMSE voidaan puolestaan laskea ottamalla neliöjuuri MSE:stä.
+RMSE sekä MSE edustavat opetusvirhettä.
+Ne ilmoittavat kuinka hyvin malli sovittuu opetusdataan.
+Niiden avulla saadaan selville havaintojen sekä ennustettujen arvojen välinen poikkeavuus.
+Alhaisemman MSE:n tai RMSE:n omaavan mallin sanotaan sovittuvan paremmin opetusdataan kuin korkeammat virhearvot omaavan mallin. \cite{guller15}
+
 RMSE (Root Mean Square Error) funktion minimoinnilla tarkoitetaan toimea, jossa
+
+esimerkiksi toetutuksessa käytetty...
+
+konvergenssilla tarkoitetaan
 
 \end{document}
