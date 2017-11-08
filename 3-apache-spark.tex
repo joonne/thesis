@@ -311,7 +311,8 @@ Alla on \cite{aberger14} mukainen yleinen kuvaus ALS algoritmista:
 
 \end{lstlisting}
 
-RMSE (Root Mean Square Error) metriikkaa käytetään yleisesti regressioalgoritmien avulla luotujen mallien evaluointiin.
+RMSE (Root Mean Square Error) on kenties suosituin ennustettujen arvosteluiden tarkkuuden evaluiointiin käytetty metriikka.
+Sitä käytetään yleisesti regressioalgoritmien avulla luotujen mallien evaluointiin.
 Läheinen metriikka on MSE (Mean Square Error).
 Regressioalgoritmien yhteydessä virheellä tarkoitetaan havainnon todellisen sekä ennustetun numeroarvon välistä eroa.
 Kuten nimi viittaa, MSE on virheiden neliöiden keskiarvo.
@@ -324,8 +325,15 @@ Alhaisemman MSE:n tai RMSE:n omaavan mallin sanotaan sovittuvan paremmin opetusd
 
 RMSE (Root Mean Square Error) funktion minimoinnilla tarkoitetaan toimea, jossa
 
+Suosittelujärjestelmä generoi ennustettuja arvioita $\hat{r}_{ui}$ testisetille $\tau$ käyttäjä-tuote pareja $(u,i)$ joille todelliset arviot $r$ tunnetaan.
+ennustettujen ja todellisten arvioiden välinen RMSE on annettu:
+
+\begin{equation}
+RMSE=\sqrt{\frac{1}{|\tau|} \sum_{(u,i)\in\tau}(\hat{r}_{ui}-r_{ui})^2}
+\end{equation}
+
 esimerkiksi toetutuksessa käytetty...
 
-konvergenssilla tarkoitetaan
+Konvergenssilla tarkoitetaan jonkin ilmiön lähestymistä ajan kuluessa jotain tiettyä arvoa, tässä tapauksessa sitä, että RMSE ei enään pienene tarpeeksi.
 
 \end{document}
