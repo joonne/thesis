@@ -45,7 +45,7 @@ Dataset rajapinta tarjoaa useita parannuksia, kuten esimerkiksi yksinkertaisemma
 \section{MovieLensRecommendation.scala}
 
 Ensimmäinen askel itsenäisen spark sovelluksen rakentamisessa on tehdä oikeanlainen kansiorakenne ja tehdä $<PROJEKTI>.sbt$ niminen tiedosto, jossa kuvaillaan sovelluksen riippuvuudet.
-Itsenäinen spark sovellus tarkoittaa käyttövalmista $jar$ tiedostoa (Java ARchive) joka voidaan jakaa spark klusterille ja se sisältää koodin ja kaikki riippuvuudet.
+Itsenäinen spark sovellus tarkoittaa käyttövalmista $jar$ tiedostoa (Java ARchive) joka voidaan jakaa spark klusterille ja se sisältää sekä koodin että kaikki riippuvuudet.
 
 Sovelluksia voidaan ottaa käyttöön klusterissa spark-submit työkalun avulla.
 Spark-submit mahdollistaa Sparkin kaikkien tuettujen klusterinhoitajien käyttämisen yhteinäisen käyttöliittymän kautta, joten käyttäjän ei tarvitse määrittää sovellusta toimimaan erikseen kaikkien kanssa.
@@ -132,14 +132,14 @@ object MovieLensALS {
 	
 	val numPartitions = 4
 	val training = ratings.filter(x => x._1 < 6)
-	.values
-	.union(personalRatingsRDD)
-	.repartition(numPartitions)
-	.cache()
+		.values
+		.union(personalRatingsRDD)
+		.repartition(numPartitions)
+		.cache()
 	val validation = ratings.filter(x => x._1 >= 6 && x._1 < 8)
-	.values
-	.repartition(numPartitions)
-	.cache()
+		.values
+		.repartition(numPartitions)
+		.cache()
 	val test = ratings.filter(x => x._1 >= 8).values.cache()
 	
 	val numTraining = training.count()
@@ -159,16 +159,16 @@ object MovieLensALS {
 	var bestLambda = -1.0
 	var bestNumIter = -1
 	for (rank <- ranks; lambda <- lambdas; numIter <- numIters) {
-	val model = ALS.train(training, rank, numIter, lambda)
-	val validationRmse = computeRmse(model, validation, numValidation)
-	println(s"RMSE (validation) = $validationRmse for the model trained with rank = $rank, lambda = $lambda, and numIter = $numIter.")
-	if (validationRmse < bestValidationRmse) {
-	bestModel = Some(model)
-	bestValidationRmse = validationRmse
-	bestRank = rank
-	bestLambda = lambda
-	bestNumIter = numIter
-	}
+		val model = ALS.train(training, rank, numIter, lambda)
+		val validationRmse = computeRmse(model, validation, numValidation)
+		println(s"RMSE (validation) = $validationRmse for the model trained with rank = $rank, lambda = $lambda, and numIter = $numIter.")
+		if (validationRmse < bestValidationRmse) {
+				bestModel = Some(model)
+				bestValidationRmse = validationRmse
+				bestRank = rank
+				bestLambda = lambda
+				bestNumIter = numIter
+		}
 	}
 	
 	val testRmse = computeRmse(bestModel.get, test, numTest)
@@ -178,32 +178,32 @@ object MovieLensALS {
 	val myRatedMovieIds = personalRatings.map(_.product).toSet
 	val candidates = sc.parallelize(movies.keys.filter(!myRatedMovieIds.contains(_)).toSeq)
 	val recommendations = bestModel.get
-	.predict(candidates.map((0, _)))
-	.collect()
-	.sortBy(- _.rating)
-	.take(10)
+		.predict(candidates.map((0, _)))
+		.collect()
+		.sortBy(- _.rating)
+		.take(10)
 	
 	var i = 1
 	println("Movies recommended for you:")
 	recommendations.foreach { r =>
-	println("%2d".format(i) + ": " + movies(r.product))
-	i += 1
+		println("%2d".format(i) + ": " + movies(r.product))
+		i += 1
 	}
 	
 	// clean up
 	sc.stop()
-	}
+}
 	
-	def isHeader(headerId: String, line: String): Boolean = line.contains(headerId)
-	
-	/** Compute RMSE (Root Mean Squared Error). */
-	def computeRmse(model: MatrixFactorizationModel, data: RDD[Rating], n: Long): Double = {
+def isHeader(headerId: String, line: String): Boolean = line.contains(headerId)
+
+/** Compute RMSE (Root Mean Squared Error). */
+def computeRmse(model: MatrixFactorizationModel, data: RDD[Rating], n: Long): Double = {
 	val predictions: RDD[Rating] = model.predict(data.map(x => (x.user, x.product)))
 	val predictionsAndRatings = predictions.map(x => ((x.user, x.product), x.rating))
-	.join(data.map(x => ((x.user, x.product), x.rating)))
-	.values
+			.join(data.map(x => ((x.user, x.product), x.rating)))
+			.values
 	math.sqrt(predictionsAndRatings.map(x => (x._1 - x._2) * (x._1 - x._2)).reduce(_ + _) / n)
-	}
+}
 }
 \end{lstlisting}
 
@@ -222,7 +222,7 @@ Tämän jälkeen taulukossa olevista arvoista muodostetaan Tupleja.
 Riveillä 44-54 valmistellaan opetus, validaatio sekä testidatat.
 Rivillä 47 opetusdataan lisätään omat henkilökohtaiset arvostelut käyttäen RDD:n union funktiota.
 Riveillä 64-83 suoritetaan varsinainen mallin opetus.
-Riveillä 89-102 haetaan henkilökohtaiset suositukset käyttämällä mallin $predict$ metodia, joka ottaa parametrinaan mahdollisien elokuvien joukon.
+Riveillä 89-102 haetaan henkilökohtaiset suositukset käyttämällä mallin $predict$ metodia, joka ottaa parametrinaan mahdollisten elokuvien joukon.
 Mahdollisilla elokuvilla tarkoitetaan elokuvia joita käyttäjä ei ole vielä nähnyt, eli ne eivät sisälly $personalRatings$ muuttujan sisältämiin elokuviin.
 Rivillä 105 kutsutaan lopuksi $sparkContext$ objektin $stop$ funktiota, jolla kerrotaan että laskenta on suoritettu loppuun.
 

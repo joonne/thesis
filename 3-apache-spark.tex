@@ -36,6 +36,95 @@ Näin varmistutaan etteivät koodi tai tulokset pääse katoamaan, vaikkakin REPL ta
 
 SELITYS JAR:ISTA JA EHKÄ JVM:STÄ?
 
+\section{Scala}
+
+Scala on hybridiohjelmointikieli, joka tukee sekä olio- että funktionaalista ohjelmointia.
+Funktionaalista ohjelmointia varten Scalasta löytyy tuki funktionaalisen ohjelmoinnin konsepteille kuten muuttumattomat tietorakenteet ja funktiot ensimmäisen luokan kansalaisina.
+Olio-ohjelmointia varten Scalasta löytyy tuki konsepteille kuten luokat, objekti ja piirre (trait).
+Scala tukee myös kapselointia, perintää, moniperintää ja muita tärkeitä olio-ohjelmoinnin konsepteja.
+Scala on staattisesti tyypitetty kieli ja Scala ohjelmat käännetään Scala kääntäjää käyttäen.
+Scala on JVM (Java Virtual Machine, Java virtuaalikone) perustainen kieli, joten Scala kääntäjä kääntää sovelluksen Java tavukoodiksi, joka voidaan ajaa missä tahansa Java virtuaalikoneessa.
+Tavukooditasolla Scala ohjelmaa ei voida erottaa Java sovelluksesta.
+Scalan ollessa JVM-perustainen, Scala on täysin yhteensopiva Javan kanssa.
+Java kirjastoja voidaan käyttää suoraan Scala koodissa.
+Tästä syystä Scala sovellukset hyötyvät suuresta Java koodin määrästä.
+Vaikka Scala tukee sekä olio- että funktionaalista ohjelmointia, funktionaalista ohjelmointia suositaan. \cite{guller15}
+
+\subsection{Perustyypit}
+
+Scalan perustyypit numeroiden esittämiseen ovat Byte, Short, Int, Long, Float ja Double. Lisäksi Scalassa on perustyypit Char, String ja Boolean.
+Char on 16 bittinen etumerkitön Unicode merkki.
+String on jono Char:eja.
+Boolean esittää totuusarvoa true tai false.
+
+Huomionarvoista on se, että Scalassa ei ole ollenkaan primitiivisiä tyyppejä kuten Javassa.
+Jokainen tyyppi on toteutettu luokkana ja käännöksen aikana kääntäjä tarvittaessa automaattisesti muuntaa Scala tyypit Javan primitiivi tyypeiksi.
+
+\subsection{Muuttujat}
+
+Scalassa on kahdentyyppisiä muuttujia: muuttuvia ja muuttumattomia.
+Muuttuva muuttuja määritellään avainsanan $var$ avulla.
+Muuttuvan muuttuja voidaan antaa uudelleen luomisen jälkeen.
+Var:ien käyttöä ei suositella, mutta joskus niiden käyttämisellä saadaan aikaan yksinkertaisempaa koodia ja tästä syystä Scala tukee myös muuttuvia muuttujia.
+Syntaksi $var$:in luomiseksi on
+
+\begin{lstlisting}[caption=Muuttuvan muuttujan luominen ja uudelleen antaminen]
+var x = 10
+x = 20
+\end{lstlisting}
+
+Muuttumatonta muuttujaa, $val$, ei sen sijaan voida antaa uudelleen luomisen jälkeen.
+Syntaksi $val$:in luomiseksi on
+
+\begin{lstlisting}[caption=Muuttumattoman muuttujan luominen]
+val y = 10
+\end{lstlisting}
+
+Mikäli muuttumatonta muuttujaa koitetaan antaa uudelleen myöhemmin ohjelmassa, kääntäjä antaa virheen.
+Huomionarvoista ylläolevassa syntaksissa on se, että Scala kääntäjä ei pakota määrittelemään muuttujan tyyppiä sillon kuin kääntäjä pystyy päättelemään sen.
+
+\begin{lstlisting}[caption=Muuttujan luominen tyyppimäärittelyn avulla]
+var x: Int = 10
+val y: Int = 10
+\end{lstlisting}
+
+\subsection{Funktiot}
+
+Funktio on lohko suoritettavaa koodia joka palauttaa arvon.
+Se on konseptuaalisesti samankaltainen kuin matematiikassa: funktio ottaa sisääntulon ja palauttaa ulostulon.
+Scalan funktiot ovat ensimmäisen luokan kansalaisia, jolla tarkoitetaan että funktiota voi käyttää kuten muuttujaa.
+Funktion voi antaa sisääntulona toiselle funktiolle, se voidaan määritellä nimettömänä funktioliteraalina.
+Funktio voidaan asettaa muuttujaan.
+Funktio voidaan määritellä toisen funktion sisällä.
+funktio voidaan palauttaa toisen funktion ulostulona.
+
+Funktio määritellään avainsanalla $def$.
+Funktion määrittely aloitetaan funktion nimellä, jota seuraa sulkeissa olevat, pilkulla erotetut, parametrit tyyppimäärittelyineen.
+Parametrien jälkeen funktiomäärittelyyn tulee kaksoispiste, funktion ulostulon tyyppi, yhtäsuuruusmerkki sekä funktion runko joko aaltosulkeissa tai ilman.
+
+\begin{lstlisting}[caption=Funktio]
+def add(firstInput: Int, secondInput: Int): Int = {
+	val sum = firstInput + secondInput
+	return sum
+}
+\end{lstlisting}
+
+Ylläolevassa esimerkissä funktion nimi on $add$ ja se ottaa kaksi Int tyyppistä sisääntuloa.
+Funktio palauttaa Int tyyppisen arvon jonka se muodostaa lisäämällä annetut sisääntulot yhteen ja palauttamalla tuloksen.
+
+Scala sallii myös lyhyemmän version samasta funktiosta:
+
+\begin{lstlisting}[caption=Funktio]
+def add(firstInput: Int, secondInput: Int): Int = firstInput + secondInput
+\end{lstlisting}
+
+Toinen versio tekee täsmällee saman asian kuin ensimmäinenkin, mutta vain lyhyemmin kirjoitettuna.
+Paluuarvon tyyppi on jätetty antamatta, sillä kääntäjä pystyy päättelemään sen koodista.
+Paluuarvo suositellaan kuitenkin annettavan aina.
+Aaltosulkeet on myöskin jätetty pois, sillä ne ovat pakolliset vain kun funktion runko sisältää useamman kuin yhden käskyn.
+Lisäksi, $return$ avainsana on ohitettu, sillä se on vapaaehtoinen.
+Scalassa kaikki on arvon palauttavia lausekkeita, joten funktion rungon viimeisen lausekkeen arvosta tulee funktion paluuarvo.
+
 \section{Resilient Distributed Dataset (RDD)}
 
 Resilient Distributed Dataset (RDD) on Sparkin tarjoama pääabstraktio.
@@ -174,7 +263,7 @@ Seuraavaksi luodaan uusi Dataset muunnoksen kautta.
 Objektin kloonaamiseksi käytetään case luokan $copy$ metodia, koska $people$ Dataset oli määritelty muuttumattomaksi.
 Lopuksi fyysinen suunnitelma tulostetaan konsoliin käyttämällä $explain$ funktiota uudelle Dataset objektille.
 
-\begin{lstlisting}[caption=Dataset olion loogisen ja fyysisen suunnitelman näyttäminen]
+\begin{lstlisting}[caption=Dataset olion fyysisen suunnitelman näyttäminen]
 
 val people = spark.read.json("./people.json").as[Person]
 val peopleWithDoubleSalary = people.map { person => 
@@ -323,16 +412,12 @@ Ne ilmoittavat kuinka hyvin malli sovittuu opetusdataan.
 Niiden avulla saadaan selville havaintojen sekä ennustettujen arvojen välinen poikkeavuus.
 Alhaisemman MSE:n tai RMSE:n omaavan mallin sanotaan sovittuvan paremmin opetusdataan kuin korkeammat virhearvot omaavan mallin. \cite{guller15}
 
-RMSE (Root Mean Square Error) funktion minimoinnilla tarkoitetaan toimea, jossa
-
-Suosittelujärjestelmä generoi ennustettuja arvioita $\hat{r}_{ui}$ testisetille $\tau$ käyttäjä-tuote pareja $(u,i)$ joille todelliset arviot $r$ tunnetaan.
-ennustettujen ja todellisten arvioiden välinen RMSE on annettu:
+Suosittelujärjestelmä luo ennustettuja arvosteluita $\hat{r}_{ui}$ testiaineistolle $\tau$ käyttäjä-tuote pareja $(u,i)$ joille todelliset arviot $r$ tunnetaan.
+Ennustettujen ja todellisten arvioiden välinen RMSE saadaan laskettua seuraavasti:
 
 \begin{equation}
 RMSE=\sqrt{\frac{1}{|\tau|} \sum_{(u,i)\in\tau}(\hat{r}_{ui}-r_{ui})^2}
 \end{equation}
-
-esimerkiksi toetutuksessa käytetty...
 
 Konvergenssilla tarkoitetaan jonkin ilmiön lähestymistä ajan kuluessa jotain tiettyä arvoa, tässä tapauksessa sitä, että RMSE ei enään pienene tarpeeksi.
 
