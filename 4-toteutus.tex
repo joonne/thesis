@@ -81,7 +81,7 @@ val ratings = spark.read.csv("ml-latest-small/ratings.csv")
 	numbers=left,
 	stepnumber=1,
 	showstringspaces=false,
-	tabsize=1,
+	tabsize=2,
 	breaklines=true,
 	breakatwhitespace=false,
 }
@@ -148,7 +148,7 @@ object MovieLensALS {
 	
 	println(s"Training: $numTraining, validation: $numValidation, test: $numTest")
 	
-	// TRAINING
+	/* training */
 	
 	val ranks = List(8, 12)
 	val lambdas = List(1.0, 10.0)
@@ -221,7 +221,17 @@ T‰m‰n j‰lkeen tiedosto k‰yd‰‰n l‰pi rivi kerrallaan ja p‰tkit‰‰n pilkulla erotet
 T‰m‰n j‰lkeen taulukossa olevista arvoista muodostetaan Tupleja.
 Riveill‰ 44-54 valmistellaan opetus, validaatio sek‰ testidatat.
 Rivill‰ 47 opetusdataan lis‰t‰‰n omat henkilˆkohtaiset arvostelut k‰ytt‰en RDD:n union funktiota.
+
 Riveill‰ 64-83 suoritetaan varsinainen mallin opetus.
+
+Opetus suoritetaan niin, ett‰ opetetaan muutama versio mallista, ja lopuksi valitaan opetetuista malleista paras k‰ytt‰en RMSE-metriikkaa mittarina.
+
+Varsinainen mallin opetus tehd‰‰n k‰ytt‰en ALS kirjaston funktiota $train$ ja tarkemmin sanottuna $train$ funktion ylikuormitettua versiota, joka ottaa sis‰‰ntulonaan $ratings$, $rank$, $iterations$ sek‰ $lambda$ parametrit.
+Ratings on RDD Rating olioita, jotka sis‰lt‰v‰t k‰ytt‰j‰n id:n, elokuvan id:n ja suosituksen.
+Rank tarkoittaa piilevien ominaisuuksien sis‰llytett‰v‰‰ m‰‰r‰‰.
+Iterations tarkoittaa ALS algoritmien iteraatioiden m‰‰r‰‰.
+Lambda tarkoittaa regularisaatio parametria, jolla yritet‰‰n ehk‰ist‰ mallin ylioppimista.
+
 Riveill‰ 89-102 haetaan henkilˆkohtaiset suositukset k‰ytt‰m‰ll‰ mallin $predict$ metodia, joka ottaa parametrinaan mahdollisten elokuvien joukon.
 Mahdollisilla elokuvilla tarkoitetaan elokuvia joita k‰ytt‰j‰ ei ole viel‰ n‰hnyt, eli ne eiv‰t sis‰lly $personalRatings$ muuttujan sis‰lt‰miin elokuviin.
 Rivill‰ 105 kutsutaan lopuksi $sparkContext$ objektin $stop$ funktiota, jolla kerrotaan ett‰ laskenta on suoritettu loppuun.

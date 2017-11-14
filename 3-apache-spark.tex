@@ -92,13 +92,18 @@ val y: Int = 10
 
 Funktio on lohko suoritettavaa koodia joka palauttaa arvon.
 Se on konseptuaalisesti samankaltainen kuin matematiikassa: funktio ottaa sisääntulon ja palauttaa ulostulon.
-Scalan funktiot ovat ensimmäisen luokan kansalaisia, jolla tarkoitetaan että funktiota voi käyttää kuten muuttujaa.
-Funktion voi antaa sisääntulona toiselle funktiolle, se voidaan määritellä nimettömänä funktioliteraalina.
-Funktio voidaan asettaa muuttujaan.
-Funktio voidaan määritellä toisen funktion sisällä.
-funktio voidaan palauttaa toisen funktion ulostulona.
+Scalan funktiot ovat ensimmäisen luokan kansalaisia, jolla tarkoitetaan että funktiota voidaan:
 
-Funktio määritellään avainsanalla $def$.
+\begin{itemize}
+	\item käyttää kuten muuttujaa
+	\item antaa sisääntulona toiselle funktiolle
+	\item määritellä nimettömänä funktioliteraalina
+	\item asettaa muuttujaan
+	\item määritellä toisen funktion sisällä
+	\item palauttaa toisen funktion ulostulona
+\end{itemize}
+
+Scalassa funktio määritellään avainsanalla $def$.
 Funktion määrittely aloitetaan funktion nimellä, jota seuraa sulkeissa olevat, pilkulla erotetut, parametrit tyyppimäärittelyineen.
 Parametrien jälkeen funktiomäärittelyyn tulee kaksoispiste, funktion ulostulon tyyppi, yhtäsuuruusmerkki sekä funktion runko joko aaltosulkeissa tai ilman.
 
@@ -118,12 +123,12 @@ Scala sallii myös lyhyemmän version samasta funktiosta:
 def add(firstInput: Int, secondInput: Int): Int = firstInput + secondInput
 \end{lstlisting}
 
-Toinen versio tekee täsmällee saman asian kuin ensimmäinenkin, mutta vain lyhyemmin kirjoitettuna.
+Toinen versio tekee täsmälleen saman asian kuin ensimmäinenkin, mutta se on vain kirjoitetty käyttäen lyhyempää syntaksia.
 Paluuarvon tyyppi on jätetty antamatta, sillä kääntäjä pystyy päättelemään sen koodista.
 Paluuarvo suositellaan kuitenkin annettavan aina.
 Aaltosulkeet on myöskin jätetty pois, sillä ne ovat pakolliset vain kun funktion runko sisältää useamman kuin yhden käskyn.
 Lisäksi, $return$ avainsana on ohitettu, sillä se on vapaaehtoinen.
-Scalassa kaikki on arvon palauttavia lausekkeita, joten funktion rungon viimeisen lausekkeen arvosta tulee funktion paluuarvo.
+Scalassa kaikki on arvon palauttavia lausekkeita, joten funktion rungon viimeisen lausekkeen arvosta tulee funktion paluuarvo. \cite{guller15}
 
 \section{Resilient Distributed Dataset (RDD)}
 
@@ -269,13 +274,20 @@ val people = spark.read.json("./people.json").as[Person]
 val peopleWithDoubleSalary = people.map { person => 
 	person.copy(salary = person.salary * 2)
 }
-peopleWithDoubleSalary.explain
+peopleWithDoubleSalary.explain(true)
+
+== Optimized Logical Plan ==
+SerializeFromObject [staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, assertnotnull(input[0, $line32.$read$$iw$$iw$Person, true], top level Product input object).name, true) AS name#67, staticinvoke(class org.apache.spark.sql.types.Decimal$, DecimalType(38,0), apply, assertnotnull(input[0, $line32.$read$$iw$$iw$Person, true], top level Product input object).salary, true) AS salary#68]
++- MapElements <function1>, class $line32.$read$$iw$$iw$Person, [StructField(name,StringType,true), StructField(salary,DecimalType(38,0),true)], obj#66: $line32.$read$$iw$$iw$Person
++- DeserializeToObject newInstance(class $line32.$read$$iw$$iw$Person), obj#65: $line32.$read$$iw$$iw$Person
++- Relation[name#55,salary#56L] json
 
 == Physical Plan ==
-*SerializeFromObject [staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, assertnotnull(input[0, $line62.$read$$iw$$iw$Person, true], top level Product input object).name, true) AS name#212, staticinvoke(class org.apache.spark.sql.types.Decimal$, DecimalType(38,0), apply, assertnotnull(input[0, $line62.$read$$iw$$iw$Person, true], top level Product input object).salary, true) AS salary#213]
-+- *MapElements <function1>, obj#211: $line62.$read$$iw$$iw$Person
-+- *DeserializeToObject newInstance(class $line62.$read$$iw$$iw$Person), obj#210: $line62.$read$$iw$$iw$Person
-+- *FileScan json [name#200,salary#201L] Batched: false, Format: JSON, Location: InMemoryFileIndex[file:/home/joonne/Documents/GitHub/thesis-code/people.json], PartitionFilters: [], PushedFilters: [], ReadSchema: struct<name:string,salary:bigint>
+*SerializeFromObject [staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, assertnotnull(input[0, $line32.$read$$iw$$iw$Person, true], top level Product input object).name, true) AS name#67, staticinvoke(class org.apache.spark.sql.types.Decimal$, DecimalType(38,0), apply, assertnotnull(input[0, $line32.$read$$iw$$iw$Person, true], top level Product input object).salary, true) AS salary#68]
++- *MapElements <function1>, obj#66: $line32.$read$$iw$$iw$Person
++- *DeserializeToObject newInstance(class $line32.$read$$iw$$iw$Person), obj#65: $line32.$read$$iw$$iw$Person
++- *FileScan json [name#55,salary#56L] Batched: false, Format: JSON, Location: InMemoryFileIndex[file:/home/joonne/Documents/GitHub/thesis-code/people.json], PartitionFilters: [], PushedFilters: [], ReadSchema: struct<name:string,salary:bigint>
+
 
 \end{lstlisting}
 
