@@ -113,12 +113,11 @@ Alla oleva koodinpätkä esittelee ICBF:n idean jokaiselle uudelle käyttäjälle.
 \lstset{
 	columns=flexible,
 	frame=single,
-	breaklines=true
+	breaklines=true,
+	tabsize=2
 }
 
 \begin{lstlisting}[caption=Tuotepohjainen yhteisösuodatus algoritmi \cite{gorakala15}]
-
-1. For each two items, measure how similar they are in terms of having received similar ratings by similar users
 
 1. Jokaiselle kahdelle tuotteelle, mittaa kuinka samankaltaisia ne ovat sen suhteen, kuinka samankaltaisia arvioita ne ovat saaneet samankaltaisilta käyttäjiltä.
 
@@ -128,13 +127,9 @@ val similarItems = items.foreach { item1 =>
 	}
 }
 
-2. For each item, identify the k-most similar items
-
 2. Tunnistaa k samankaltaisinta tuotetta jokaiselle tuotteelle
 
 val itemsSorted = sort(similarItems)
-
-3. For each user, identify the items that are most similar to the user's purchases
 
 3. Jokaiselle käyttäjälle, tunnista tuotteet jotka ovat eniten samankaltaisia käyttäjän ostoshistorian kanssa.
 
@@ -163,7 +158,8 @@ Askeleet jokaiselle uudelle käyttäjälle käyttäjäpohjaisessa yhteisösuodatuksessa
 	columns=flexible,
 	frame=single,
 	keywords={val}
-	breaklines=true
+	breaklines=true,
+	tabsize=2
 }
 
 \begin{lstlisting}[caption=Käyttäjäpohjainen yhteisösuodatus algoritmi \cite{gorakala15}]
