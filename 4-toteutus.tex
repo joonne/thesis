@@ -11,6 +11,7 @@ Nykyinen, lokakuussa 2016 julkistettu versio on saatavilla projektin versionhall
 Tämä aineisto valittiin, jottai voitaisiin antaa arvioita elokuville, jotka on oikeasti nähty ja myös laitteiston vuoksi.
 MovieLens ml-latest-small aineisto koostuu $movies.csv$ and $ratings.csv$ tiedostoista.
 
+\captionof{table}{movies.csv}
 \begin{tabular}{lll}
 	movieId & title & genres \\ \hline
 	1 & Toy Story (1995) & Adventure|Animation|Children \\
@@ -25,6 +26,7 @@ MovieLens ml-latest-small aineisto koostuu $movies.csv$ and $ratings.csv$ tiedos
 	10 & GoldenEye (1995) & Action|Adventure|Thriller \\
 \end{tabular}
 
+\captionof{table}{ratings.csv}
 \begin{tabular}{llll}
 	userId & movieId & rating & timestamp \\ \hline
 	1 & 31 & 2.5 & 1260759144 \\
@@ -58,20 +60,52 @@ sbt package
 spark-submit --class "MovieLensALS" --master local[4] movielens-recommendations_2.11-1.0.jar
 \end{lstlisting}
 
+\lstset {
+	language=Scala,
+	basicstyle=\footnotesize,
+	numbers=left,
+	stepnumber=1,
+	showstringspaces=false,
+	tabsize=2,
+	breaklines=true,
+	breakatwhitespace=false,
+}
+
 \begin{lstlisting}[caption=Suositusten lataaminen RDD rajapintaa käyttäen]
 val ratings = sc.textFile("ml-latest-small/ratings.csv")
   .filter(x => !isHeader("userId", x))
   .map { line =>
     val fields = line.split(",")
-    (fields(3).toLong % 10, Rating(fields(0).toInt, fields(1).toInt, fields(2).toDouble))
+    val timestamp = fields(3).toLong % 10
+    val userId = fields(0).toInt
+    val movieId = fields(1).toInt
+    val rating = fields(2).toDouble 
+
+    (timestamp, Rating(userId, movieId, rating))
   }
 \end{lstlisting}
 
+\lstset {
+	language=Scala,
+	basicstyle=\footnotesize,
+	numbers=left,
+	stepnumber=1,
+	showstringspaces=false,
+	tabsize=2,
+	breaklines=true,
+	breakatwhitespace=false,
+}
+
 \begin{lstlisting}[caption=Suositusten lataaminen dataset rajapintaa käyttäen]
 val ratings = spark.read.csv("ml-latest-small/ratings.csv")
-  .filter(arr => arr(0) != "userId")
-  .map { fields =>
-   	Rating(fields(0).asInstanceOf[String].toInt, fields(1).asInstanceOf[String].toInt, fields(2).asInstanceOf[String].toFloat, fields(3).asInstanceOf[String].toLong % 10)
+	.filter(arr => arr(0) != "userId")
+	.map { fields =>
+		val userId = fields(0).asInstanceOf[String].toInt
+		val movieId = fields(1).asInstanceOf[String].toInt
+		val rating = fields(2).asInstanceOf[String].toFloat
+		val timestamp = fields(3).asInstanceOf[String].toDouble % 10
+
+		Rating(userId, movieId, rating, timestamp)
   }
 \end{lstlisting}
 
@@ -92,118 +126,129 @@ import org.apache.spark.mllib.recommendation._
 object MovieLensALS {
 	def main(args: Array[String]) {
 
-	val conf = new SparkConf()
-		.setAppName("MovieLensALS")
-		.set("spark.executor.memory", "4g")
-	val sc = new SparkContext(conf)
+		val conf = new SparkConf()
+			.setAppName("MovieLensALS")
+			.set("spark.executor.memory", "4g")
+		val sc = new SparkContext(conf)
+	
+		/* load personal ratings */
+		val personalRatings = Source.fromFile("personalRatings.txt")
+			.getLines()
+			.map { line =>
+					val fields = line.split(",")
+					Rating(fields(0).toInt, fields(1).toInt, fields(2).toDouble)
+			}.toSeq
+		
+		val personalRatingsRDD = sc.parallelize(personalRatings, 1)
+		
+		/* load ratings and movie titles */
+		val ratings = sc.textFile("ml-latest-small/ratings.csv")
+			.filter(x => !isHeader("userId", x))
+			.map { line =>
+					val fields = line.split(",")
+					val timestamp = fields(3).toLong % 10
+					val userId = fields(0).toInt
+					val movieId = fields(1).toInt
+					val rating = fields(2).toDouble)
 
-	/* load personal ratings */
-	val personalRatings = Source.fromFile("personalRatings.txt")
-		.getLines()
-		.map { line =>
-				val fields = line.split(",")
-				Rating(fields(0).toInt, fields(1).toInt, fields(2).toDouble)
-		}.toSeq
-	
-	val personalRatingsRDD = sc.parallelize(personalRatings, 1)
-	
-	/* load ratings and movie titles */
-	val ratings = sc.textFile("ml-latest-small/ratings.csv")
-		.filter(x => !isHeader("userId", x))
-		.map { line =>
-				val fields = line.split(",")
-				/* format: (timestamp % 10, Rating(userId, movieId, rating)) */
-				(fields(3).toLong % 10, Rating(fields(0).toInt, fields(1).toInt, fields(2).toDouble))
-		}
-	
-	val movies = sc.textFile("ml-latest-small/movies.csv")
-		.filter(x => !isHeader("movieId", x))
-		.map { line =>
-				val fields = line.split(",")
-				// format: (movieId, movieName)
-				(fields(0).toInt, fields(1))
-		}.collect().toMap
-	
-	val numRatings = ratings.count
-	val numUsers = ratings.map(_._2.user).distinct.count
-	val numMovies = ratings.map(_._2.product).distinct.count
-	
-	println(s"Got $numRatings ratings from $numUsers users on $numMovies movies.")
-	
-	val numPartitions = 4
-	val training = ratings.filter(x => x._1 < 6)
-		.values
-		.union(personalRatingsRDD)
-		.repartition(numPartitions)
-		.cache()
-	val validation = ratings.filter(x => x._1 >= 6 && x._1 < 8)
-		.values
-		.repartition(numPartitions)
-		.cache()
-	val test = ratings.filter(x => x._1 >= 8).values.cache()
-	
-	val numTraining = training.count()
-	val numValidation = validation.count()
-	val numTest = test.count()
-	
-	println(s"Training: $numTraining, validation: $numValidation, test: $numTest")
-	
-	/* training */
-	
-	val ranks = List(8, 12)
-	val lambdas = List(1.0, 10.0)
-	val numIters = List(10, 20)
-	var bestModel: Option[MatrixFactorizationModel] = None
-	var bestValidationRmse = Double.MaxValue
-	var bestRank = 0
-	var bestLambda = -1.0
-	var bestNumIter = -1
-	for (rank <- ranks; lambda <- lambdas; numIter <- numIters) {
-		val model = ALS.train(training, rank, numIter, lambda)
-		val validationRmse = computeRmse(model, validation, numValidation)
-		println(s"RMSE (validation) = $validationRmse for the model trained with rank = $rank, lambda = $lambda, and numIter = $numIter.")
-		if (validationRmse < bestValidationRmse) {
-				bestModel = Some(model)
-				bestValidationRmse = validationRmse
-				bestRank = rank
-				bestLambda = lambda
-				bestNumIter = numIter
-		}
-	}
-	
-	val testRmse = computeRmse(bestModel.get, test, numTest)
-	
-	println(s"The best model was trained with rank = $bestRank and lambda = $bestLambda and numIter = $bestNumIter and its RMSE on the test set is $testRmse .")
-	
-	val myRatedMovieIds = personalRatings.map(_.product).toSet
-	val candidates = sc.parallelize(movies.keys.filter(!myRatedMovieIds.contains(_)).toSeq)
-	val recommendations = bestModel.get
-		.predict(candidates.map((0, _)))
-		.collect()
-		.sortBy(- _.rating)
-		.take(10)
-	
-	var i = 1
-	println("Movies recommended for you:")
-	recommendations.foreach { r =>
-		println("%2d".format(i) + ": " + movies(r.product))
-		i += 1
-	}
-	
-	// clean up
-	sc.stop()
-}
-	
-def isHeader(headerId: String, line: String): Boolean = line.contains(headerId)
-
-/** Compute RMSE (Root Mean Squared Error). */
-def computeRmse(model: MatrixFactorizationModel, data: RDD[Rating], n: Long): Double = {
-	val predictions: RDD[Rating] = model.predict(data.map(x => (x.user, x.product)))
-	val predictionsAndRatings = predictions.map(x => ((x.user, x.product), x.rating))
-			.join(data.map(x => ((x.user, x.product), x.rating)))
+					(timestamp, Rating(userId, movieId, rating)
+			}
+		
+		val movies = sc.textFile("ml-latest-small/movies.csv")
+			.filter(x => !isHeader("movieId", x))
+			.map { line =>
+					val fields = line.split(",")
+					(fields(0).toInt, fields(1))
+			}.collect().toMap
+		
+		val numRatings = ratings.count
+		val numUsers = ratings.map(_._2.user).distinct.count
+		val numMovies = ratings.map(_._2.product).distinct.count
+		
+		val numPartitions = 4
+		val training = ratings.filter(x => x._1 < 6)
 			.values
-	math.sqrt(predictionsAndRatings.map(x => (x._1 - x._2) * (x._1 - x._2)).reduce(_ + _) / n)
-}
+			.union(personalRatingsRDD)
+			.repartition(numPartitions)
+			.cache()
+		val validation = ratings.filter(x => x._1 >= 6 && x._1 < 8)
+			.values
+			.repartition(numPartitions)
+			.cache()
+		val test = ratings.filter(x => x._1 >= 8).values.cache()
+		
+		val numTraining = training.count()
+		val numValidation = validation.count()
+		val numTest = test.count()
+		
+		/* training */
+		
+		val ranks = List(8, 12)
+		val lambdas = List(1.0, 10.0)
+		val numIters = List(10, 20)
+		var bestModel: Option[MatrixFactorizationModel] = None
+		var bestValidationRmse = Double.MaxValue
+		var bestRank = 0
+		var bestLambda = -1.0
+		var bestNumIter = -1
+		for (rank <- ranks; lambda <- lambdas; numIter <- numIters) {
+			val model = ALS.train(training, rank, numIter, lambda)
+			val validationRmse =
+					computeRmse(model, validation, numValidation)
+			
+			if (validationRmse < bestValidationRmse) {
+					bestModel = Some(model)
+					bestValidationRmse = validationRmse
+					bestRank = rank
+					bestLambda = lambda
+					bestNumIter = numIter
+			}
+		}
+		
+		val testRmse = computeRmse(bestModel.get, test, numTest)
+		
+		val myRatedMovieIds = personalRatings.map(_.product).toSet
+		val candidates = sc.parallelize(
+				movies.keys.filter(!myRatedMovieIds.contains(_)).toSeq
+		)
+		val recommendations = bestModel.get
+			.predict(candidates.map((0, _)))
+			.collect()
+			.sortBy(- _.rating)
+			.take(10)
+		
+		var i = 1
+		println("Movies recommended for you:")
+		recommendations.foreach { r =>
+			println("%2d".format(i) + ": " + movies(r.product))
+			i += 1
+		}
+		
+		// clean up
+		sc.stop()
+	}
+	
+	def isHeader(id: String, line: String): Boolean = line.contains(id)
+	
+	/** Compute RMSE */
+	def computeRmse(
+			model: MatrixFactorizationModel,
+			data: RDD[Rating],
+			n: Long
+	): Double = {
+		val predictions: RDD[Rating] =
+			model.predict(data.map(x => (x.user, x.product)))
+		val predictionsAndRatings =
+			predictions.map(x => ((x.user, x.product), x.rating))
+				.join(data.map(x => ((x.user, x.product), x.rating)))
+				.values
+		
+		math.sqrt(
+			predictionsAndRatings
+				.map(x => (x._1 - x._2) * (x._1 - x._2))
+				.reduce(_ + _) / n
+		)
+	}
 }
 \end{lstlisting}
 
@@ -235,5 +280,25 @@ Lambda tarkoittaa regularisaatio parametria, jolla yritetään ehkäistä mallin yli
 Riveillä 89-102 haetaan henkilökohtaiset suositukset käyttämällä mallin $predict$ metodia, joka ottaa parametrinaan mahdollisten elokuvien joukon.
 Mahdollisilla elokuvilla tarkoitetaan elokuvia joita käyttäjä ei ole vielä nähnyt, eli ne eivät sisälly $personalRatings$ muuttujan sisältämiin elokuviin.
 Rivillä 105 kutsutaan lopuksi $sparkContext$ objektin $stop$ funktiota, jolla kerrotaan että laskenta on suoritettu loppuun.
+
+
+\section{Apache Pig}
+
+Koska valmiita personoituja suosittelujärjestelmiä ei vaikuttanut olevan saatavilla, tuloksia vertaillaan ei-personoituihin, Apache Pig järjestelmällä saatuihin tuloksiin.
+Apache Pig on suurten datasettien analysointiin tarkoitettu alusta, joka sisältää korkean tason kielen data-analyysi sovellusten ilmaisemiseen sekä infrastruktuurin näiden ohjelmien käyttämiseen.
+Pig ohjelmien rakenne mahdollistaa merkittävän rinnakkaistamisen, joka puolestaan mahdollistaa todella suurten datasettien käsittelyn. \cite{pig17}
+
+Tällä hetkellä Pig:n infrastruktuurikerros koostuu kääntäjästä joka tuottaa Map-Reduce ohjelmien pätkiä, joille suurimittaiset rinnakkaiset toteutukset löytyvät valmiina.
+Pig:n kielikerros koostuu kielestä nimeltä Pig Latin, jolla on seuraavat ominaisuudet:
+
+Ohjelmoinnin helppous.
+Rinnakkaisesti suoritettavien data-analyysi ohjelmien kirjoittaminen on helppoa.
+Monimutkaiset, useista toisistaan riippuvista datamuunnokset enkoodataan eksplisiittisesti data virtaus (flow) sekvensseinä, jolloin niiden kirjoittaminen, ymmärtäminen ja hallinta helpottuu.
+Optimointimahdollisuudet.
+Suorituksen automaattinen optimointi, joka antaa käyttäjän keskittyä semantiikkaan tehokkuuden sijaan.
+Laajennettavuus.
+Käyttäjät voivat luoda omia funktioitaan erikoiskäyttöiseen prosessointiin. \cite{pig17}
+
+Toteutus on muunnettu uudemmalle MovieLens datasetin versiolle, mutta muutoin koodi on uudelleen käytetty alkuperäisessä muodossaan. \cite{pig_original_code} \cite{pig_own_code}
 
 \end{document}

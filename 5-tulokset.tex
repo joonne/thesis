@@ -3,6 +3,14 @@
 
 \chapter{Tulokset}
 
+Tässä kappaleessa käsitellään työn tärkeimpiä tuloksia.
+
+\section{Sisääntulot}
+
+Tässä osassa esitetään suosittelujärjestelmän sisääntulo aineistosta itse annetut arviot.
+
+\newpage
+
 \captionof{table}{Arvostellut elokuvat}
 \begin{tabular}{llll}
 	userId & movieId & movieName & rating \\ \hline
@@ -19,9 +27,9 @@
 	0 & 136598 & Vacation (2015) & 4.0 \\
 	0 & 137595 & Magic Mike XXL (2015) & 1.0 \\
 	0 & 138208 & The Walk (2015) & 2.0 \\
-	0 & 140523 & "Visit, The (2015)" & 3.5 \\
+	0 & 140523 & The Visit (2015) & 3.5 \\
 	0 & 146656 & Creed (2015) & 4.0 \\
-	0 & 148626 & "Big Short, The (2015)" & 4.5 \\
+	0 & 148626 & The Big Short (2015) & 4.5 \\
 	0 & 149532 & Marco Polo: One Hundred Eyes (2015) & 4.5 \\
 	0 & 150548 & Sherlock: The Abominable Bride (2016) & 4.5 \\
 	0 & 156609 & Neighbors 2: Sorority Rising (2016) & 3.5 \\
@@ -31,38 +39,61 @@
 
 \newpage
 
-\begin{lstlisting}[caption=Suositellut elokuvat, language=sh]
-1: Am Ende eiens viel zu kurzen Tages (Death of a superhero) (2011)
-2: Prisoner of the Mountains (Kavkazsky plennik) (1996)
-3: Funeral in Berlin (1966)
-4: Caveman (1981)
-5: Dream With the Fishes (1997)
-6: Erik the Viking (1989)
-7: Dead Man's Shoes (2004)
-8: Excision (2012)
-9: Mifune's Last Song (Mifunes sidste sang) (1999)
-10: Maelström (2000)
-\end{lstlisting}
+Taulukossa 5.1 on esitetty suosittelujärjestelmän sisääntulona annetut jo nähdyt elokuvat.
+Sisääntulon rakenne on seuraava: sarakkeessa yksi sijaitsee käyttäjän tunniste, sarakkeessa kaksi sijaitsee elokuvan tunniste, sarakkeeseen kolme on sijoitettu elokuvan nimi ja sarakkeessa neljä sijaitsee elokuvalle annettu arvio asteikolla 0-5.
+
+Jonkun työkalun avulla arvosteluiden antaminen olisi ollut paljon mielekkäämpää.
+
+\section{Suositukset}
+
+Tässä osassa käsitellään suosittelujärjestelmän tarjoamat suositukset, eli työn varsinaiset tulokset.
 
 \newpage
 
-Koska valmiita personoituja suosittelujärjestelmiä ei vaikuttanut olevan saatavilla, tuloksia vertaillaan ei-personoituihin, Apache Pig järjestelmällä saatuihin tuloksiin.
-Apache Pig on suurten datasettien analysointiin tarkoitettu alusta, joka sisältää korkean tason kielen data-analyysi sovellusten ilmaisemiseen sekä infrastruktuurin näiden ohjelmien käyttämiseen.
-Pig ohjelmien merkittävä piirre on se, että niiden rakenne mahdollistaa merkittävän rinnakkaistamisen, joka puolestaan mahdollistaa todella suurten datasettien käsittelyn. \cite{pig17}
+\captionof{table}{Toteutetun järjestelmän suosittelemat elokuvat}
+\begin{tabular}{cl}
+	number & movieName \\ \hline
+	1 & Death of a superhero (2011) \\
+	2 & Prisoner of the Mountains (1996) \\
+	3 & Funeral in Berlin (1966) \\
+	4 & Caveman (1981) \\
+	5 & Dream With the Fishes (1997) \\
+	6 & Erik the Viking (1989) \\
+	7 & Dead Man's Shoes (2004) \\
+	8 & Excision (2012) \\
+	9 & Mifune's Last Song (1999) \\
+	10 & Maelström (2000) \\
+\end{tabular}
 
-Tällä hetkellä Pig:n infrastruktuurikerros koostuu kääntäjästä joka tuottaa Map-Reduce ohjelmien pätkiä, joille suurimittaiset rinnakkaiset toteutukset löytyvät valmiina.
-Pig:n kielikerros koostuu kielestä nimeltä Pig Latin, jolla on seuraavat ominaisuudet:
+\newpage
 
-Ohjelmoinnin helppous.
-Rinnakkaisesti suoritettavien data-analyysi ohjelmien kirjoittaminen on helppoa.
-Monimutkaiset, useista toisistaan riippuvista datamuunnokset enkoodataan eksplisiittisesti data virtaus (flow) sekvensseinä, jolloin niiden kirjoittaminen, ymmärtäminen ja hallinta helpottuu.
-Optimointimahdollisuudet.
-Tapa, jolla tehtävät enkoodataan mahdollistaa suorituksen automaattisen optimoinnin, antaen käyttäjän keskittyä semantiikkaan tehokkuuden sijaan.
-Laajennettavuus.
-Käyttäjät voivat luoda omia funktioitaan erikoiskäyttöiseen prosessointiin. \cite{pig17}
+Taulukossa 5.2 on suosittelujärjestelmältä saaduista suosituksista 10 ensimmäistä.
 
-Toteutus on portattu uudemmalle MovieLens datasetin versiolle, mutta muutoin koodi on uudelleen käytetty alkuperäisessä muodossaan.
+\newpage
 
-Suuremman datasetin käyttäminen, sekä isomman arvostelumäärän tarjoaminen järjestelmälle voisi parantaa tuloksia.
+\captionof{table}{Vertailtavan järjestelmän suosittelemat elokuvat}
+\begin{tabular}{cl}
+	number & movieName \\ \hline
+	1 & Death of a superhero (2011) \\
+	2 & Prisoner of the Mountains (1996) \\
+	3 & Funeral in Berlin (1966) \\
+	4 & Caveman (1981) \\
+	5 & Dream With the Fishes (1997) \\
+	6 & Erik the Viking (1989) \\
+	7 & Dead Man's Shoes (2004) \\
+	8 & Excision (2012) \\
+	9 & Mifune's Last Song (1999) \\
+	10 & Maelström (2000) \\
+\end{tabular}
+
+\newpage
+
+Taulukossa 5.2 on suosittelujärjestelmältä saaduista suosituksista 10 ensimmäistä.
+
+~
+
+Tuloksien yhteiset piirteet on helppo poimia taulukoista 5.2 ja 5.3.
+Suurimmat erot ovat...
+Puutteellisia tuloksia on hankala arvioida, sillä molemmat järjestelmät antavat tarvittavat 10 suositusta samalle aineistolle.
 
 \end{document}

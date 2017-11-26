@@ -53,15 +53,11 @@ Käyttäjä saattaa haluta suosituksena tuotesarjan, apua selaamiseen tai mahdollis
 Vaikuttaminen saattaa olla pahantahtoista. \cite{ricci11}
 
 GroupLens, BookLens ja MovieLens olivat uranuurtajia suosittelujärjestelmissä.
-GroupLens on tutkimuslaboratorio tietojenkäsittelyopin ja tekniikan laitoksella Minnesotan Yliopistossa, Twin Cities:issä, joka on erikoistunut suosittelujärjestelmiin, verkkoyhteisöihin, mobiili ja kaikkialla läsnä oleviin teknologioihin, digitaalisiin kirjastoihin ja paikallisen maantieteen tietojärjestelmiin. \cite{aggarwal16}
+GroupLens on tutkimuslaboratorio tietojenkäsittelyopin ja tekniikan laitoksella Minnesotan Yliopistossa, joka on erikoistunut suosittelujärjestelmiin, verkkoyhteisöihin, mobiili ja kaikkialla läsnä oleviin teknologioihin, digitaalisiin kirjastoihin ja paikallisen maantieteen tietojärjestelmiin. \cite{aggarwal16}
 BookLens on on GroupLensin rakentama kirjojen suosittelujärjestelmä \cite{booklens17}.
 MovieLens on GroupLensin ylläpitämä elokuvien suosittelujärjestelmä \cite{movieLens17}.
 Uranuurtavan tutkimuksen lisäksi nämä sivustot julkaisivat aineistoja, joka ei ollut yleistä.
 \cite{aggarwal16}
-
-
-% TODO: how to include this? Privacy concerns in RSs ? Worth exploring?
-%A Recommendation engine system or part of it can also be acquired via a competition such as the Netflix prize competition held in 2007, 2008 and 2009. As a result, Netflix's algorithm was beaten by 10.05\%\ . Sequels were canceled due to privacy concerns. Two people were apparently able to reveal the identities of users by matching the rating data to those of Internet Movie Database (IMDB) thus finding out the identities of IMDB users. Netflix (Netflix Prize competition, winner used RBM) \cite{bell06} \cite{koren09}.
 
 \section{Suositustekniikat}
 
@@ -141,7 +137,7 @@ users.foreach { user =>
 
 \end{lstlisting}
 
-Amazon.com:in, Amerikan suurin internetkauppa, on aiemmin tiedetty käyttävät tuote-tuotteeseen yhteisösuodatusta.
+Amerikan suurimman verkkokaupan, Amazon.com:in, on aiemmin tiedetty käyttävät tuote-tuotteeseen yhteisösuodatusta.
 Tässä toteutuksessa algoritmi rakentaa samankaltaisten tuotteiden taulun etsimällä tuotteita joita käyttäjät tapaavat ostaa yhdessä.
 Seuraavaksi algoritmi etsii käyttäjän ostoshistoriaa ja arvosteluita vastaavat tuotteet, yhdistää nämä tuotteet ja palauttaa suosituimmat tai eniten korreloivat tuotteet. \cite{linden03}
 
@@ -184,7 +180,7 @@ val ratedItems = mostSimilarUsers.map { user =>
 		val purchases = mostSimilarUsers.map { usr =>
 			usr.purchases.filter(_.id === purchase.id)
 		}
-	purchases.sum() / purchases.size
+		purchases.sum() / purchases.size
 	}
 }
 
