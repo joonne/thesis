@@ -7,7 +7,7 @@ Tässä kappaleessa käsitellään työn tärkeimpiä tuloksia.
 
 \section{Sisääntulot}
 
-Tässä osassa esitetään suosittelujärjestelmän sisääntulo aineistosta itse annetut arviot.
+Tässä osassa esitetään suosittelujärjestelmän sisääntulot.
 
 \newpage
 
@@ -41,6 +41,7 @@ Tässä osassa esitetään suosittelujärjestelmän sisääntulo aineistosta itse annetu
 
 Taulukossa 5.1 on esitetty suosittelujärjestelmän sisääntulona annetut jo nähdyt elokuvat.
 Sisääntulon rakenne on seuraava: sarakkeessa yksi sijaitsee käyttäjän tunniste, sarakkeessa kaksi sijaitsee elokuvan tunniste, sarakkeeseen kolme on sijoitettu elokuvan nimi ja sarakkeessa neljä sijaitsee elokuvalle annettu arvio asteikolla 0-5.
+Taulukossa olevat arvot ovat vain pieni osa kaikesta opetukseen käytetystä datasta.
 
 Jonkun työkalun avulla arvosteluiden antaminen olisi ollut paljon mielekkäämpää.
 
@@ -51,49 +52,96 @@ Tässä osassa käsitellään suosittelujärjestelmän tarjoamat suositukset, eli työn 
 \newpage
 
 \captionof{table}{Toteutetun järjestelmän suosittelemat elokuvat}
-\begin{tabular}{cl}
-	number & movieName \\ \hline
-	1 & Death of a superhero (2011) \\
-	2 & Prisoner of the Mountains (1996) \\
-	3 & Funeral in Berlin (1966) \\
-	4 & Caveman (1981) \\
-	5 & Dream With the Fishes (1997) \\
-	6 & Erik the Viking (1989) \\
-	7 & Dead Man's Shoes (2004) \\
-	8 & Excision (2012) \\
-	9 & Mifune's Last Song (1999) \\
-	10 & Maelström (2000) \\
+\begin{tabular}{cll}
+	number & movieName & genres \\ \hline
+	1 & Death of a superhero (2011) & Animation, Drama \\
+	2 & Prisoner of the Mountains (1996) & War \\
+	3 & Funeral in Berlin (1966) & Action, Drama, Thriller \\
+	4 & Caveman (1981) & Comedy \\
+	5 & Dream With the Fishes (1997) & Drama \\
+	6 & Erik the Viking (1989) & Adventure, Comedy, Fantasy \\
+	7 & Dead Man's Shoes (2004) & Crime, Thriller \\
+	8 & Excision (2012) & Crime, Drama, Horror, Thriller \\
+	9 & Mifune's Last Song (1999) & Comedy, Drama, Romance \\
+	10 & Maelström (2000) & Drama, Romance \\
 \end{tabular}
+
+~
+
+TODO: joku käppyrä vaikka 50 suosituksesta että miten jakaantuu suhteessa itse arvostelemiin elokuviin?
 
 \newpage
 
-Taulukossa 5.2 on suosittelujärjestelmältä saaduista suosituksista 10 ensimmäistä.
+Taulukossa 5.2 on suosittelujärjestelmältä saaduista suosituksista 10 ensimmäistä,
+mukaan on lisätty myös elokuvien tyylilajit, jotta on helpompi arvioida suosituksien paikkansapitävyyttä.
 
 \newpage
 
 \captionof{table}{Vertailtavan järjestelmän suosittelemat elokuvat}
-\begin{tabular}{cl}
-	number & movieName \\ \hline
-	1 & Death of a superhero (2011) \\
-	2 & Prisoner of the Mountains (1996) \\
-	3 & Funeral in Berlin (1966) \\
-	4 & Caveman (1981) \\
-	5 & Dream With the Fishes (1997) \\
-	6 & Erik the Viking (1989) \\
-	7 & Dead Man's Shoes (2004) \\
-	8 & Excision (2012) \\
-	9 & Mifune's Last Song (1999) \\
-	10 & Maelström (2000) \\
+\begin{tabular}{lll}
+	movieId & correlation & rMovieId \\ \hline
+	112897 &  &  \\
+	116887 &  &  \\
+	117529 &  &  \\
+	118696 &  &  \\
+	128520 &  &  \\
+	122882 &  &  \\
+	122886 &  &  \\
+	131013 &  &  \\
+	132796 &  &  \\
+	136305 &  &  \\
+	136598 &  &  \\
+	137595 &  &  \\
+	138208 &  &  \\
+	140523 &  &  \\
+	146656 &  &  \\
+	148626 &  &  \\
+	149532 &  &  \\
+	150548 &  &  \\
+	156609 &  &  \\
+	159093 &  &  \\
+	160271 &  &  \\
+\end{tabular}
+
+\captionof{table}{Vertailtavan järjestelmän suosittelemat elokuvat}
+\begin{tabular}{lll}
+	movieName & correlation & rMovieName \\ \hline
+	The Expendables 3 (2014) & & \\
+	Exodus: Gods and Kings (2014) & & \\
+	Jurassic World (2015) & & \\
+	The Hobbit: The Battle of the Five Armies (2014) & & \\
+	The Wedding Ringer (2015) & & \\
+	Mad Max: Fury Road (2015) & & \\
+	Star Wars: Episode VII - The Force Awakens (2015) & & \\
+	Get Hard (2015) & & \\
+	San Andreas (2015) & & \\
+	Sharknado 3: Oh Hell No! (2015) & & \\
+	Vacation (2015) & & \\
+	Magic Mike XXL (2015) & & \\
+	The Walk (2015) & & \\
+	The Visit (2015) & & \\
+	Creed (2015) & & \\
+	The Big Short (2015) & & \\
+	Marco Polo: One Hundred Eyes (2015) & & \\
+	Sherlock: The Abominable Bride (2016) & & \\
+	Neighbors 2: Sorority Rising (2016) & & \\
+	Now You See Me 2 (2016) & & \\
+	Central Intelligence (2016) & & \\
 \end{tabular}
 
 \newpage
 
-Taulukossa 5.2 on suosittelujärjestelmältä saaduista suosituksista 10 ensimmäistä.
+Taulukossa 5.3 on vertailtavalta suosittelujärjestelmältä saaduista suositukset.
+Vertailtavia tuloksia täytyy tulkita hieman eri tavalla, sillä vertailtava järjestelmä etsii eniten korreloivat elokuvat.
+Tästä syystä nämä tulokset on esitetty niin, että vasemmassa sarakkeessa on nähty elokuva, keskimmäisessä sijaitsee järjestelmän antama, eniten korreloiva elokuva, ja oikean puoleisessa sarakkeessa sijaitsee korrelaatio numeroarvona.
 
 ~
 
-Tuloksien yhteiset piirteet on helppo poimia taulukoista 5.2 ja 5.3.
-Suurimmat erot ovat...
+Tuloksien yhteiset piirteet on helppo poimia taulukoista.
+Suurimmat tekniset eroavaisuudet ovat luonnollisesti tavassa jolla suositukset saadaan.
+Itse toteutetun järjestelmän suositukset saadaan opetetun mallin ennustamina kun taas vertailtavan järjestelmän suositukset on luotu yksinkertaisemmin.
 Puutteellisia tuloksia on hankala arvioida, sillä molemmat järjestelmät antavat tarvittavat 10 suositusta samalle aineistolle.
+Tuloksien paikaansapitävyyttä voidaan arvioida esimerkiksi tyylilajien perusteella.
+Elokuvan hyvyys 
 
 \end{document}
