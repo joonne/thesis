@@ -12,29 +12,29 @@ Tässä osassa esitetään suosittelujärjestelmän sisääntulot.
 \newpage
 
 \captionof{table}{Arvostellut elokuvat}
-\begin{tabular}{llll}
-	userId & movieId & movieName & rating \\ \hline
-	0 & 112897 & The Expendables 3 (2014) & 4.0 \\
-	0 & 116887 & Exodus: Gods and Kings (2014) & 4.0 \\
-	0 & 117529 & Jurassic World (2015) & 4.0 \\
-	0 & 118696 & The Hobbit: The Battle of the Five Armies (2014) & 4.5 \\
-	0 & 128520 & The Wedding Ringer (2015) & 4.5 \\
-	0 & 122882 & Mad Max: Fury Road (2015) & 4.0 \\
-	0 & 122886 & Star Wars: Episode VII - The Force Awakens (2015) & 4.5 \\
-	0 & 131013 & Get Hard (2015) & 4.0 \\
-	0 & 132796 & San Andreas (2015) & 3.0 \\
-	0 & 136305 & Sharknado 3: Oh Hell No! (2015) & 1.0 \\
-	0 & 136598 & Vacation (2015) & 4.0 \\
-	0 & 137595 & Magic Mike XXL (2015) & 1.0 \\
-	0 & 138208 & The Walk (2015) & 2.0 \\
-	0 & 140523 & The Visit (2015) & 3.5 \\
-	0 & 146656 & Creed (2015) & 4.0 \\
-	0 & 148626 & The Big Short (2015) & 4.5 \\
-	0 & 149532 & Marco Polo: One Hundred Eyes (2015) & 4.5 \\
-	0 & 150548 & Sherlock: The Abominable Bride (2016) & 4.5 \\
-	0 & 156609 & Neighbors 2: Sorority Rising (2016) & 3.5 \\
-	0 & 159093 & Now You See Me 2 (2016) & 4.0 \\
-	0 & 160271 & Central Intelligence (2016) & 4.0 \\
+\begin{tabular}{lll}
+	Tunniste & Nimi & Arvostelu \\ \hline
+	112897 & The Expendables 3 (2014) & 4.0 \\
+	116887 & Exodus: Gods and Kings (2014) & 4.0 \\
+	117529 & Jurassic World (2015) & 4.0 \\
+	118696 & The Hobbit: The Battle of the Five Armies (2014) & 4.5 \\
+	128520 & The Wedding Ringer (2015) & 4.5 \\
+	122882 & Mad Max: Fury Road (2015) & 4.0 \\
+	122886 & Star Wars: Episode VII - The Force Awakens (2015) & 4.5 \\
+	131013 & Get Hard (2015) & 4.0 \\
+	132796 & San Andreas (2015) & 3.0 \\
+	136305 & Sharknado 3: Oh Hell No! (2015) & 1.0 \\
+	136598 & Vacation (2015) & 4.0 \\
+	137595 & Magic Mike XXL (2015) & 1.0 \\
+	138208 & The Walk (2015) & 2.0 \\
+	140523 & The Visit (2015) & 3.5 \\
+	146656 & Creed (2015) & 4.0 \\
+	148626 & The Big Short (2015) & 4.5 \\
+	149532 & Marco Polo: One Hundred Eyes (2015) & 4.5 \\
+	150548 & Sherlock: The Abominable Bride (2016) & 4.5 \\
+	156609 & Neighbors 2: Sorority Rising (2016) & 3.5 \\
+	159093 & Now You See Me 2 (2016) & 4.0 \\
+	160271 & Central Intelligence (2016) & 4.0 \\
 \end{tabular}
 
 \newpage
@@ -53,7 +53,7 @@ Tässä osassa käsitellään suosittelujärjestelmän tarjoamat suositukset, eli työn 
 
 \captionof{table}{Toteutetun järjestelmän suosittelemat elokuvat}
 \begin{tabular}{cll}
-	number & movieName & genres \\ \hline
+	Numero & Nimi & Tyylilajit \\ \hline
 	1 & Death of a superhero (2011) & Animation, Drama \\
 	2 & Prisoner of the Mountains (1996) & War \\
 	3 & Funeral in Berlin (1966) & Action, Drama, Thriller \\
@@ -79,61 +79,76 @@ mukaan on lisätty myös elokuvien tyylilajit, jotta on helpompi arvioida suosituk
 
 \captionof{table}{Vertailtavan järjestelmän suosittelemat elokuvat}
 \begin{tabular}{lll}
-	movieId & correlation & rMovieId \\ \hline
-	112897 &  &  \\
-	116887 &  &  \\
-	117529 &  &  \\
-	118696 &  &  \\
-	128520 &  &  \\
-	122882 &  &  \\
-	122886 &  &  \\
-	131013 &  &  \\
-	132796 &  &  \\
-	136305 &  &  \\
-	136598 &  &  \\
-	137595 &  &  \\
-	138208 &  &  \\
-	140523 &  &  \\
-	146656 &  &  \\
-	148626 &  &  \\
-	149532 &  &  \\
-	150548 &  &  \\
-	156609 &  &  \\
-	159093 &  &  \\
-	160271 &  &  \\
+	Tunniste & Korrelaatio & Eniten korreloivat elokuvat \\ \hline
+	112897 & - & - \\
+	116887 & - & - \\
+	117529 & 1.0 & 159858, 142997, 140267 \\
+	118696 & 1.0 & 122890, 130490, 135436 \\
+	128520 & 1.0 & 131013 \\
+	122882 & 1.0 & 127136, 127202, 128520 \\
+	122886 & 1.0 & 122890, 128520, 129428 \\
+	131013 & 1.0 & 132796, 134368, 135569 \\
+	132796 & 1.0 & 133419, 134368, 134853 \\
+	136305 & - & - \\
+	136598 & 1.0 & 139385, 139642, 138036 (0.867) \\
+	137595 & - & - \\
+	138208 & 1.0 & 142448 \\
+	140523 & - & - \\
+	146656 & 1.0 & 152077 (0.999), 152081, 156609 \\
+	148626 & 1.0 & 157296, 152077 (0.499) \\
+	149532 & - & - \\
+	150548 & - & - \\
+	156609 & - & - \\
+	159093 & - & - \\
+	160271 & - & - \\
 \end{tabular}
 
 \captionof{table}{Vertailtavan järjestelmän suosittelemat elokuvat}
 \begin{tabular}{lll}
-	movieName & correlation & rMovieName \\ \hline
-	The Expendables 3 (2014) & & \\
-	Exodus: Gods and Kings (2014) & & \\
-	Jurassic World (2015) & & \\
-	The Hobbit: The Battle of the Five Armies (2014) & & \\
-	The Wedding Ringer (2015) & & \\
-	Mad Max: Fury Road (2015) & & \\
-	Star Wars: Episode VII - The Force Awakens (2015) & & \\
-	Get Hard (2015) & & \\
-	San Andreas (2015) & & \\
-	Sharknado 3: Oh Hell No! (2015) & & \\
-	Vacation (2015) & & \\
-	Magic Mike XXL (2015) & & \\
-	The Walk (2015) & & \\
-	The Visit (2015) & & \\
-	Creed (2015) & & \\
-	The Big Short (2015) & & \\
-	Marco Polo: One Hundred Eyes (2015) & & \\
-	Sherlock: The Abominable Bride (2016) & & \\
-	Neighbors 2: Sorority Rising (2016) & & \\
-	Now You See Me 2 (2016) & & \\
-	Central Intelligence (2016) & & \\
+	Nimi & Korrelaatio & Eniten korreloivat elokuvat \\ \hline
+
+	Jurassic World (2015) & 1.0 & The Conjuring 2 (2016) \\
+	& 1.0 & Hotel Transylvania 2 (2015) \\
+	& 1.0 & The Witch (2015) \\ \hline
+
+	%The Hobbit: The Battle of the Five Armies (2014) & & \\
+
+	The Wedding Ringer (2015) & 1.0 & Get Hard (2015) \\ \hline
+
+	Mad Max: Fury Road (2015) & 1.0 & True Story (2015) \\
+	& 1.0 & Me and Earl and the Dying Girl (2015) \\
+	& 1.0 & The Wedding Ringer (2015) \\ \hline
+
+	%Star Wars: Episode VII - The Force Awakens (2015) & & \\
+
+	Get Hard (2015) & 1.0 & San Andreas (2015) \\
+	& 1.0 & Spy (2015) \\
+	& 1.0 & Star Trek 3 (2016) \\ \hline
+
+	San Andreas (2015) & 1.0 & Pitch Perfect 2 (2015) \\
+	& 1.0 & Spy (2015) \\
+	& 1.0 & Inside Out (2015) \\ \hline
+
+	Vacation (2015) & 1.0 & The Revenant (2015) \\
+	& 1.0 & Southpaw (2015) \\
+	& 0.867 & The Man from U.N.C.L.E. (2015) \\ \hline
+
+	The Walk (2015) & 1.0 & Everest (2015) \\ \hline
+
+	The Visit (2015) & 0.999 & 10 Cloverfield Lane (2016) \\
+	& 1.0 & Zootopia (2016) \\
+	& 1.0 & Neighbors 2: Sorority Rising (2016) \\ \hline
+
+	The Big Short (2015) & 1.0 & Finding Dory (2016) \\
+	& 0.499 & 10 Cloverfield Lane (2016) \\ \hline
+	
 \end{tabular}
 
 \newpage
 
-Taulukossa 5.3 on vertailtavalta suosittelujärjestelmältä saaduista suositukset.
-Vertailtavia tuloksia täytyy tulkita hieman eri tavalla, sillä vertailtava järjestelmä etsii eniten korreloivat elokuvat.
-Tästä syystä nämä tulokset on esitetty niin, että vasemmassa sarakkeessa on nähty elokuva, keskimmäisessä sijaitsee järjestelmän antama, eniten korreloiva elokuva, ja oikean puoleisessa sarakkeessa sijaitsee korrelaatio numeroarvona.
+Taulukoissa 5.3 ja 5.4 on vertailtavalta suosittelujärjestelmältä saadut suositukset.
+Vertailtavia tuloksia täytyy tulkita hieman eri tavalla, sillä vertailtava järjestelmä etsii eniten korreloivat elokuvat, eikä suorita yhteisösuodatusta kuten esimerkkijärjestelmä.
+Tästä syystä nämä tulokset on esitetty niin, että vasemmassa sarakkeessa on nähty elokuva, keskimmäisessä sijaitsee järjestelmän antama korrelaatio numeroarvona ja oikean puoleisessa sarakkeessa sijaitsee eniten korreloiva tai eniten korreloivat elokuvat elokuva.
 
 ~
 
@@ -141,7 +156,9 @@ Tuloksien yhteiset piirteet on helppo poimia taulukoista.
 Suurimmat tekniset eroavaisuudet ovat luonnollisesti tavassa jolla suositukset saadaan.
 Itse toteutetun järjestelmän suositukset saadaan opetetun mallin ennustamina kun taas vertailtavan järjestelmän suositukset on luotu yksinkertaisemmin.
 Puutteellisia tuloksia on hankala arvioida, sillä molemmat järjestelmät antavat tarvittavat 10 suositusta samalle aineistolle.
+Vertailtavan järjestelmän tuloksissa puutoksia taas on havaittavissa, sillä kaikille arvioiduille elokuville ei saatu laskettua korrelaatio arvoja muihin elokuviin.
+Koska vertailtava algoritmi laskee, todennäköisesti puutokset....
 Tuloksien paikaansapitävyyttä voidaan arvioida esimerkiksi tyylilajien perusteella.
-Elokuvan hyvyys 
+Elokuvan hyvyys on hyvinkin henkilökohtainen kokemus, eikä siihen oteta kantaa tässä työssä.
 
 \end{document}
