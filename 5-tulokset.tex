@@ -9,8 +9,6 @@ Tässä kappaleessa käsitellään työn tärkeimpiä tuloksia.
 
 Tässä osassa esitetään suosittelujärjestelmän sisääntulot.
 
-\newpage
-
 \captionof{table}{Arvostellut elokuvat}
 \begin{tabular}{lll}
 	Tunniste & Nimi & Arvostelu \\ \hline
@@ -37,10 +35,8 @@ Tässä osassa esitetään suosittelujärjestelmän sisääntulot.
 	160271 & Central Intelligence (2016) & 4.0 \\
 \end{tabular}
 
-\newpage
-
 Taulukossa 5.1 on esitetty suosittelujärjestelmän sisääntulona annetut jo nähdyt elokuvat.
-Sisääntulon rakenne on seuraava: sarakkeessa yksi sijaitsee käyttäjän tunniste, sarakkeessa kaksi sijaitsee elokuvan tunniste, sarakkeeseen kolme on sijoitettu elokuvan nimi ja sarakkeessa neljä sijaitsee elokuvalle annettu arvio asteikolla 0-5.
+Sisääntulon rakenne on seuraava: sarakkeessa yksi sijaitsee elokuvan tunniste, sarakkeeseen kaksi on sijoitettu elokuvan nimi ja sarakkeessa kolme sijaitsee elokuvalle annettu arvio asteikolla 0-5.
 Taulukossa olevat arvot ovat vain pieni osa kaikesta opetukseen käytetystä datasta.
 
 Jonkun työkalun avulla arvosteluiden antaminen olisi ollut paljon mielekkäämpää.
@@ -49,7 +45,6 @@ Jonkun työkalun avulla arvosteluiden antaminen olisi ollut paljon mielekkäämpää.
 
 Tässä osassa käsitellään suosittelujärjestelmän tarjoamat suositukset, eli työn varsinaiset tulokset.
 
-\newpage
 
 \captionof{table}{Toteutetun järjestelmän suosittelemat elokuvat}
 \begin{tabular}{cll}
@@ -67,10 +62,6 @@ Tässä osassa käsitellään suosittelujärjestelmän tarjoamat suositukset, eli työn 
 \end{tabular}
 
 ~
-
-TODO: joku käppyrä vaikka 50 suosituksesta että miten jakaantuu suhteessa itse arvostelemiin elokuviin?
-
-\newpage
 
 Taulukossa 5.2 on suosittelujärjestelmältä saaduista suosituksista 10 ensimmäistä,
 mukaan on lisätty myös elokuvien tyylilajit, jotta on helpompi arvioida suosituksien paikkansapitävyyttä.
@@ -102,6 +93,8 @@ mukaan on lisätty myös elokuvien tyylilajit, jotta on helpompi arvioida suosituk
 	159093 & - & - \\
 	160271 & - & - \\
 \end{tabular}
+
+\newpage
 
 \captionof{table}{Vertailtavan järjestelmän suosittelemat elokuvat}
 \begin{tabular}{lll}
@@ -148,17 +141,13 @@ mukaan on lisätty myös elokuvien tyylilajit, jotta on helpompi arvioida suosituk
 
 Taulukoissa 5.3 ja 5.4 on vertailtavalta suosittelujärjestelmältä saadut suositukset.
 Vertailtavia tuloksia täytyy tulkita hieman eri tavalla, sillä vertailtava järjestelmä etsii eniten korreloivat elokuvat, eikä suorita yhteisösuodatusta kuten esimerkkijärjestelmä.
-Tästä syystä nämä tulokset on esitetty niin, että vasemmassa sarakkeessa on nähty elokuva, keskimmäisessä sijaitsee järjestelmän antama korrelaatio numeroarvona ja oikean puoleisessa sarakkeessa sijaitsee eniten korreloiva tai eniten korreloivat elokuvat elokuva.
+Tästä syystä nämä tulokset on esitetty niin, että vasemmassa sarakkeessa on nähty elokuva, keskimmäisessä sijaitsee järjestelmän antama korrelaatio numeroarvona ja oikean puoleisessa sarakkeessa sijaitsee eniten korreloiva tai eniten korreloivat elokuvat.
 Taulukosta 5.4 on poistettu ne taulukon 5.3 rivit joille korrelaatioita ei löytynyt ollenkaan.
 
-~
-
-Tuloksien yhteiset piirteet on helppo poimia taulukoista.
 Suurimmat tekniset eroavaisuudet ovat luonnollisesti tavassa jolla suositukset saadaan.
-Itse toteutetun järjestelmän suositukset saadaan opetetun mallin ennustamina kun taas vertailtavan järjestelmän suositukset on luotu yksinkertaisemmin.
-Puutteellisia tuloksia on hankala arvioida, sillä molemmat järjestelmät antavat tarvittavat 10 suositusta samalle aineistolle.
+Itse toteutetun järjestelmän suositukset saadaan opetetun mallin ennustamina kun taas vertailtavan järjestelmän suositukset on luotu hieman yksinkertaisemmin.
+Itse toteutetun järjestelmän tuloksissa puutoksia ei ole havaittavissa, sillä järjestelmältä voi kysyä tuloksia niin monta kuin elokuvia sisääntuloaineistossa on.
 Vertailtavan järjestelmän tuloksissa puutoksia taas on havaittavissa, sillä kaikille arvioiduille elokuville ei saatu laskettua korrelaatio arvoja muihin elokuviin.
-Koska vertailtava algoritmi laskee, todennäköisesti puutokset....
 Tuloksien paikaansapitävyyttä voidaan arvioida esimerkiksi tyylilajien perusteella.
 Elokuvan hyvyys on hyvinkin henkilökohtainen kokemus, eikä siihen oteta kantaa tässä työssä.
 

@@ -8,7 +8,7 @@ Aineistot on ker‰tty useiden aikajaksojen aikana, riippuen aineston koosta.
 MovieLens ml-latest-small aineisto sis‰lt‰‰ 100 000 arviota, jotka ovat antaneet 700 k‰ytt‰j‰‰ 9000 elokuvalle.
 N‰iden aineistojen haittapuolena on, ett‰ ne muuttuvat ajan myˆt‰, eiv‰tk‰ n‰in ollen ole sopivia tutkimustulosten raportointiin.
 Nykyinen, lokakuussa 2016 julkistettu versio on saatavilla projektin versionhallinnassa.
-T‰m‰ aineisto valittiin, jottai voitaisiin antaa arvioita elokuville, jotka on oikeasti n‰hty ja myˆs laitteiston vuoksi.
+T‰m‰ aineisto valittiin, jotta voitaisiin antaa arvioita elokuville, jotka on oikeasti n‰hty ja myˆs laitteiston vuoksi.
 MovieLens ml-latest-small aineisto koostuu $movies.csv$ and $ratings.csv$ tiedostoista.
 
 \captionof{table}{movies.csv}
@@ -49,16 +49,22 @@ Dataset rajapinta tarjoaa useita parannuksia, kuten esimerkiksi yksinkertaisemma
 Ensimm‰inen askel itsen‰isen spark sovelluksen rakentamisessa on tehd‰ oikeanlainen kansiorakenne ja luoda $<PROJEKTI>.sbt$ niminen tiedosto, jossa kuvaillaan sovelluksen riippuvuudet.
 Itsen‰inen spark sovellus tarkoittaa k‰yttˆvalmista $jar$ tiedostoa (Java ARchive), joka voidaan jakaa spark klusterille ja se sis‰lt‰‰ sek‰ koodin ett‰ kaikki riippuvuudet.
 
-Sovelluksia voidaan ottaa k‰yttˆˆn klusterissa spark-submit tyˆkalun avulla.
-Spark-submit mahdollistaa Sparkin kaikkien tuettujen klusterinhoitajien k‰ytt‰misen yhtein‰isen k‰yttˆliittym‰n kautta, joten k‰ytt‰j‰n ei tarvitse m‰‰ritt‰‰ sovellusta toimimaan erikseen kaikkien kanssa.
+Sovelluksia voidaan ottaa k‰yttˆˆn klusterissa spark-submit tyˆkalun avulla, joka mahdollistaa Sparkin kaikkien tuettujen klusterinhoitajien k‰ytt‰misen yhtein‰isen k‰yttˆliittym‰n kautta.
+T‰llˆin k‰ytt‰j‰n ei tarvitse m‰‰ritt‰‰ sovellusta toimimaan erikseen kaikkien kanssa.
 
-\begin{lstlisting}[caption=Kokoonpano jar-tiedoston tekeminen sbt tyˆkalulla,language=sh]
+\begin{lstlisting}[caption=Sovelluksen paketointi sbt tyˆkalulla,language=sh]
 sbt package
 \end{lstlisting}
 
 \begin{lstlisting}[caption=Sovelluksen k‰yttˆˆnotto klusterissa,language=sh]
-spark-submit --class "MovieLensALS" --master local[4] movielens-recommendations_2.11-1.0.jar
+spark-submit --class "MovieLensALS" \
+	--master local[4] \
+	movielens-recommendations_2.11-1.0.jar
 \end{lstlisting}
+
+~
+
+Alla olevassa esimerkiss‰ 4.3 ladataan tyˆss‰ k‰ytetyt suositukset RDD rajapintaa k‰ytt‰en.
 
 \lstset {
 	language=Scala,
@@ -73,7 +79,7 @@ spark-submit --class "MovieLensALS" --master local[4] movielens-recommendations_
 
 \begin{lstlisting}[caption=Suositusten lataaminen RDD rajapintaa k‰ytt‰en]
 val ratings = sc.textFile("ml-latest-small/ratings.csv")
-  .filter(x => !isHeader("userId", x))
+  .filter(arr => arr(0) != "userId")
   .map { line =>
     val fields = line.split(",")
     val timestamp = fields(3).toLong % 10
@@ -84,6 +90,10 @@ val ratings = sc.textFile("ml-latest-small/ratings.csv")
     (timestamp, Rating(userId, movieId, rating))
   }
 \end{lstlisting}
+
+~
+
+Alla olevassa esimerkiss‰ 4.4 ladataan tyˆss‰ k‰ytetyt suositukset Dataset rajapintaa k‰ytt‰en.
 
 \lstset {
 	language=Scala,
@@ -96,7 +106,7 @@ val ratings = sc.textFile("ml-latest-small/ratings.csv")
 	breakatwhitespace=false,
 }
 
-\begin{lstlisting}[caption=Suositusten lataaminen dataset rajapintaa k‰ytt‰en]
+\begin{lstlisting}[caption=Suositusten lataaminen Dataset rajapintaa k‰ytt‰en]
 val ratings = spark.read.csv("ml-latest-small/ratings.csv")
 	.filter(arr => arr(0) != "userId")
 	.map { fields =>
@@ -108,6 +118,10 @@ val ratings = spark.read.csv("ml-latest-small/ratings.csv")
 		Rating(userId, movieId, rating, timestamp)
   }
 \end{lstlisting}
+
+~
+
+Alla olevassa listauksessa on esitetty toteutetun suositteluj‰rjestelm‰n implementaatio.
 
 \lstset {
 	language=Scala,
@@ -266,39 +280,41 @@ T‰m‰n j‰lkeen tiedosto k‰yd‰‰n l‰pi rivi kerrallaan ja p‰tkit‰‰n pilkulla erotet
 T‰m‰n j‰lkeen taulukossa olevista arvoista muodostetaan Tupleja.
 Riveill‰ 44-54 valmistellaan opetus, validaatio sek‰ testidatat.
 Rivill‰ 47 opetusdataan lis‰t‰‰n omat henkilˆkohtaiset arvostelut k‰ytt‰en RDD:n union funktiota.
-
 Riveill‰ 64-83 suoritetaan varsinainen mallin opetus.
-
 Opetus suoritetaan niin, ett‰ opetetaan muutama versio mallista, ja lopuksi valitaan opetetuista malleista paras k‰ytt‰en RMSE-metriikkaa mittarina.
-
 Varsinainen mallin opetus tehd‰‰n k‰ytt‰en ALS kirjaston funktiota $train$ ja tarkemmin sanottuna $train$ funktion ylikuormitettua versiota, joka ottaa sis‰‰ntulonaan $ratings$, $rank$, $iterations$ sek‰ $lambda$ parametrit.
 Ratings on RDD Rating olioita, jotka sis‰lt‰v‰t k‰ytt‰j‰n id:n, elokuvan id:n ja suosituksen.
 Rank tarkoittaa piilevien ominaisuuksien sis‰llytett‰v‰‰ m‰‰r‰‰.
-Iterations tarkoittaa ALS algoritmien iteraatioiden m‰‰r‰‰.
+Iterations tarkoittaa ALS algoritmin iteraatioiden m‰‰r‰‰.
 Lambda tarkoittaa regularisaatio parametria, jolla yritet‰‰n ehk‰ist‰ mallin ylioppimista.
-
 Riveill‰ 89-102 haetaan henkilˆkohtaiset suositukset k‰ytt‰m‰ll‰ mallin $predict$ metodia, joka ottaa parametrinaan mahdollisten elokuvien joukon.
 Mahdollisilla elokuvilla tarkoitetaan elokuvia joita k‰ytt‰j‰ ei ole viel‰ n‰hnyt, eli ne eiv‰t sis‰lly $personalRatings$ muuttujan sis‰lt‰miin elokuviin.
 Rivill‰ 105 kutsutaan lopuksi $sparkContext$ objektin $stop$ funktiota, jolla kerrotaan ett‰ laskenta on suoritettu loppuun.
+Rivill‰ 108 m‰‰ritell‰‰n apufunktio $isHeader$, jota k‰ytet‰‰n apuna suodattamaan l‰htˆaineistosta ei halutut rivit pois.
+Riveill‰ 111-128 m‰‰ritell‰‰n apufunktio $computeRMSE$, jonka avulla evaluoidaan opetetun mallin virhett‰.
 
 
 \section{Apache Pig}
 
-Koska valmiita personoituja suositteluj‰rjestelmi‰ ei vaikuttanut olevan saatavilla, tuloksia vertaillaan ei-personoituihin, Apache Pig j‰rjestelm‰ll‰ saatuihin tuloksiin.
+Koska valmiita personoituja suositteluj‰rjestelmi‰ ei lˆydetty valmiina, tuloksia vertaillaan ei-personoituihin, Apache Pig j‰rjestelm‰ll‰ saatuihin tuloksiin.
+Toteutus on muunnettu uudemmalle MovieLens ml-latest-small datasetin versiolle, mutta muutoin koodi on uudelleenk‰ytetty alkuper‰isess‰ muodossaan. \cite{pig_original_code} \cite{pig_own_code}
+
 Apache Pig on suurten datasettien analysointiin tarkoitettu alusta, joka sis‰lt‰‰ korkean tason kielen data-analyysi sovellusten ilmaisemiseen sek‰ infrastruktuurin n‰iden ohjelmien k‰ytt‰miseen.
 Pig ohjelmien rakenne mahdollistaa merkitt‰v‰n rinnakkaistamisen, joka puolestaan mahdollistaa todella suurten datasettien k‰sittelyn. \cite{pig17}
 
-T‰ll‰ hetkell‰ Pig:n infrastruktuurikerros koostuu k‰‰nt‰j‰st‰ joka tuottaa Map-Reduce ohjelmien p‰tki‰, joille suurimittaiset rinnakkaiset toteutukset lˆytyv‰t valmiina.
+Pig:n infrastruktuurikerros koostuu k‰‰nt‰j‰st‰, joka tuottaa Map-Reduce ohjelmien p‰tki‰, joille suurimittaiset rinnakkaiset toteutukset lˆytyv‰t valmiina.
 Pig:n kielikerros koostuu kielest‰ nimelt‰ Pig Latin, jolla on seuraavat ominaisuudet:
 
-Ohjelmoinnin helppous.
-Rinnakkaisesti suoritettavien data-analyysi ohjelmien kirjoittaminen on helppoa.
-Monimutkaiset, useista toisistaan riippuvista datamuunnokset enkoodataan eksplisiittisesti data virtaus (flow) sekvenssein‰, jolloin niiden kirjoittaminen, ymm‰rt‰minen ja hallinta helpottuu.
-Optimointimahdollisuudet.
-Suorituksen automaattinen optimointi, joka antaa k‰ytt‰j‰n keskitty‰ semantiikkaan tehokkuuden sijaan.
-Laajennettavuus.
-K‰ytt‰j‰t voivat luoda omia funktioitaan erikoisk‰yttˆiseen prosessointiin. \cite{pig17}
+\begin{itemize}
+	\item Ohjelmoinnin helppous.
+	\item Rinnakkaisesti suoritettavien data-analyysi ohjelmien kirjoittaminen on helppoa.
+	\item Monimutkaiset, useista toisistaan riippuvista datamuunnokset enkoodataan eksplisiittisesti data virtaus (flow) sekvenssein‰, jolloin niiden kirjoittaminen, ymm‰rt‰minen ja hallinta helpottuu.
+	\item Optimointimahdollisuudet.
+	\item Suorituksen automaattinen optimointi, joka antaa k‰ytt‰j‰n keskitty‰ semantiikkaan tehokkuuden sijaan.
+	\item Laajennettavuus.
+	\item K‰ytt‰j‰t voivat luoda omia funktioitaan erikoisk‰yttˆiseen prosessointiin.
+\end{itemize}
 
-Toteutus on muunnettu uudemmalle MovieLens datasetin versiolle, mutta muutoin koodi on uudelleen k‰ytetty alkuper‰isess‰ muodossaan. \cite{pig_original_code} \cite{pig_own_code}
+\cite{pig17}
 
 \end{document}
