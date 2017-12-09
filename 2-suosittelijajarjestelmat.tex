@@ -17,23 +17,24 @@ Suositukset voivat olla myös räätälöimättömiä ja niiden tuottaminen onkin usein 
 Lista, joka sisältää 10 suosituinta tuotetta, on esimerkki räätälöimättömästä suosittelusta.
 Järjestäminen tehdään ennustamalla kaikista sopivimmat tuotteet käyttäjän mieltymysten tai vaatimusten perusteella.
 Tämän suorittamiseksi suosittelijajärjestelmän on kerättävä käyttäjältä tämän mieltymykset.
-Mieltymykset voivat olla suoraan käyttäjältä kysyttyjä tai käyttäjän antamia tuotearvioita tai ne voidaan tulkita käyttäjän toiminnasta kuten klikkauksista tai sivun katselukerroista.
+Mieltymykset voivat olla suoraan käyttäjältä kysyttyjä tai käyttäjän antamia tuotearvioita tai ne voidaan tulkita käyttäjän toiminnasta kuten klikkauksista, sivun katselukerroista tai ajasta jonka käyttäjä on viipynyt tietyllä tuotesivulla.
 Suosittelijajärjestelmä voisi esimerkiksi tulkita tuotesivulle päätymisen todisteeksi mieltymyksestä sivun tuotteista. \cite{ricci11}
 
-Suosittelijajärjestelmien kehitys alkoi melko yksinkertaisesta havainnosta: ihmiset tapaavat luottaa toisten suosituksiin tehdessään rutiininomaisia päätöksiä.
+Suosittelijajärjestelmien kehitys alkoi melko yksinkertaisesta havainnosta: ihmiset tapaavat luottaa toisten ihmisten suosituksiin tehdessään rutiininomaisia päätöksiä.
 On esimerkiksi yleistä luottaa vertaispalautteeseen valitessaan kirjaa luettavaksi tai luottaa elokuvakriitikoiden kirjoittamiin arvioihin.
-Ensimmäinen suosittelijajärjestelmä yritti matkia tätä käytöstä käyttämällä algoritmeja suosituksien löytämiseen yhteisöstä aktiiviselle käyttäjälle, joka etsi suosituksia.
-Tämä lähestymistapa on tyypiltään yhteistyösuodattamista ja idea sen takana on että jos käyttäjät pitivät samankaltaisista tuotteista aikaisemmin, he luultavasti pitävät samoja tuotteita ostaneiden henkilöiden suosituksia merkityksellisinä. \cite{ricci11}
+Ensimmäinen suosittelijajärjestelmä yritti matkia tätä käytöstä etsimällä yhteisöstä suosituksia aktiiviselle käyttäjälle.
+Suositukset haettiin käyttämällä algoritmeja.
+Tämä lähestymistapa on tyypiltään yhteisösuodattamista.
+Idea sen takana on että jos käyttäjät pitivät samankaltaisista tuotteista aikaisemmin, he luultavasti pitävät samoja tuotteita ostaneiden henkilöiden suosituksia merkityksellisinä. \cite{ricci11}
 
 Verkkokauppojen kehityksen myötä syntyi tarve suosittelulle vaihtoehtojen rajoittamiseksi.
 Käyttäjät kokivat aina vain vaikeammaksi löytää oikeat tuotteet sivustojen suurista valikoimista.
 Tiedon määrän räjähdysmäinen kasvaminen internetissä on ajanut käyttäjät tekemään huonoja päätöksiä.
-Hyödyn tuottamisen sijaan vaihtoehtojen määrä oli alkanut heikentää kuluttajien hyvinvointia.
-Vaihtoehdot ovat hyväksi, mutta vaihtoehtojen lisääntyminen ei ole aina parempi. \cite{ricci11}
+Vaihtoehdot ovat hyväksi, mutta vaihtoehtojen lisääntyminen on alkanut hyödyn tuottamisen sijaan heikentää kuluttajien hyvinvointia. \cite{ricci11}
 
-Viimeaikoina suosittelijajärjestelmät ovat osoittautuneet tehokkaaksi lääkkeeksi käsillä olevaa tiedon ylimääräongelmaa vastaan.
-Suosittelijajärjestelmät käsittelevät tätä ilmiötä tarjoamalla uusia, aiemmin tuntemattomia tuotteita jotka ovat todennäköisesti merkityksellisiä käyttäjälle tämän nykyisessä tehtävässä.
-Kun käyttäjä pyytää suosituksia, suosittelujärjestelmä tuottaa suosituksia käyttämällä tietoa ja tuntemusta käyttäjistä, saatavilla olevista tuotteista ja aiemmista tapahtumista suosittelijan tietokannasta.
+Viimeaikoina suosittelijajärjestelmät ovat osoittautuneet tehokkaaksi lääkkeeksi tiedon ylimääräongelmaa vastaan.
+Suosittelijajärjestelmät käsittelevät tätä ilmiötä tarjoamalla uusia, aiemmin tuntemattomia, tuotteita jotka ovat todennäköisesti merkityksellisiä käyttäjälle tämän nykyisessä tehtävässä.
+Kun käyttäjä pyytää suosituksia, suosittelujärjestelmä tuottaa suosituksia käyttämällä tietoa ja tuntemusta käyttäjistä, saatavilla olevista tuotteista ja aiemmista tapahtumista (transactions).
 Tutkittuaan tarjotut suositukset, käyttäjä voi hyväksyä tai hylätä ne tarjoten epäsuoraa ja täsmällistä palautetta suosittelijalle.
 Tätä uutta tietoa voidaan myöhemmin käyttää hyödyksi tuotettaessa uusia suosituksia seuraaviin käyttäjän ja järjestelmän vuorovaikutuksiin. \cite{ricci11}
 
@@ -44,16 +45,13 @@ Esimerkkinä suuren profiilin verkkosivustot kuten Amazon.com, YouTube, Netflix s
 Oma lukunsa ovat myös vain suosittelujärjestelmien tutkimiseen ja kehittämiseen tarkoitetut konferenssit kuten RecSys ja AI Communications (2008). \cite{ricci11}
 
 Suosittelujärjestelmällä voidaan ajatella olevan kaksi päätarkoitusta.
-Ensimmäinen on avustaa palveluntarjoajaa.
-Toinen on tuottaa arvoa palvelun käyttäjälle.
+Ensimmäinen on avustaa palveluntarjoajaa ja toinen on tuottaa arvoa palvelun käyttäjälle.
 Suosittelujärjestelmän on siis tasapainoteltava sekä palveluntarjoajan että käyttäjän tarpeiden välillä. \cite{ricci11}
 Palveluntarjoaja voi esimerkiksi ottaa suosittelujärjestelmän avuksi parantamaan tai monipuolistamaan myyntiä, lisäämään käyttäjien tyytyväisyyttä, lisäämään käyttäjien uskollisuutta tai ymmärtämään paremmin mitä käyttäjä haluaa \cite{ricci11}.
-Käyttäjillä puolestaan saattaa olla seuraavanlaisia odotuksia suosittelujärjestelmältä.
-Käyttäjä saattaa haluta suosituksena tuotesarjan, apua selaamiseen tai mahdollistaa muihin vaikuttamisen.
-Vaikuttaminen saattaa olla pahantahtoista. \cite{ricci11}
+Käyttäjä puolestaan saattaa haluta suosituksena tuotesarjan, apua selaamiseen tai mahdollistaa muihin vaikuttamisen. \cite{ricci11}
 
 GroupLens, BookLens ja MovieLens olivat uranuurtajia suosittelujärjestelmissä.
-GroupLens on tutkimuslaboratorio tietojenkäsittelyopin ja tekniikan laitoksella Minnesotan Yliopistossa, joka on erikoistunut suosittelujärjestelmiin, verkkoyhteisöihin, mobiili ja kaikkialla läsnä oleviin teknologioihin, digitaalisiin kirjastoihin ja paikallisen maantieteen tietojärjestelmiin. \cite{aggarwal16}
+GroupLens on tutkimuslaboratorio tietojenkäsittelyopin ja tekniikan laitoksella Minnesotan Yliopistossa, joka on erikoistunut muunmuassa suosittelujärjestelmiin ja verkkoyhteisöihin \cite{aggarwal16}.
 BookLens on on GroupLensin rakentama kirjojen suosittelujärjestelmä \cite{booklens17}.
 MovieLens on GroupLensin ylläpitämä elokuvien suosittelujärjestelmä \cite{movieLens17}.
 Uranuurtavan tutkimuksen lisäksi nämä sivustot julkaisivat aineistoja, joka ei ollut yleistä tuohon aikaan.
@@ -62,13 +60,13 @@ Uranuurtavan tutkimuksen lisäksi nämä sivustot julkaisivat aineistoja, joka ei o
 \section{Suositustekniikat}
 
 Suosittelujärjestelmällä täytyy olla jonkunlainen ymmärrys tuotteista, jotta se pystyy suosittelemaan jotain.
-Tämän mahdollistamiseksi, järjestelmän täytyy pystyä ennustamaan tuotteen käytännöllisyys tai ainakin verrata tuotteiden hyödyllisyyttä ja tämän perusteella päättää suositeltavat tuotteet.
+Tämän mahdollistamiseksi järjestelmän täytyy pystyä ennustamaan tuotteen käytännöllisyys tai ainakin verrata tuotteiden hyödyllisyyttä ja tämän perusteella päättää suositeltavat tuotteet.
 Ennustamista voidaan luonnostella yksinkertaisella personoimattomalla suosittelualgoritmilla joka suosittelee vain suosituimpia elokuvia.
 Tätä lähestymistapaa voidaan perustella sillä, että tarkemman tiedon puuttuessa käyttäjän mieltymyksistä, elokuva josta muutkin ovat pitäneet on todennäköisesti myös keskivertokäyttäjän mieleen, ainakin enemmän kuin satunaisesti valikoitu elokuva.
 Suosittujen elokuvien voidaan siis katsoa olevan kohtuullisen osuvia suosituksia keskivertokäyttäjälle. \cite{ricci11}
 
 Tuotteen $i$ hyödyllisyyttä käyttäjälle $u$ voidaan mallintaa reaaliarvoisella funktiolla $R(u,i)$, kuten yleensä tehdään yhteisösuodatuksessa ottamalla huomioon käyttäjien antamat arviot tuotteista.
-Yhteisösuodatus suosittelijan perustehtävä on ennustaa $R$:n arvoa käyttäjä-tuote pareille ja laskea arvio todelliselle funktiolle $R$.
+Yhteisösuodatuksessa suosittelijan perustehtävä on ennustaa $R$:n arvoa käyttäjä-tuote pareille ja laskea arvio todelliselle funktiolle $R$.
 Laskiessaan tätä ennustetta käyttäjälle $u$ tuotejoukolle, järjestelmä suosittelee tuotteita joilla on suurin ennustettu hyödyllisyys.
 Ennustettujen tuotteiden määrä on usein paljon pienempi kuin tuotteiden koko määrä, joten voidaan sanoa että suosittelijajärjestelmä suodattaa käyttäjälle suositeltavat tuotteet. \cite{ricci11}
 
@@ -77,11 +75,11 @@ Tässä työssä keskitytään vain yhteen suosittelutekniikoiden luokkkaan, yhteisöll
 
 Yhteisöllistä suodatusta käyttävät suosittelijajärjestelmät perustuvat käyttäjien yhteistyöhön.
 Niiden tavoitteena on tunnistaa kuvioita käyttäjän mielenkiinnoista voidakseen tehdä suunnattuja suosituksia \cite{aberger14}.
-Tämän lähestymistavan alkuperäisessä toteutuksessa suositellaan aktiiviselle käyttäjälle niitä tuotteita joita muut samankaltaiset mieltymyksen omaavat käyttäjät ovat pitäneet aiemmin \cite{ricci11}.
+Tämän lähestymistavan alkuperäisessä toteutuksessa suositellaan aktiiviselle käyttäjälle niitä tuotteita joita muut samankaltaiset käyttäjät ovat pitäneet aiemmin \cite{ricci11}.
 Käyttäjä arvostelee tuotteita.
 Seuraavaksi algoritmi etsii suosituksia perustuen käyttäjiin, jotka ovat ostaneet samanlaisia tuotteita tai perustuen tuotteisiin, jotka ovat eniten samanlaisia käyttäjän ostoshistoriaan verrattuna.
 Yhteisösuodatus voidaan jakaa kahteen kategoriaan, jotka ovat tuotepohjainen- ja käyttäjäpohjainen yhteisösuodatus.
-Yhteisösuodatusta on eniten käytetty ja toteutettu tekniikka suositusjärjestelmissä \cite{gorakala15} \cite{ricci11} \cite{burke02}.
+Yhteisösuodatus on eniten käytetty ja toteutettu tekniikka suositusjärjestelmissä \cite{gorakala15} \cite{ricci11} \cite{burke02}.
 
 Yhteisöllinen suodatus analysoi käyttäjien välisiä suhteita ja tuotteiden välisiä riippuvuuksia tunnistaakseen uusia käyttäjä-tuote assosiaatioita \cite{korenBellVolinsky09}.
 Päätelmä siitä, että käyttäjät voisivat pitää samasta laulusta koska molemmat kuuntelevat muita samankaltaisia lauluja on esimerkki yhteisöllisestä suodatuksesta \cite{ryza15}.
@@ -95,45 +93,49 @@ Tästä johtuen suhteiden määrä on todella niukka, sillä useat käyttäjät ovat arvo
 
 \subsection{Muistiperustainen yhteisöllinen suodatus}
 
-Muistiperustaississa metodeissa käyttäjä-tuote suosituksia käytetään suoraan uusien tuotteiden ennustamiseksi.
+Muistiperustaisissa metodeissa käyttäjä-tuote suosituksia käytetään suoraan uusien tuotteiden ennustamiseksi.
 Tämä voidaan toteuttaa kahdella tavalla, käyttäjäpohjaisena suositteluna tai tuotepohjaisena suositteluna.
 
 Seuraavat kappaleet kuvaavat käyttäjäpohjaista yhteisösuodatusta ja tuotepohjaista yhteisösuodatusta.
 
 \subsubsection{Tuotepohjainen yhteisösuodatus}
 
-Tuotepohjainen yhteisösuodatus (Item-based collaborative filtering, IBCF) aloittaa etsimällä samankaltaisia tuotteita käyttäjän ostoshistoriasta \cite{gorakala15}.
+Tuotepohjaisessa yhteisösuodatuksessa (Item-based collaborative filtering, IBCF) algoritmi aloittaa etsimällä samankaltaisia tuotteita käyttäjän ostoshistoriasta \cite{gorakala15}.
 Seuraavaksi mallinnetaan käyttäjän mieltymykset tuotteelle perustuen saman käyttäjän tekemiin arvosteluihin \cite{ricci11}.
-Alla oleva koodinpätkä esittelee ICBF:n idean jokaiselle uudelle käyttäjälle.
+Alla oleva koodinpätkä esittelee tuotepohjaisen yhteisösuodatuksen idean jokaiselle uudelle käyttäjälle.
 
 \newpage
 
 \lstset{
 	columns=flexible,
-	frame=single,
+%	frame=single,
 	breaklines=true,
 	tabsize=2
 }
 
-\begin{lstlisting}[caption=Tuotepohjainen yhteisösuodatus algoritmi \cite{gorakala15}]
+\begin{lstlisting}[caption=Tuotepohjaisen yhteisösuodatuksen algoritmi \cite{gorakala15}]
 
 1. Jokaiselle kahdelle tuotteelle, mittaa kuinka samankaltaisia ne ovat sen suhteen, kuinka samankaltaisia arvioita ne ovat saaneet samankaltaisilta käyttäjiltä.
 
-val similarItems = items.foreach { item1 =>
-	items.foreach { item2 =>
-		val similarity = cosineSimilarity(item1, item2);
+case class Similarity(item1: Item, item2: Item, similarity: Double)
+
+val similarItems: Seq[Similarity] = items.map { item1 =>
+	items.map { item2 =>
+		Similarity (item1, item2, cosineSimilarity(item1, item2))
 	}
 }
 
-2. Tunnistaa k samankaltaisinta tuotetta jokaiselle tuotteelle
+2. Tunnista k samankaltaisinta tuotetta jokaiselle tuotteelle
 
-val itemsSorted = sort(similarItems)
+case class Similarities(item: Item, kMostSimilarItems: Seq[Similarity])
+
+val similarities = findKMostSimilarItems(similarItems)
 
 3. Jokaiselle käyttäjälle, tunnista tuotteet jotka ovat eniten samankaltaisia käyttäjän ostoshistorian kanssa.
 
 users.foreach { user =>
 	user.purchases.foreach { purchase =>
-		val mostSimilar = findSimilarItem(purchase)
+		val mostSimilar = findSimilarItem(purchase, similarities)
 	}
 }
 
@@ -141,13 +143,13 @@ users.foreach { user =>
 
 \newpage
 
-Amerikan suurimman verkkokaupan, Amazon.com:in, on aiemmin tiedetty käyttävät tuote-tuotteeseen yhteisösuodatusta.
+Amerikan suurimman verkkokaupan, Amazon.com:in, on aiemmin tiedetty käyttäneen tuote-tuotteeseen yhteisösuodatusta.
 Tässä toteutuksessa algoritmi rakentaa samankaltaisten tuotteiden taulun etsimällä tuotteita joita käyttäjät tapaavat ostaa yhdessä.
 Seuraavaksi algoritmi etsii käyttäjän ostoshistoriaa ja arvosteluita vastaavat tuotteet, yhdistää nämä tuotteet ja palauttaa suosituimmat tai eniten korreloivat tuotteet. \cite{linden03}
 
 \subsubsection{Käyttäjäpohjainen yhteisösuodatus}
 
-Tuotepohjainen yhteisösuodatus (User-based collaborative filtering, UBCF) aloittaa etsimällä samankaltaisimmat käyttäjät.
+Tuotepohjaisessa yhteisösuodatuksessa (User-based collaborative filtering, UBCF) algoritmi aloittaa etsimällä samankaltaisimmat käyttäjät.
 Seuraava askel on arvostella samankaltaisten käyttäjien ostamat tuotteet.
 Lopuksi valitaan parhaan arvosanan saaneet tuotteet.
 Samankaltaisuus saadaan laskettua vertaamalla käyttäjien ostoshistorioiden samankaltaisuutta. \cite{ricci11}
@@ -158,7 +160,7 @@ Askeleet jokaiselle uudelle käyttäjälle käyttäjäpohjaisessa yhteisösuodatuksessa
 
 \lstset{
 	columns=flexible,
-	frame=single,
+%	frame=single,
 	keywords={val}
 	breaklines=true,
 	tabsize=2
@@ -198,7 +200,7 @@ val topRatedItems = ratedItems.take(10)
 
 \subsection{Mallipohjainen yhteisösuodatus}
 
-Muistipohjaiseen yhteisösuodatuksen käyttäessä tallennettuja suosituksia suoraan ennustamisen apuna, mallipohjaisissa lähestymistavoissa näitä arvosteluita käytetään ennustavan mallin oppimiseen.
+Muistipohjaisen yhteisösuodatuksen käyttäessä tallennettuja suosituksia suoraan ennustamisen apuna, mallipohjaisissa lähestymistavoissa näitä arvosteluita käytetään ennustavan mallin oppimiseen.
 Perusajatus on mallintaa käyttäjä-tuote vuorovaikutuksia tekijöillä jotka edustavat käyttäjien ja tuotteiden piileviä ominaisuuksia (latent factors) järjestelmässä.
 Piileviä ominaisuuksia ovat esimerkiksi käyttäjän mieltymykset ja tuotteiden kategoriat.
 Tämä malli opetetaan käyttämällä saatavilla olevaa dataa ja myöhemmin käytetään ennustamaan käyttäjien arvioita uusille tuotteille. \cite{ricci11}
