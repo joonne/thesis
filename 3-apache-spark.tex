@@ -55,17 +55,18 @@ Scalan perustyypit numeroiden esittämiseen ovat Byte, Short, Int, Long, Float ja
 Lisäksi Scalassa on perustyypit Char, String ja Boolean.
 Char on 16 bittinen etumerkitön Unicode merkki.
 String on jono Char:eja.
-Boolean esittää totuusarvoa true tai false.
+Boolean esittää totuusarvoa tosi (true) tai epätosi (false). \cite{guller15}
 
-Huomionarvoista on se, että Scalassa ei ole ollenkaan primitiivisiä tyyppejä kuten Javassa.
-Jokainen tyyppi on toteutettu luokkana ja käännöksen aikana kääntäjä tarvittaessa automaattisesti muuntaa Scala tyypit Javan primitiivi tyypeiksi.
+Javasta poiketen Scalassa ei ole ollenkaan primitiivisiä tyyppejä vaan jokainen tyyppi on toteutettu luokkana.
+Käännöksen aikana kääntäjä tarvittaessa automaattisesti muuntaa Scala tyypit Javan primitiivisiksi tyypeiksi. \cite{guller15}
 
 \subsection{Muuttujat}
 
 Scalassa on kahdentyyppisiä muuttujia: muuttuvia ja muuttumattomia.
 Muuttuva muuttuja määritellään avainsanan $var$ avulla.
-Muuttuvan muuttuja voidaan antaa uudelleen luomisen jälkeen.
-Var:ien käyttöä ei suositella, mutta joskus niiden käyttämisellä saadaan aikaan yksinkertaisempaa koodia ja tästä syystä Scala tukee myös muuttuvia muuttujia.
+Muuttuvaa muuttujaa ei voida antaa uudelleen luomisen jälkeen.
+Var:ien käyttöä ei suositella, mutta joskus niiden käyttämisellä saadaan aikaan yksinkertaisempaa ohjelmakoodia ja tästä syystä Scala tukee myös muuttuvia muuttujia. \cite{guller15}
+
 Syntaksi $var$:in luomiseksi on
 
 \begin{lstlisting}[caption=Muuttuvan muuttujan luominen ja uudelleen antaminen]
@@ -91,7 +92,8 @@ val y: Int = 10
 \subsection{Funktiot}
 
 Funktio on lohko suoritettavaa koodia joka palauttaa arvon.
-Se on konseptuaalisesti samankaltainen kuin matematiikassa: funktio ottaa sisääntulon ja palauttaa ulostulon.
+Se on konseptuaalisesti samankaltainen kuin matematiikassa: funktio ottaa sisääntulon ja palauttaa ulostulon. \cite{guller15}
+
 Scalan funktiot ovat ensimmäisen luokan kansalaisia, jolla tarkoitetaan että funktiota voidaan:
 
 \begin{itemize}
@@ -103,9 +105,11 @@ Scalan funktiot ovat ensimmäisen luokan kansalaisia, jolla tarkoitetaan että fun
 	\item palauttaa toisen funktion ulostulona
 \end{itemize}
 
+\cite{guller15}
+
 Scalassa funktio määritellään avainsanalla $def$.
 Funktion määrittely aloitetaan funktion nimellä, jota seuraa sulkeissa olevat, pilkulla erotetut, parametrit tyyppimäärittelyineen.
-Parametrien jälkeen funktiomäärittelyyn tulee kaksoispiste, funktion ulostulon tyyppi, yhtäsuuruusmerkki sekä funktion runko joko aaltosulkeissa tai ilman.
+Parametrien jälkeen funktiomäärittelyyn tulee kaksoispiste, funktion ulostulon tyyppi, yhtäsuuruusmerkki sekä funktion runko joko aaltosulkeissa tai ilman. \cite{guller15}
 
 \lstset{language=Scala,tabsize=2}
 
@@ -116,8 +120,8 @@ def add(firstInput: Int, secondInput: Int): Int = {
 }
 \end{lstlisting}
 
-Ylläolevassa esimerkissä funktion nimi on $add$ ja se ottaa kaksi Int tyyppistä sisääntuloa.
-Funktio palauttaa Int tyyppisen arvon jonka se muodostaa lisäämällä annetut sisääntulot yhteen ja palauttamalla tuloksen.
+Ylläolevassa esimerkissä funktion nimi on $add$ ja se ottaa kaksi $Int$ tyyppistä sisääntuloa.
+Funktio palauttaa $Int$ tyyppisen arvon jonka se muodostaa lisäämällä annetut sisääntulot yhteen ja palauttamalla tuloksen.
 
 Scala sallii myös lyhyemmän version samasta funktiosta:
 
@@ -132,24 +136,22 @@ Paluuarvon tyyppi on jätetty antamatta, sillä kääntäjä pystyy päättelemään sen k
 Paluuarvo suositellaan kuitenkin annettavan aina.
 Aaltosulkeet on myöskin jätetty pois, sillä ne ovat pakolliset vain kun funktion runko sisältää useamman kuin yhden käskyn.
 Lisäksi, $return$ avainsana on ohitettu, sillä se on vapaaehtoinen.
-Scalassa kaikki on arvon palauttavia lausekkeita, joten funktion rungon viimeisen lausekkeen arvosta tulee funktion paluuarvo. \cite{guller15}
+Scalassa kaikki lausekkeet ovat arvon palauttavia lausekkeita, joten funktion rungon viimeisen lausekkeen arvosta tulee funktion paluuarvo. \cite{guller15}
 
 \section{Resilient Distributed Dataset (RDD)}
 
 Resilient Distributed Dataset (RDD) on Sparkin tarjoama pääabstraktio.
 RDD on muuttumaton, osioitu elementtikokoelma, joka voidaan hajauttaa klusterin useiden koneiden välillä. \cite{spark-rdd}
 
-Tärkeä yksityiskohta ymmärtää RDD:stä on että ne ovat laiskasti evaluoituvia.
-Laiska evaluaatio (lazy evaluation) on evaluointi taktiikka, jossa lausekkeen evaluointia viivytetään siihen asti kun sen arvoa tarvitaan.
-Kun uusi RDD luodaan, mitään ei oikeasti vielä tapahdu.
-Spark tietää missä data sijaitsee tai miten data saadaan laskettua kun tulee aika tehdä sille jotain.
+RDD:t ovat laiskasti evaluoituvia, jolla tarkoitetaan sitä, että lausekkeen evaluointia viivytetään siihen asti kun sen arvoa tarvitaan.
+Kun uusi RDD luodaan, mitään laskentaa ei oikeasti vielä tapahdu, vaan Spark tietää missä data sijaitsee tai miten data saadaan laskettua kun tulee aika tehdä sille jotain.
 
 RDD voidaan luoda kahdella tavalla.
 Olemassaoleva Scala kokoelma voidaan rinnakkaistaa (parallelize).
 Toinen keino on viitata ulkoiseen aineistoon ulkoisessa varastointijärjestelmässä kuten HDFS:sä, HBase:ssa tai missä tahansa Hadoopin tuntemassa tiedostojärjestelmässä. \cite{spark-programming-guide}
 
 RDD:t voidaan tallentaa muistiin, jolloin ohjelmistokehittäjä voi uudelleenkäyttää niitä tehokkaasti rinnakkaisissa operaatioissa.
-RDD:t voivat palautua solmuvirheistä automaattisesti käyttäen Directed Acyclic Graph (DAD) moottoria.
+RDD:t voivat palautua solmuvirheistä automaattisesti käyttäen Directed Acyclic Graph (DAG) moottoria.
 DAG tukee syklistä datavirtaa.
 Jokaista Spark työtä kohti luodaan DAG klusterissa suoritettavan tehtävän tasoista.
 Verrattuna MapReduceen, joka luo DAGin kahdesta ennaltamäärätystä tilasta (Map ja Reduce), Sparkin luomat DAGit voivat sisältää minkä tahansa määrän tasoja.
@@ -164,22 +166,22 @@ Yksinkertaisimmat työt voivat valmistua vain yhden tason jälkeen ja monimutkaise
 
 \section{Dataset API}
 
-Dataset (DS) on RDD:n korvaaja Sparkissa.
-DS on vahvasti tyypitetty kokoelma aluespesifisiä objekteja jotka voidaan muuntaa rinnakkain käyttäen funktionaalisia tai relaatio-operaatioita.
-Dataset:ille olemassa olevat operaatiot on jaettu muunnoksiin ja toimiin.
-Muunnokset ovat operaatioita, jotka luovat uusia Datasettejä, kuten map, filter, select, aggregate.
-Toimet ovat operaatioita jotka laukaisevat laskentaa ja palauttavat tuloksia.
+Dataset (DS) on vahvasti tyypitetty kokoelma aluespesifisiä objekteja jotka voidaan muuntaa rinnakkain käyttäen funktionaalisia tai relaatio-operaatioita.
+DS on RDD:n korvaaja Sparkissa.
+Dataset:ille olemassa olevat operaatiot on jaettu muunnoksiin (transformations) ja toimiin (actions).
+Muunnokset ovat operaatioita, jotka luovat uusia Dataset objekteja, kuten map, filter, select, aggregate.
+Toimet ovat operaatioita jotka suorittavat laskentaa ja palauttavat tuloksia.
 Toimia ovat esimerkiksi count, show tai datan kirjoittaminen tiedostojärjestelmään. \cite{spark-dataset}
 
-Dataset-instanssit ovat laiskoja luonteeltaan, jolla tarkoitetaan sitä, että laskenta aloitetaan vasta kun toimintoa kutsutaan.
+Dataset-instanssit ovat laiskasti evaluoituvia, jolla tarkoitetaan sitä, että laskenta aloitetaan vasta kun toimintoa kutsutaan tai instanssin arvoa tarvitaan.
 Dataset on pohjimmiltaan looginen suunnitelma, jolla kuvataan datan tuottamiseen tarvittava laskenta.
 Toimea kutsuttaessa, Sparkin kyselyoptimoija (query optimizer) optimoi loogisen suunnitelman ja generoi fyysisen suunnitelman.
 Fyysinen suunnitelma takaa rinnakkaisesti ja hajautetusti tapahtuvan tehokkaan suorituksen.
-Loogista suunnitelmaa, kuten myös optimoitu fyysistä suunnitelmaa, voidaan tutkia käyttämällä DS:n $explain$ funktiota. \cite{spark-dataset}
+Loogista suunnitelmaa, kuten myös optimoitua fyysistä suunnitelmaa, voidaan tutkia käyttämällä DS:n $explain$ funktiota. \cite{spark-dataset}
 
 Domain-spesifisten olioiden tehokkaaseen tukemiseen tarvitaan enkooderia.
 Enkooderilla tarkoitetaan ohjelmaa, joka muuntaa tietoa jonkin algoritmin mukaisesti ja tässä tapauksessa sitä käytetään yhdistämään domain-spesifinen tyyppi $T$ Sparkin sisäiseen tyyppijärjestelmään.
-Enkooderia voidaan käyttää esimerkiksi luokan $Person$, joka sisältää kentät nimi (merkkijono) ja ikä (kokonaisluku), kertomaan Sparkille generoi koodia ajon aikana joka serialisoi $Person$ olion binäärirakenteeksi.
+Esimerkiksi luokan $Person$ tapauksessa, joka sisältää kentät nimi (merkkijono) ja ikä (kokonaisluku), enkooderia voidaan käyttää käskemään Sparkia luomaan koodia ajon aikana joka serialisoi $Person$ olion binäärirakenteeksi.
 Generoidulla binäärirakenteella on usein pienempi muistijalanjälki ja se on myös optimoitu tehokkaaseen dataprosessointiin.
 Datan binääriesitys voidaan tarkistaa käyttämällä DS:n tarjoamaa $schema$ funktiota. \cite{spark-dataset}
 
@@ -255,13 +257,13 @@ val spark = SparkSession
 \end{lstlisting}
 
 SparkSession on Spark ohjelmoinnin aloituspiste, kun halutaan käyttää Dataset ja Dataframe rajapintoja.
-Ylläolevassa koodinpätkässä luodaan $SparkSession$ ketjuttamalla rakentaja metodin kutsuja.
+Ylläolevassa koodinpätkässä luodaan $SparkSession$ ketjuttamalla rakentajan kutsuja.
 
 \cite{spark-dataset}
 
 Dataset oliot ovat samankaltaisia kuin RDD:t, sillä nekin tarjoavat vahvan tyypityksen ja mahdollisuuden käyttää voimakkaita lambda-funktioita \cite{spark-sql-programming-guide}.
 Lambda-funktioita avustaa Spark SQL:n optimoitu suoritusmoottori \cite{spark-sql-programming-guide}.
-Perinteisen serialisoinnin, kuten Java serialisoinnin, sijaan, käytetään erikoistunutta enkooderia olioiden serialisointiin.
+Perinteisen serialisoinnin, kuten Java serialisoinnin, sijaan käytetään erikoistunutta enkooderia olioiden serialisointiin.
 Serialisaatiolla tarkoitetaan olion muuntamista tavuiksi, jolloin olion muistijalanjälki pienenee.
 Yleisesti serialisointia tarvitaan datan prosessointiin tai verkon yli lähettämiseen.
 Molempia, sekä enkoodereita ja serialisointia käytetään olioiden muuntamiseen tavuiksi, mutta koodi luo enkooderit dynaamisesti.
@@ -272,19 +274,29 @@ Seuraavaksi luodaan uusi Dataset muunnoksen kautta.
 Objektin kloonaamiseksi käytetään case luokan $copy$ metodia, koska $people$ Dataset oli määritelty muuttumattomaksi.
 Lopuksi fyysinen suunnitelma tulostetaan konsoliin käyttämällä $explain$ funktiota uudelle Dataset objektille.
 
-\begin{lstlisting}[caption=Dataset olion fyysisen suunnitelman näyttäminen]
+\begin{lstlisting}[caption=Dataset olion loogisen ja fyysisen suunnitelman näyttäminen]
 
 val people = spark.read.json("./people.json").as[Person]
+
 val peopleWithDoubleSalary = people.map { person => 
 	person.copy(salary = person.salary * 2)
 }
+
 peopleWithDoubleSalary.explain(true)
+
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Dataset olion looginen suunnitelma]
 
 == Optimized Logical Plan ==
 SerializeFromObject [staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, assertnotnull(input[0, $line32.$read$$iw$$iw$Person, true], top level Product input object).name, true) AS name#67, staticinvoke(class org.apache.spark.sql.types.Decimal$, DecimalType(38,0), apply, assertnotnull(input[0, $line32.$read$$iw$$iw$Person, true], top level Product input object).salary, true) AS salary#68]
 +- MapElements <function1>, class $line32.$read$$iw$$iw$Person, [StructField(name,StringType,true), StructField(salary,DecimalType(38,0),true)], obj#66: $line32.$read$$iw$$iw$Person
 +- DeserializeToObject newInstance(class $line32.$read$$iw$$iw$Person), obj#65: $line32.$read$$iw$$iw$Person
 +- Relation[name#55,salary#56L] json
+
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Dataset olion fyysinen suunnitelma]
 
 == Physical Plan ==
 *SerializeFromObject [staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, assertnotnull(input[0, $line32.$read$$iw$$iw$Person, true], top level Product input object).name, true) AS name#67, staticinvoke(class org.apache.spark.sql.types.Decimal$, DecimalType(38,0), apply, assertnotnull(input[0, $line32.$read$$iw$$iw$Person, true], top level Product input object).salary, true) AS salary#68]
@@ -301,7 +313,7 @@ DataFrame on pohjimmiltaan nimettyihin sarakkeisiin järjestetty Dataset.
 Se on käsitteellisesti yhtenevä relaatiotietokannan taulun tai R/Python kielten tietokehyksen (data frame) kanssa, mutta DataFrame omaa rikkaammat optimoinnit konepellin alla.
 DataFrame voidaan rakentaa useammalla tavalla, kuten esimerkiksi jäsennellyistä tiedostoista, Hive tauluista, ulkoisista tietokannoista tai olemassaolevista RDD olioista.
 DataFrame rajapinta on saatavilla Scala, Java, Python ja R -ohjelmointikielille.
-Scala rajapinnassa DataFrame on riveistä rakentuva Dataset, se on siis yksinkertaisesti tyyppialias Dataset[Row]. \cite{spark-programming-guide}
+Scala toteutuksessa DataFrame on riveistä rakentuva Dataset, se on siis yksinkertaisesti tyyppialias Dataset[Row]. \cite{spark-programming-guide}
 
 \begin{lstlisting}[caption=DataFrame luominen käyttäen read funktiota]
 
@@ -321,10 +333,11 @@ DataFrame objektia luotaessa, Spark arvaa luodun objektin sisäisen mallin.
 
 Matriisin tekijöihinjako on toimi, jossa matriisi hajoitetaan matriisien tuloksi.
 Matriisi voidaan hajoittaa tekijöihinsä usealla eri tavalla.
-Seuraava kappale kuvailee matriisin tekijöihinjakoa yleisellä tasolla sekä vuorottelevien pienenmpien neliöiden (Alternating Least Squares, ALS) algoritmia. ALS on Sparkin toteuttama matriisin tekijöihinjako algoritmi ja se perustuu samalle ajatukselle Netflix prize kilpailun voittajan, matriisin tekijöihinjako mallin kanssa.
+Seuraava kappale kuvailee matriisin tekijöihinjakoa yleisellä tasolla sekä vuorottelevien pienenmpien neliöiden (Alternating Least Squares, ALS) algoritmia. 
+ALS on Sparkin toteuttama matriisin tekijöihinjako algoritmi ja se perustuu samalle ajatukselle Netflix prize kilpailun voittajan, matriisin tekijöihinjako mallin kanssa. \cite{ryza15}
 
 Matriisin tekijöihinjako kuuluu suureen algoritmien luokkaan nimeltä piilevien tekijöiden mallit (Latent-factor models).
-Piilevien tekijöiden mallit yrittävät selittää usean käyttäjän ja tuotteen välillä havaittuja vuorovaikutuksia käyttämällä suhteellisen pientä määrää havaitsemattomia, piileviä syitä.
+Piilevien tekijöiden mallit yrittävät selittää usean käyttäjän ja tuotteen välillä havaittuja vuorovaikutuksia käyttämällä suhteellisen pientä määrää havaitsemattomia, piileviä tekijöitä.
 Voidaan esimerkiksi yrittää selittää miksi ihminen ostaisi tietyn albumin lukemattomien mahdolisuuksien joukosta kuvailemalla käyttäjiä ja tuotteita mieltymysten perusteella, joista ei ole mahdollista saada tietoa. \cite{ryza15}
 Piilevää tekijää ei ole mahdollista tarkastella sellaisenaan.
 Ihmisen terveys on esimerkki piilevästä tekijästä, sillä
@@ -336,11 +349,11 @@ sitä ei ole mahdollista mitata kuten esimerkiksi verenpainetta.
 	\includegraphics[scale=0.8]{matrix_factorization}
 \end{figure}
 
-Matriisin tekijöihinjako algoritmit käsittelevät käyttäjä- ja tuotetietoja suurena matriisina A.
-Jokainen rivissä $i$ sekä sarakkeessa $j$ sijaitseva kohta esittää arvostelua jonka käyttäjä on antanut tietylle tuotteelle. \cite{ryza15}
+Matriisin tekijöihinjako algoritmit käsittelevät käyttäjä- ja tuotetietoja suurena matriisina $A$.
+Jokainen rivissä $i$ sekä sarakkeessa $j$ sijaitseva alkio esittää arvostelua jonka käyttäjä on antanut tietylle tuotteelle. \cite{ryza15}
 
-Yleensä $A$ on harva (sparse), jolla tarkoitetaan että useimmat $A$:n alkiot sisältävät 0.
-Tämä johtuu siitä, että usein vain muutama käyttäjä-tuote kombinaatio on olemassa kaikista mahdollisuuksista.
+Yleensä $A$ on harva (sparse), jolla tarkoitetaan että useimmat $A$:n alkiot sisältävät arvon nolla.
+Tämä johtuu siitä, että kaikista mahdollisuuksista usein vain muutama käyttäjä-tuote kombinaatio on olemassa. \cite{ryza15}
 
 Matriisin tekijöihinjako mallintaa $A$:n kahden pienemmän matriisin $X$ ja $Y$ tulona, jotka ovat varsin pieniä.
 Koska $A$:ssa on monta riviä ja saraketta, $X$ ja $Y$ sisältävät paljon rivejä mutta vain muutaman $(k)$ sarakkeen.
@@ -353,13 +366,13 @@ Spark ALS kykenee käsittelemään sekä implisiittistä että eksplisiittistä tietoa.
 Implisiittistä tietoa on esimerkiksi sivujen katselukerrat tai tieto siitä, onko käyttäjä kuunnellut tiettyä artistia.
 \cite{spark14} \cite{ryza15}
 
-Usein monissa tosielämän käyttötapauksissa on käytettävissä ainoastaan implisiittistä tieto kuten katselukerrat, klikkaukset, ostos, tykkäykset tai jakamiset.
+Usein monissa tosielämän käyttötapauksissa on käytettävissä ainoastaan implisiittistä tietoa kuten katselukerrat, klikkaukset, ostokset, tykkäykset tai jakamiset.
 Spark MLlib kohtelee tietoa numeroina jotka esittävät havaintojen vahvuutta kuten klikkausten määrä tai kumulatiivinen aika joka käytetään elokuvan katseluun, sen sijaan että mallinnettaisiin arviomatriisia suoraan.
 Ekplisiittisten arvioioiden sijaan, nämä numerot liittyvät havaittujen käyttäjämieltymysten varmuuteen.
 Tämän tiedon perusteella malli koettaa etsiä piileviä tekijöitä joiden avulla voidaan ennustaa käyttäjän odotettu arvio tuotteelle. \cite{spark14}
 
 Näihin algoritmeihin viitataan joskus matriisin täyttö algoritmeina.
-Tämä johtuu siitä että alkuperäinen matriisi $A$ saattaa olla harva vaikka matriisitulo $XY^T$ on tiheä.
+Tämä johtuu siitä, että alkuperäinen matriisi $A$ saattaa olla harva vaikka matriisitulo $XY^T$ on tiheä.
 Vaikka tulosmatriisi sisältää arvon kaikille alkioille, se on kuitenkin vain arvio $A$:sta. \cite{ryza15}
 
 \subsection{Alternating Least Squares (ALS)}
@@ -389,10 +402,10 @@ Vain ne käyttäjä vektorit lähetetään, joita tarvitaan tuotelohkoissa.
 Vähennetty kommunikaatio saavutetaan valmiiksi laskemalla joitain tietoja suositusmatriisista jotta voidaan päätellä jokaisen käyttäjän ulostulot ja jokaisen tuotteen sisääntulot.
 Ulostulolla tarkoitetaan niitä tuotelohkoja, joihin käyttäjä tulee myötävaikuttamaan.
 Sisääntulolla tarkoitetaan niitä ominaisuusvektoreita jotka jokainen tuote ottaa vastaan niiltä käyttäjälohkoilta joista ne ovat riippuvaisia.
-Tämä mahdollistaa sen, että voidaan lähettää vain taulukollisen ominaisuusvektoreita jokaisen käyttäjä- ja tuotelohkon välillä.
+Tämä mahdollistaa sen, että voidaan lähettää vain taulukollinen ominaisuusvektoreita jokaisen käyttäjä- ja tuotelohkon välillä.
 Vastaavasti tuotelohko löytää käyttäjän arviot ja päivittää tuotteita näiden viestien perusteella. \cite{als14}
 
-Sen sijaan että etsittäisiin, alemman tason arviot suositusmatriisille $A$, etsitäänkin arviot mieltymysmatriisi $P$:lle, jossa $P$:n alkiot saavat arvon 1 kun $r > 0$ ja arvon 0 kun $r< = 0$.
+Sen sijaan että etsittäisiin alemman tason arviot suositusmatriisille $A$, etsitäänkin arviot mieltymysmatriisi $P$:lle, jossa $P$:n alkiot saavat arvon 1 kun $r > 0$ ja arvon 0 kun $r< = 0$.
 Eksplisiittisen tuotearvion sijaan arvostelut kuvaavat käyttäjän mieltymyksen vahvuuden luottamusarvoa. \cite{als14}
 
 \begin{equation}
@@ -401,7 +414,7 @@ A_iY(Y^T Y)^{-1} = X_i
 
 ALS operoi kiinnittämällä yhden tuntemattomista $u_i$ ja $v_j$ ja vaihtelemalla tätä kiinnittämistä.
 Kun toinen on kiinnitetty, toinen voidaan laskea ratkaisemalla pienimpien neliöiden ongelma.
-Tämä lähestymistapa on hyödyllinen, koska se muuttaa aiemman, ei-konveksin, ongelman kvadraattiseksi, eli neliömäiseksi, jolloin se voidaan ratkaista optimaalisesti. \cite{aberger14}
+Tämä lähestymistapa on hyödyllinen, koska se muuttaa aiemman, ei-konveksin, ongelman neliömäiseksi, jolloin se voidaan ratkaista optimaalisesti. \cite{aberger14}
 Alla on \cite{aberger14} mukainen yleinen kuvaus ALS algoritmista:
 
 \begin{lstlisting}[caption=Vaihtelevien pienimpien neliöiden algoritmi (ALS) \cite{aberger14}]
@@ -418,17 +431,15 @@ Alla on \cite{aberger14} mukainen yleinen kuvaus ALS algoritmista:
 
 RMSE (Root Mean Square Error) on kenties suosituin ennustettujen arvosteluiden tarkkuuden evaluiointiin käytetty metriikka.
 Sitä käytetään yleisesti regressioalgoritmien avulla luotujen mallien evaluointiin.
-Läheinen metriikka on MSE (Mean Square Error).
 Regressioalgoritmien yhteydessä virheellä tarkoitetaan havainnon todellisen sekä ennustetun numeroarvon välistä eroa.
-Kuten nimi viittaa, MSE on virheiden neliöiden keskiarvo.
-Se voidaan laskea neliöimällä jokaisen havainnon virhe ja laskemalla virheiden neliöiden keskiarvo.
+RMSE:n tuntemiseksi tulee tuntea ensin MSE (Mean Square Error).
+Kuten nimi viittaa, MSE on virheiden neliöiden keskiarvo ja se voidaan laskea neliöimällä jokaisen havainnon virhe ja laskemalla virheiden neliöiden keskiarvo.
 RMSE voidaan puolestaan laskea ottamalla neliöjuuri MSE:stä.
-RMSE sekä MSE edustavat opetusvirhettä.
-Ne ilmoittavat kuinka hyvin malli sovittuu opetusdataan.
+Sekä RMSE että MSE edustavat opetusvirhettä ja ne ilmoittavat kuinka hyvin malli sovittuu opetusdataan.
 Niiden avulla saadaan selville havaintojen sekä ennustettujen arvojen välinen poikkeavuus.
 Alhaisemman MSE:n tai RMSE:n omaavan mallin sanotaan sovittuvan paremmin opetusdataan kuin korkeammat virhearvot omaavan mallin. \cite{guller15}
 
-Suosittelujärjestelmä luo ennustettuja arvosteluita $\hat{r}_{ui}$ testiaineistolle $\tau$ käyttäjä-tuote pareja $(u,i)$ joille todelliset arviot $r$ tunnetaan.
+Suosittelujärjestelmä luo ennustettuja arvosteluita $\hat{r}_{ui}$ testiaineistolle $\tau$ käyttäjä-tuote pareja $(u,i)$ joille todelliset arviot $r$ tunnetaan. \cite{guller15}
 Ennustettujen ja todellisten arvioiden välinen RMSE saadaan laskettua seuraavasti:
 
 \begin{equation}
