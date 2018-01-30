@@ -293,28 +293,4 @@ Rivillä 105 kutsutaan lopuksi $sparkContext$ objektin $stop$ funktiota, jolla ke
 Rivillä 108 määritellään apufunktio $isHeader$, jota käytetään apuna suodattamaan lähtöaineistosta ei halutut rivit pois.
 Riveillä 111-128 määritellään apufunktio $computeRMSE$, jonka avulla evaluoidaan opetetun mallin virhettä.
 
-
-\section{Apache Pig}
-
-Koska valmiita personoituja suosittelujärjestelmiä ei löydetty valmiina, tuloksia vertaillaan ei-personoituihin, Apache Pig järjestelmällä saatuihin tuloksiin.
-Toteutus on muunnettu uudemmalle MovieLens ml-latest-small datasetin versiolle, mutta muutoin koodi on uudelleenkäytetty alkuperäisessä muodossaan. \cite{pig_original_code} \cite{pig_own_code}
-
-Apache Pig on suurten datasettien analysointiin tarkoitettu alusta, joka sisältää korkean tason kielen data-analyysi sovellusten ilmaisemiseen sekä infrastruktuurin näiden ohjelmien käyttämiseen.
-Pig ohjelmien rakenne mahdollistaa merkittävän rinnakkaistamisen, joka puolestaan mahdollistaa todella suurten datasettien käsittelyn. \cite{pig17}
-
-Pig:n infrastruktuurikerros koostuu kääntäjästä, joka tuottaa Map-Reduce ohjelmien pätkiä, joille suurimittaiset rinnakkaiset toteutukset löytyvät valmiina.
-Pig:n kielikerros koostuu kielestä nimeltä Pig Latin, jolla on seuraavat ominaisuudet:
-
-\begin{itemize}
-	\item Ohjelmoinnin helppous.
-	\item Rinnakkaisesti suoritettavien data-analyysi ohjelmien kirjoittaminen on helppoa.
-	\item Monimutkaiset, useista toisistaan riippuvista datamuunnokset enkoodataan eksplisiittisesti data virtaus (flow) sekvensseinä, jolloin niiden kirjoittaminen, ymmärtäminen ja hallinta helpottuu.
-	\item Optimointimahdollisuudet.
-	\item Suorituksen automaattinen optimointi, joka antaa käyttäjän keskittyä semantiikkaan tehokkuuden sijaan.
-	\item Laajennettavuus.
-	\item Käyttäjät voivat luoda omia funktioitaan erikoiskäyttöiseen prosessointiin.
-\end{itemize}
-
-\cite{pig17}
-
 \end{document}
