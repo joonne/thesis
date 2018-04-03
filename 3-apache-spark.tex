@@ -6,9 +6,9 @@
 Apache Spark on avoimen l‰hdekoodin sovelluskehys, joka yhdist‰‰ hajautettujen ohjelmien kirjoittamiseen tarkoitetun j‰rjestelm‰n sek‰ elegantin mallin ohjelmien kirjoittamiseen \cite{ryza15}.
 Spark tarjoaa korkean tason rajapinnat Java, Scala, Python sek‰ R ohjelmointikielille.
 
-Jokainen Spark sovelus koostuu ajaja (driver) ohjelmasta sek‰ yhdest‰ tai useammasta t‰yt‰ntˆˆnpanijasta (executor).
-Ajaja on ohjelma, joka ajaa k‰ytt‰j‰n p‰‰ohjelmaa ja suorittaa erilaisia rinnakkaisia operaatioita klusterissa.
-T‰yt‰ntˆˆnpanija on yksi kone klusterissa. \cite{ryza15}
+Jokainen Spark sovelus koostuu driver-ohjelmasta sek‰ yhdest‰ tai useammasta executor-ohjelmasta.
+Driver on ohjelma, joka ajaa k‰ytt‰j‰n p‰‰ohjelmaa ja suorittaa erilaisia rinnakkaisia operaatioita klusterissa.
+Executor on yksi kone klusterissa. \cite{ryza15}
 
 Spark voidaan esitell‰ kuvailemalla sen edelt‰j‰‰, MapReduce:a, ja sen tarjoamia etuja.
 MapReduce tarjosi yksinkertaisen mallin ohjelmien kirjoittamiseen ja pystyi suorittamaan kirjoitettua ohjelmaa rinnakkain sadoilla tietokoneilla.
@@ -17,12 +17,12 @@ Suoritusaikaa hallitaan lis‰‰m‰ll‰ lis‰‰ tietokoneita suorittamaan teht‰v‰‰. \ci
 
 Apache Spark s‰ilytt‰‰ MapReduce:n lineaarisen skaalautuvuuden ja vikasietokyvyn mutta laajentaa sit‰ kolmella merkitt‰v‰ll‰ tavalla.
 Ensiksi, MapReducessa map- ja reduce-teht‰vien v‰liset tulokset t‰ytyy kirjoittaa levylle kun taas Spark kykenee v‰litt‰m‰‰n tulokset suoraan putkiston (pipeline) seuraavalle vaiheelle.
-Toiseksi, Apache Spark kohtelee kehitt‰ji‰ paremmin tarjoamalla rikkaan joukon muunnoksia (transformations) joiden avulla voidaan muutamalla koodirivill‰ ilmaista monimutkaisia putkistoja. (ESIMERKKI?)
+Toiseksi, Apache Spark:in voidaan ajatella kohtelevan kehitt‰ji‰ paremmin tarjoamalla rikkaan joukon muunnoksia (transformations) joiden avulla voidaan muutamalla koodirivill‰ ilmaista monimutkaisia putkistoja. (ESIMERKKI?)
 Kolmanneksi, Spark esittelee muistissa tapahtuvan prosessoinnin tarjoamalla abstraktion nimelt‰ Resilient Distributed Dataset (RDD). RDD tarjoaa kehitt‰j‰lle mahdollisuuden materialisoida mink‰ tahansa askeleen putkistossa ja tallentaa sen muistiin.
 T‰m‰ tarkoittaa sit‰, ett‰ tulevien askelien ei tarvitse laskea aiempia tuloksia uudelleen ja t‰llˆin on mahdollista jatkaa juuri k‰ytt‰j‰n haluamasta askeleesta.
 Aiemmin t‰m‰nkaltaista ominaisuutta ei ole ollut saatavilla hajautetun laskennan j‰rjestelmiss‰. \cite{ryza15}
 
-Spark ohjelmia voidaan kirjottaa Java, Scala, Python tai R ohjelmointikielell‰.
+Spark ohjelmia voidaan kirjottaa Java, Scala, Python tai R-ohjelmointikielell‰.
 Scalan k‰ytt‰misell‰ saavutetaan kuitenkin muutamia etuja, joita muut kielet eiv‰t tarjoa.
 Tehokkuus saatta parantua, sill‰ datan siirt‰minen eri kerrosten v‰lill‰ tai muunnosten suorittaminen datalle voi johtaa heikompaan tehokkuuteen.
 Spark on kirjoitettu Scala-ohjelmointikielell‰, joten viimeisimm‰t ja parhaimmat ominaisuudet ovat aina k‰ytˆss‰, eik‰ niiden k‰‰nnˆst‰ tarvitse odotella.
@@ -34,19 +34,21 @@ Spark-jakelun mukana toimitetaan luku-evaluointi-tulostus-silmukka, komentorivit
 Kun REPLiss‰ kehitetyn sovelluksen tai sovelluksen osan voidaan katsoa olevan tarpeeksi valmis, on j‰rkev‰‰ tehd‰ siit‰ koottu kirjasto (JAR).
 N‰in varmistutaan ettei ohjelmakoodia tai tuloksia p‰‰se katoamaan, vaikkakin REPL tarjoaa samantapaisen muistin komentohistoriasta kuin perinteinen komentorivikin.
 
-SELITYS JAR:ISTA JA EHKƒ JVM:STƒ?
+JAR eli Java ARchive on suosittuun ZIP tiedostoformaattiin perustuva alustariippumaton tiedostoformaatti, jota k‰ytet‰‰n kokoamaan monta tiedostoa yhdeksi tiedostoksi. \cite{JAR}
+
+JVM (Java Virtual Machine, Java-virtuaalikone) on abstrakti laskentakone (computing machine). Kuten oikea laskentakone, se omaa k‰skykannan ja muokkaa useita muistialueita ajon aikana. JVM ei tied‰ mit‰‰n ohjelmointikielist‰, kuten Scala tai Java, vaan se operoi ainoastaan class-tiedostoilla, jotka ovat tietynlaisia bin‰‰ritiedostoja. Class-tiedosto sis‰lt‰‰ JVM k‰skyt sek‰ symbolitaulun. \cite{JVM}
 
 \section{Scala}
 
-Scala on hybridiohjelmointikieli, joka tukee sek‰ olio- ett‰ funktionaalista ohjelmointia.
+Scala on moniparadigmainen ohjelmointikieli, joka tukee sek‰ olio- ett‰ funktionaalista ohjelmointia.
 Funktionaalista ohjelmointia varten Scalasta lˆytyy tuki funktionaalisen ohjelmoinnin konsepteille kuten muuttumattomat tietorakenteet ja funktiot ensimm‰isen luokan kansalaisina.
-Olio-ohjelmointia varten Scalasta lˆytyy tuki konsepteille kuten luokat, objekti ja piirre (trait).
+Olio-ohjelmointia varten Scalasta lˆytyy tuki konsepteille kuten luokat, oliot ja piirre (trait).
 Scala tukee myˆs kapselointia, perint‰‰, moniperint‰‰ ja muita t‰rkeit‰ olio-ohjelmoinnin konsepteja.
 Scala on staattisesti tyypitetty kieli ja sill‰ kirjoitetut ohjelmat k‰‰nnet‰‰n Scala k‰‰nt‰j‰‰ k‰ytt‰en.
-Scala on JVM (Java Virtual Machine, Java virtuaalikone) perustainen kieli, joten Scala k‰‰nt‰j‰ k‰‰nt‰‰ sovelluksen Java tavukoodiksi, joka voidaan ajaa miss‰ tahansa Java virtuaalikoneessa.
+Scala on JVM-perustainen (Java Virtual Machine, Java-virtuaalikone) kieli, joten Scala k‰‰nt‰j‰ k‰‰nt‰‰ sovelluksen Java-tavukoodiksi, joka voidaan ajaa miss‰ tahansa Java-virtuaalikoneessa.
 Tavukooditasolla Scala ohjelmaa ei voida erottaa Java sovelluksesta.
-Scalan ollessa JVM-perustainen, Scala on t‰ysin yhteensopiva Javan kanssa ja n‰in ollen Java kirjastoja voidaan k‰ytt‰‰ suoraan Scala koodissa.
-T‰st‰ syyst‰ Scala sovellukset hyˆtyv‰t suuresta Java koodin m‰‰r‰st‰.
+Scalan ollessa JVM-perustainen, Scala on t‰ysin yhteensopiva Javan kanssa ja n‰in ollen Java-kirjastoja voidaan k‰ytt‰‰ suoraan Scala-koodissa.
+T‰st‰ syyst‰ Scala-sovellukset hyˆtyv‰t suuresta Java-koodin m‰‰r‰st‰.
 Vaikka Scala tukee sek‰ olio- ett‰ funktionaalista ohjelmointia, funktionaalista ohjelmointia suositaan. \cite{guller15}
 
 \subsection{Perustyypit}
@@ -62,14 +64,14 @@ K‰‰nnˆksen aikana k‰‰nt‰j‰ tarvittaessa automaattisesti muuntaa Scala tyypit Jav
 
 \subsection{Muuttujat}
 
-Scalassa on kahdentyyppisi‰ muuttujia: muuttuvia ja muuttumattomia.
+Scalassa on kahdentyyppisi‰ muuttujia: muuttuvia ja vakioita.
 Muuttuva muuttuja m‰‰ritell‰‰n avainsanan $var$ avulla.
-Muuttuvaa muuttujaa ei voida antaa uudelleen luomisen j‰lkeen.
+Muuttuvaa muuttujaa ei voida asettaa uudelleen luomisen j‰lkeen.
 Var:ien k‰yttˆ‰ ei suositella, mutta joskus niiden k‰ytt‰misell‰ saadaan aikaan yksinkertaisempaa ohjelmakoodia ja t‰st‰ syyst‰ Scala tukee myˆs muuttuvia muuttujia. \cite{guller15}
 
 Syntaksi $var$:in luomiseksi on
 
-\begin{lstlisting}[caption=Muuttuvan muuttujan luominen ja uudelleen antaminen]
+\begin{lstlisting}[caption=Muuttuvan muuttujan luominen ja uudelleen asettaminen]
 var x = 10
 x = 20
 \end{lstlisting}
@@ -98,7 +100,7 @@ Scalan funktiot ovat ensimm‰isen luokan kansalaisia, jolla tarkoitetaan ett‰ fun
 
 \begin{itemize}
 	\item k‰ytt‰‰ kuten muuttujaa
-	\item antaa sis‰‰ntulona toiselle funktiolle
+	\item antaa syˆtteen‰ toiselle funktiolle
 	\item m‰‰ritell‰ nimettˆm‰n‰ funktioliteraalina
 	\item asettaa muuttujaan
 	\item m‰‰ritell‰ toisen funktion sis‰ll‰
@@ -114,8 +116,8 @@ Parametrien j‰lkeen funktiom‰‰rittelyyn tulee kaksoispiste, funktion ulostulon t
 \lstset{language=Scala,tabsize=2}
 
 \begin{lstlisting}[caption=Funktio]
-def add(firstInput: Int, secondInput: Int): Int = {
-	val sum = firstInput + secondInput
+def add(first: Int, second: Int): Int = {
+	val sum = first + second
 	return sum
 }
 \end{lstlisting}
@@ -128,7 +130,7 @@ Scala sallii myˆs lyhyemm‰n version samasta funktiosta:
 \lstset{language=Scala,tabsize=2}
 
 \begin{lstlisting}[caption=Funktio]
-def add(firstInput: Int, secondInput: Int): Int = firstInput + secondInput
+def add(first: Int, second: Int): Int = first + second
 \end{lstlisting}
 
 Toinen versio tekee t‰sm‰lleen saman asian kuin ensimm‰inenkin, mutta se on vain kirjoitetty k‰ytt‰en lyhyemp‰‰ syntaksia.
@@ -141,21 +143,21 @@ Scalassa kaikki lausekkeet ovat arvon palauttavia lausekkeita, joten funktion ru
 \section{Resilient Distributed Dataset (RDD)}
 
 Resilient Distributed Dataset (RDD) on Sparkin tarjoama p‰‰abstraktio.
-RDD on muuttumaton, osioitu elementtikokoelma, joka voidaan hajauttaa klusterin useiden koneiden v‰lill‰. \cite{spark-rdd}
+RDD on muuttumaton, partitioitu elementtikokoelma, joka voidaan hajauttaa klusterin useiden koneiden v‰lill‰. \cite{spark-rdd}
 
 RDD:t ovat laiskasti evaluoituvia, jolla tarkoitetaan sit‰, ett‰ lausekkeen evaluointia viivytet‰‰n siihen asti kun sen arvoa tarvitaan.
 Kun uusi RDD luodaan, mit‰‰n laskentaa ei oikeasti viel‰ tapahdu, vaan Spark tiet‰‰ miss‰ data sijaitsee tai miten data saadaan laskettua kun tulee aika tehd‰ sille jotain.
 
-RDD voidaan luoda kahdella tavalla.
-Olemassaoleva Scala kokoelma voidaan rinnakkaistaa (parallelize).
-Toinen keino on viitata ulkoiseen aineistoon ulkoisessa varastointij‰rjestelm‰ss‰ kuten HDFS:s‰, HBase:ssa tai miss‰ tahansa Hadoopin tuntemassa tiedostoj‰rjestelm‰ss‰. \cite{spark-programming-guide}
+RDD voidaan luoda kahdella tavalla, rinnakkaistamalla (parallelize) tai viittaamalla ulkoiseen aineistoon.
+Rinnakkaistamisessa olemassaoleva Scala kokoelma voidaan rinnakkaistaa RDD:ksi.
+Ulkoiseen ainestoon viittaamisella tarkoitetaan viittaamista aineistoon ulkoisessa varastointij‰rjestelm‰ss‰ kuten HDFS:s‰, HBase:ssa tai miss‰ tahansa Hadoopin tuntemassa tiedostoj‰rjestelm‰ss‰. \cite{spark-programming-guide}
 
 RDD:t voidaan tallentaa muistiin, jolloin ohjelmistokehitt‰j‰ voi uudelleenk‰ytt‰‰ niit‰ tehokkaasti rinnakkaisissa operaatioissa.
 RDD:t voivat palautua solmuvirheist‰ automaattisesti k‰ytt‰en Directed Acyclic Graph (DAG) moottoria.
-DAG tukee syklist‰ datavirtaa.
-Jokaista Spark tyˆt‰ kohti luodaan DAG klusterissa suoritettavan teht‰v‰n tasoista.
+DAG tukee asyklist‰ datavirtaa, jolla tarkoitetaan sit‰, ett‰ jokainen graafin kaari kulkee topologisessa j‰rjestyksess‰ aiemmasta myˆhemp‰‰n.
+Jokaista Spark-tyˆt‰ kohti luodaan DAG klusterissa suoritettavan teht‰v‰n tasoista.
 Verrattuna MapReduceen, joka luo DAGin kahdesta ennaltam‰‰r‰tyst‰ tilasta (Map ja Reduce), Sparkin luomat DAGit voivat sis‰lt‰‰ mink‰ tahansa m‰‰r‰n tasoja.
-T‰st‰ syyst‰ jotkin tyˆt voivat valmistua nopeammin kuin ne valmistuisivat MapReducessa.
+T‰st‰ syyst‰ jotkin tyˆt voivat valmistua nopeammin kuin ne valmistuisivat MapReducessa. TODO
 Yksinkertaisimmat tyˆt voivat valmistua vain yhden tason j‰lkeen ja monimutkaisemmat teht‰v‰t valmistuvat yhden monitasoisen ajon j‰lkeen, ilman ett‰ niit‰ t‰ytyy pilkkoa useampiin tˆihin. \cite{mapRSpark}
 
 \begin{figure}[h]
@@ -166,9 +168,9 @@ Yksinkertaisimmat tyˆt voivat valmistua vain yhden tason j‰lkeen ja monimutkaise
 
 \section{Dataset API}
 
-Dataset (DS) on vahvasti tyypitetty kokoelma aluespesifisi‰ objekteja jotka voidaan muuntaa rinnakkain k‰ytt‰en funktionaalisia tai relaatio-operaatioita.
+Dataset (DS) on vahvasti tyypitetty kokoelma aluespesifisi‰ objekteja, jotka voidaan muuntaa rinnakkain k‰ytt‰en funktionaalisia tai relaatio-operaatioita.
 DS on RDD:n korvaaja Sparkissa.
-Dataset:ille olemassa olevat operaatiot on jaettu muunnoksiin (transformations) ja toimiin (actions).
+Dataset:ille olemassa olevat operaatiot on jaettu \textit{muunnoksiin} (transformations) ja \textit{toimiin} (actions).
 Muunnokset ovat operaatioita, jotka luovat uusia Dataset objekteja, kuten map, filter, select, aggregate.
 Toimet ovat operaatioita jotka suorittavat laskentaa ja palauttavat tuloksia.
 Toimia ovat esimerkiksi count, show tai datan kirjoittaminen tiedostoj‰rjestelm‰‰n. \cite{spark-dataset}
@@ -181,7 +183,7 @@ Loogista suunnitelmaa, kuten myˆs optimoitua fyysist‰ suunnitelmaa, voidaan tutk
 
 Domain-spesifisten olioiden tehokkaaseen tukemiseen tarvitaan enkooderia.
 Enkooderilla tarkoitetaan ohjelmaa, joka muuntaa tietoa jonkin algoritmin mukaisesti ja t‰ss‰ tapauksessa sit‰ k‰ytet‰‰n yhdist‰m‰‰n domain-spesifinen tyyppi $T$ Sparkin sis‰iseen tyyppij‰rjestelm‰‰n.
-Esimerkiksi luokan $Person$ tapauksessa, joka sis‰lt‰‰ kent‰t nimi (merkkijono) ja ik‰ (kokonaisluku), enkooderia voidaan k‰ytt‰‰ k‰skem‰‰n Sparkia luomaan koodia ajon aikana joka serialisoi $Person$ olion bin‰‰rirakenteeksi.
+Esimerkiksi luokan $Person$ tapauksessa, joka sis‰lt‰‰ kent‰t nimi (merkkijono) ja ik‰ (kokonaisluku), enkooderia voidaan k‰ytt‰‰ k‰skem‰‰n Sparkia luomaan koodia ajon aikana joka sarjallistaa $Person$ olion bin‰‰rirakenteeksi.
 Generoidulla bin‰‰rirakenteella on usein pienempi muistijalanj‰lki ja se on myˆs optimoitu tehokkaaseen dataprosessointiin.
 Datan bin‰‰riesitys voidaan tarkistaa k‰ytt‰m‰ll‰ DS:n tarjoamaa $schema$ funktiota. \cite{spark-dataset}
 
@@ -218,6 +220,7 @@ Dataset voidaan luoda myˆs tekem‰ll‰ muutoksia olemassaoleville Dataset olioille
 
 \begin{lstlisting}[caption=Creating a new Dataset through a transformation]
 
+val people: Dataset<Person> = Dataset(Person())
 val names = people.map(_.name)
 
 \end{lstlisting}
@@ -246,6 +249,7 @@ Case-luokat ovat tavallisia Scala-luokkia jotka ovat:
 \end{itemize}
 
 Mik‰li tyyppimuunnos (casting) j‰tett‰isiin tekem‰tt‰, p‰‰dytt‰isiin luomaan DataFrame olio, jonka sis‰inen mallin (schema) Spark pyrkisi arvaamaan.
+DataFrame rajapintaa k‰sitell‰‰n seuraavassa aliluvussa.
 Tyyppimuunnos tehd‰‰n k‰ytt‰m‰ll‰ $as$ avainsanaa.
 
 \begin{lstlisting}[caption=SparkSession kontekstin luominen]
@@ -256,18 +260,19 @@ val spark = SparkSession
 .getOrCreate()
 \end{lstlisting}
 
-SparkSession on Spark ohjelmoinnin aloituspiste, kun halutaan k‰ytt‰‰ Dataset ja Dataframe rajapintoja.
+SparkSession on Spark ohjelmoinnin l‰htˆkohta, kun halutaan k‰ytt‰‰ Dataset ja DataFrame rajapintoja.
 Yll‰olevassa koodinp‰tk‰ss‰ luodaan $SparkSession$ ketjuttamalla rakentajan kutsuja.
 
 \cite{spark-dataset}
 
 Dataset oliot ovat samankaltaisia kuin RDD:t, sill‰ nekin tarjoavat vahvan tyypityksen ja mahdollisuuden k‰ytt‰‰ voimakkaita lambda-funktioita \cite{spark-sql-programming-guide}.
+Lambda funktiolla tarkoitetaan yleisesti anonyymi‰ funktiota, jota ei olla sidottu muuttujaan.
 Lambda-funktioita avustaa Spark SQL:n optimoitu suoritusmoottori \cite{spark-sql-programming-guide}.
-Perinteisen serialisoinnin, kuten Java serialisoinnin, sijaan k‰ytet‰‰n erikoistunutta enkooderia olioiden serialisointiin.
+Perinteisen sarjallistamisen, kuten Java-sarjallistamisen, sijaan k‰ytet‰‰n erikoistunutta enkooderia olioiden sarjallistamiseen.
 Serialisaatiolla tarkoitetaan olion muuntamista tavuiksi, jolloin olion muistijalanj‰lki pienenee.
-Yleisesti serialisointia tarvitaan datan prosessointiin tai verkon yli l‰hett‰miseen.
-Molempia, sek‰ enkoodereita ja serialisointia k‰ytet‰‰n olioiden muuntamiseen tavuiksi, mutta koodi luo enkooderit dynaamisesti.
-Enkooderit k‰ytt‰v‰t sellaista muotoa, ett‰ Spark kykenee suorittamaan monenlaisia operaatioita, kuten suodattamista, j‰rjest‰mist‰ ja hajautusta (hashing), ilman ett‰ tavuja tarvitsee deserialisoida takaisin objektiksi. \cite{spark-programming-guide}
+Yleisesti sarjallistamista tarvitaan datan prosessointiin tai verkon yli l‰hett‰miseen.
+Molempia, sek‰ enkoodereita ja sarjallistamista k‰ytet‰‰n olioiden muuntamiseen tavuiksi, mutta koodi luo enkooderit dynaamisesti.
+Enkooderit k‰ytt‰v‰t sellaista muotoa, ett‰ Spark kykenee suorittamaan monenlaisia operaatioita, kuten suodattamista, j‰rjest‰mist‰ ja hajautusta (hashing), ilman ett‰ tavuja tarvitsee purkaa takaisin objektiksi. \cite{spark-programming-guide}
 
 Seuraavassa koodilistauksessa luodaan uusi Datase lukemalla $json$ tiedosto tiedostoj‰rjestelm‰st‰.
 Seuraavaksi luodaan uusi Dataset muunnoksen kautta.
