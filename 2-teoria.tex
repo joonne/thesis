@@ -1,0 +1,52 @@
+\documentclass[main.tex]{thesis.tex}
+\begin{document}
+
+\chapter{Teoria}
+
+\section{Matriisin tekijöihinjako}
+
+Matriisin tekijöihinjako on toimi, jossa matriisi hajoitetaan matriisien tuloksi.
+Matriisi voidaan hajoittaa tekijöihinsä usealla eri tavalla.
+Seuraava kappale kuvailee matriisin tekijöihinjakoa yleisellä tasolla sekä vuorottelevien pienenmpien neliöiden (Alternating Least Squares, ALS) algoritmia. 
+ALS on Sparkin toteuttama matriisin tekijöihinjako algoritmi ja se perustuu samalle ajatukselle Netflix prize kilpailun voittajan, matriisin tekijöihinjako mallin kanssa. \cite{ryza15}
+
+Matriisin tekijöihinjako kuuluu suureen algoritmien luokkaan nimeltä piilevien tekijöiden mallit (Latent-factor models).
+Piilevien tekijöiden mallit yrittävät selittää usean käyttäjän ja tuotteen välillä havaittuja vuorovaikutuksia käyttämällä suhteellisen pientä määrää havaitsemattomia, piileviä tekijöitä.
+Voidaan esimerkiksi yrittää selittää miksi ihminen ostaisi tietyn albumin lukemattomien mahdolisuuksien joukosta kuvailemalla käyttäjiä ja tuotteita mieltymysten perusteella, joista ei ole mahdollista saada tietoa. \cite{ryza15}
+Piilevää tekijää ei ole mahdollista tarkastella sellaisenaan.
+Ihmisen terveys on esimerkki piilevästä tekijästä, sillä
+sitä ei ole mahdollista mitata kuten esimerkiksi verenpainetta.
+
+\begin{figure}[h]
+	\caption{Matrix factorization \cite{ryza15}}
+	\centering
+	\includegraphics[scale=0.8]{matrix_factorization}
+\end{figure}
+
+Matriisin tekijöihinjako algoritmit käsittelevät käyttäjä- ja tuotetietoja suurena matriisina $A$.
+Jokainen rivissä $i$ sekä sarakkeessa $j$ sijaitseva alkio esittää arvostelua jonka käyttäjä on antanut tietylle tuotteelle. \cite{ryza15}
+
+Yleensä $A$ on harva (sparse), jolla tarkoitetaan että useimmat $A$:n alkiot sisältävät arvon nolla.
+Tämä johtuu siitä, että kaikista mahdollisuuksista usein vain muutama käyttäjä-tuote kombinaatio on olemassa. \cite{ryza15}
+
+Matriisin tekijöihinjako mallintaa $A$:n kahden pienemmän matriisin $X$ ja $Y$ tulona, jotka ovat varsin pieniä.
+Koska $A$:ssa on monta riviä ja saraketta, $X$ ja $Y$ sisältävät paljon rivejä mutta vain muutaman $(k)$ sarakkeen.
+Nämä $k$ saraketta vastaavat piileviä tekijöitä joita käytetään kuvailemaan tiedossa sijaitsevia vuorovaikutuksia.
+Hajotelma (factorization) on ainoastaan arvio, sillä $k$ on pieni. \cite{ryza15}
+
+Tavanomainen lähestymistapa matriisin tekijöihinjakoon perustuvassa yhteisöllisessä suodatuksessa on kohdella käyttäjä-tuote matriisin alkioita käyttäjien antamina täsmällisinä arvosteluina.
+Eksplisiittistä tietoa on esimerkiksi käyttäjän antama arvio tuotteelle.
+Spark ALS kykenee käsittelemään sekä implisiittistä että eksplisiittistä tietoa.
+Implisiittistä tietoa on esimerkiksi sivujen katselukerrat tai tieto siitä, onko käyttäjä kuunnellut tiettyä artistia.
+\cite{spark14} \cite{ryza15}
+
+Usein monissa tosielämän käyttötapauksissa on käytettävissä ainoastaan implisiittistä tietoa kuten katselukerrat, klikkaukset, ostokset, tykkäykset tai jakamiset.
+Spark MLlib kohtelee tietoa numeroina jotka esittävät havaintojen vahvuutta kuten klikkausten määrä tai kumulatiivinen aika, joka käytetään elokuvan katseluun, sen sijaan että mallinnettaisiin arviomatriisia suoraan.
+Ekplisiittisten arvioioiden sijaan, nämä numerot liittyvät havaittujen käyttäjämieltymysten varmuuteen.
+Tämän tiedon perusteella malli koettaa etsiä piileviä tekijöitä joiden avulla voidaan ennustaa käyttäjän odotettu arvio tuotteelle. \cite{spark14}
+
+Näihin algoritmeihin viitataan joskus matriisin täyttö (matrix completion) algoritmeina.
+Tämä johtuu siitä, että alkuperäinen matriisi $A$ saattaa olla harva vaikka matriisitulo $XY^T$ on tiheä.
+Vaikka tulosmatriisi sisältää arvon kaikille alkioille, se on kuitenkin vain arvio $A$:sta. \cite{ryza15}
+
+\end{document}
