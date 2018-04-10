@@ -5,16 +5,16 @@
 
 \section{Matriisin tekijöihinjako}
 
-Matriisin tekijöihinjako on toimi, jossa matriisi hajoitetaan matriisien tuloksi.
+Matriisin tekijöihinjaossa matriisi hajoitetaan matriisien tuloksi.
 Matriisi voidaan hajoittaa tekijöihinsä usealla eri tavalla.
 Seuraava kappale kuvailee matriisin tekijöihinjakoa yleisellä tasolla sekä vuorottelevien pienenmpien neliöiden (Alternating Least Squares, ALS) algoritmia. 
-ALS on Sparkin toteuttama matriisin tekijöihinjako algoritmi ja se perustuu samalle ajatukselle Netflix prize kilpailun voittajan, matriisin tekijöihinjako mallin kanssa. \cite{ryza15}
+ALS on Sparkin toteuttama matriisin tekijöihinjako algoritmi ja se perustuu samalle ajatukselle Netflix prize-kilpailun voittajan, matriisin tekijöihinjako mallin kanssa. \cite{ryza15}
 
-Matriisin tekijöihinjako kuuluu suureen algoritmien luokkaan nimeltä piilevien tekijöiden mallit (Latent-factor models).
-Piilevien tekijöiden mallit yrittävät selittää usean käyttäjän ja tuotteen välillä havaittuja vuorovaikutuksia käyttämällä suhteellisen pientä määrää havaitsemattomia, piileviä tekijöitä.
+Matriisin tekijöihinjako kuuluu suureen algoritmien luokkaan nimeltä latenttien tekijöiden mallit (Latent-factor models).
+Latenttien tekijöiden mallit yrittävät selittää usean käyttäjän ja tuotteen välillä havaittuja vuorovaikutuksia käyttämällä suhteellisen pientä määrää havaitsemattomia, latentteja tekijöitä.
 Voidaan esimerkiksi yrittää selittää miksi ihminen ostaisi tietyn albumin lukemattomien mahdolisuuksien joukosta kuvailemalla käyttäjiä ja tuotteita mieltymysten perusteella, joista ei ole mahdollista saada tietoa. \cite{ryza15}
-Piilevää tekijää ei ole mahdollista tarkastella sellaisenaan.
-Ihmisen terveys on esimerkki piilevästä tekijästä, sillä
+Latenttia tekijää ei ole mahdollista tarkastella sellaisenaan.
+Ihmisen terveys on esimerkki latentista tekjiästä, sillä
 sitä ei ole mahdollista mitata kuten esimerkiksi verenpainetta.
 
 \begin{figure}[h]
@@ -23,15 +23,15 @@ sitä ei ole mahdollista mitata kuten esimerkiksi verenpainetta.
 	\includegraphics[scale=0.8]{matrix_factorization}
 \end{figure}
 
-Matriisin tekijöihinjako algoritmit käsittelevät käyttäjä- ja tuotetietoja suurena matriisina $A$.
-Jokainen rivissä $i$ sekä sarakkeessa $j$ sijaitseva alkio esittää arvostelua jonka käyttäjä on antanut tietylle tuotteelle. \cite{ryza15}
+Matriisin tekijöihinjako-algoritmit käsittelevät käyttäjä- ja tuotetietoja suurena matriisina $A$.
+Jokainen rivissä $i$ sekä sarakkeessa $j$ sijaitseva alkio esittää arvostelua, jonka käyttäjä on antanut tietylle tuotteelle. \cite{ryza15}
 
 Yleensä $A$ on harva (sparse), jolla tarkoitetaan että useimmat $A$:n alkiot sisältävät arvon nolla.
-Tämä johtuu siitä, että kaikista mahdollisuuksista usein vain muutama käyttäjä-tuote kombinaatio on olemassa. \cite{ryza15}
+Tämä johtuu siitä, että kaikista mahdollisuuksista usein vain muutama käyttäjä-tuote-kombinaatio on olemassa. \cite{ryza15}
 
 Matriisin tekijöihinjako mallintaa $A$:n kahden pienemmän matriisin $X$ ja $Y$ tulona, jotka ovat varsin pieniä.
 Koska $A$:ssa on monta riviä ja saraketta, $X$ ja $Y$ sisältävät paljon rivejä mutta vain muutaman $(k)$ sarakkeen.
-Nämä $k$ saraketta vastaavat piileviä tekijöitä joita käytetään kuvailemaan tiedossa sijaitsevia vuorovaikutuksia.
+Nämä $k$ saraketta vastaavat latentteja tekijöitä, joita käytetään kuvailemaan datassa sijaitsevia vuorovaikutuksia.
 Hajotelma (factorization) on ainoastaan arvio, sillä $k$ on pieni. \cite{ryza15}
 
 Tavanomainen lähestymistapa matriisin tekijöihinjakoon perustuvassa yhteisöllisessä suodatuksessa on kohdella käyttäjä-tuote matriisin alkioita käyttäjien antamina täsmällisinä arvosteluina.
@@ -43,10 +43,83 @@ Implisiittistä tietoa on esimerkiksi sivujen katselukerrat tai tieto siitä, onko
 Usein monissa tosielämän käyttötapauksissa on käytettävissä ainoastaan implisiittistä tietoa kuten katselukerrat, klikkaukset, ostokset, tykkäykset tai jakamiset.
 Spark MLlib kohtelee tietoa numeroina jotka esittävät havaintojen vahvuutta kuten klikkausten määrä tai kumulatiivinen aika, joka käytetään elokuvan katseluun, sen sijaan että mallinnettaisiin arviomatriisia suoraan.
 Ekplisiittisten arvioioiden sijaan, nämä numerot liittyvät havaittujen käyttäjämieltymysten varmuuteen.
-Tämän tiedon perusteella malli koettaa etsiä piileviä tekijöitä joiden avulla voidaan ennustaa käyttäjän odotettu arvio tuotteelle. \cite{spark14}
+Tämän tiedon perusteella malli koettaa etsiä latentteja tekijöitä, joiden avulla voidaan ennustaa käyttäjän arvio tuotteelle. \cite{spark14}
 
-Näihin algoritmeihin viitataan joskus matriisin täyttö (matrix completion) algoritmeina.
+Näihin algoritmeihin viitataan joskus matriisin täyttö (matrix completion) -algoritmeina.
 Tämä johtuu siitä, että alkuperäinen matriisi $A$ saattaa olla harva vaikka matriisitulo $XY^T$ on tiheä.
 Vaikka tulosmatriisi sisältää arvon kaikille alkioille, se on kuitenkin vain arvio $A$:sta. \cite{ryza15}
+
+\subsection{Alternating Least Squares (ALS)}
+
+Yhteisöllistä suodatusta käytetään usein suosittelijajärjestelmissä.
+Nämä tekniikat pyrkivät täyttämään käyttäjä-tuote-assosiaatiomatriisin puuttuvat kohdat.
+Spark MLlib tukee mallipohjaista yhteisösuodatusta, jossa käyttäjiä ja tuotteita kuvaillaan pienellä määrällä latentteja tekijöitä, joita voidaan käyttää puuttuvien kohtien ennustamiseen.
+Spark MLlib käyttää vuorottelevien pienimpien neliöiden (Alternating Least Squares, ALS) algoritmia näiden latenttien tekijöiden oppimiseen. \cite{spark14}
+
+Spark ALS yrittää arvata arvostelumatriisin $A$ kahden alemman arvon matriisin, $X$ ja $Y$, tulona. \cite{als14}
+
+\begin{equation}
+A = XY^T
+\end{equation}
+
+Tyypillisesti näihin arvioihin viitataan tekijämatriiseina.
+Perinteinen lähestymistapa on iteratiivinen.
+Jokaisen iteraation aikana, toista tekijämatriisia pidetään vakiona ja toinen ratkaistaan käyttäen pienimpien summien algoritmia.
+Juuri ratkaistua tekijämatriisia pidetään vuorostaan vakiona kun ratkaistaan toista tekijämatriisia. \cite{als14}
+Spark ALS mahdollistaa massiivisen rinnakkaistamisen sillä algoritmia voidaan suorittaa rinnakkain, toisistaan erillään.
+Tämä on erinomainen ominaisuus suuren mittakaavan (large-scale) laskenta-algoritmille. \cite{ryza15}
+
+Spark ALS on lohkotettu versio ALS tekijöihinjako-algoritmista.
+Ajatuksena on ryhmittää kaksi tekijäryhmää, $käyttäjät$ ja $tuotteet$, lohkoihin.
+Ryhmittämistä seuraa kommunikaation vähentäminen lähettämällä jokaiseen tuotelohkoon vain yksi kopio jokaisesta käyttäjävektorista iteraation aikana.
+Vain ne käyttäjä vektorit lähetetään, joita tarvitaan tuotelohkoissa.
+Vähennetty kommunikaatio saavutetaan valmiiksi laskemalla joitain tietoja suositusmatriisista, jotta voidaan päätellä jokaisen käyttäjän ulostulot ja jokaisen tuotteen sisääntulot.
+Ulostulolla tarkoitetaan niitä tuotelohkoja, joihin käyttäjä tulee myötävaikuttamaan.
+Sisääntulolla tarkoitetaan niitä ominaisuusvektoreita jotka jokainen tuote ottaa vastaan niiltä käyttäjälohkoilta joista ne ovat riippuvaisia.
+Tämä mahdollistaa sen, että voidaan lähettää vain taulukollinen ominaisuusvektoreita jokaisen käyttäjä- ja tuotelohkon välillä.
+Vastaavasti tuotelohko löytää käyttäjän arviot ja päivittää tuotteita näiden viestien perusteella. \cite{als14}
+
+Sen sijaan että etsittäisiin alemman tason arviot suositusmatriisille $A$, etsitäänkin arviot mieltymysmatriisi $P$:lle, jossa $P$:n alkiot saavat arvon 1 kun $r > 0$ ja arvon 0 kun $r< = 0$.
+Eksplisiittisen tuotearvion sijaan arvostelut kuvaavat käyttäjän mieltymyksen vahvuuden luottamusarvoa. \cite{als14}
+
+\begin{equation}
+A_iY(Y^T Y)^{-1} = X_i
+\end{equation}
+
+ALS operoi kiinnittämällä yhden tuntemattomista $u_i$ ja $v_j$ ja vaihtelemalla tätä kiinnittämistä.
+Kun toinen on kiinnitetty, toinen voidaan laskea ratkaisemalla pienimpien neliöiden ongelma.
+Tämä lähestymistapa on hyödyllinen, koska se muuttaa aiemman, ei-konveksin, ongelman neliömäiseksi, jolloin se voidaan ratkaista optimaalisesti. \cite{aberger14} Ei-konveksilla tarkoitetaan sellaista ongelmaa, jolla saattaa olla olemassa useita lokaaleja minimejä ja/tai maksimeita ja saattaa kestää kauan tunnistaa onko ongelmalla ratkaisua lainkaan tai että löydetty ratkaisu on myös globaali ratkaisu. \cite
+Alla on \cite{aberger14} mukainen yleinen kuvaus ALS algoritmista:
+
+\begin{lstlisting}[caption=Vaihtelevien pienimpien neliöiden algoritmi (ALS) \cite{aberger14}]
+
+1. Alusta matriisi V asettamalla ensimmäiseksi riviksi elokuvan keskimääräinen arvio ja pieni satunnaisluku jäljelläoleviin alkioihin.
+
+2. Kiinnitä V, ratkaise U minimoimalla RMSE-funktio.
+
+3. Kiinnitä U, ratkaise V minimoimalla RMSE-funktio.
+
+4. Toista askeleita 2 ja 3 konvergenssiin asti.
+
+\end{lstlisting}
+
+RMSE (Root Mean Square Error) on kenties suosituin ennustettujen arvosteluiden tarkkuuden evaluiointiin käytetty metriikka.
+Sitä käytetään yleisesti regressioalgoritmien avulla luotujen mallien evaluointiin.
+Regressioalgoritmien yhteydessä virheellä tarkoitetaan havainnon todellisen sekä ennustetun numeroarvon välistä eroa.
+RMSE:n tuntemiseksi tulee tuntea ensin MSE (Mean Square Error).
+Kuten nimi viittaa, MSE on virheiden neliöiden keskiarvo ja se voidaan laskea neliöimällä jokaisen havainnon virhe ja laskemalla virheiden neliöiden keskiarvo.
+RMSE voidaan puolestaan laskea ottamalla neliöjuuri MSE:stä.
+Sekä RMSE että MSE edustavat opetusvirhettä ja ne ilmoittavat kuinka hyvin malli sovittuu opetusdataan.
+Niiden avulla saadaan selville havaintojen sekä ennustettujen arvojen välinen poikkeavuus.
+Alhaisemman MSE:n tai RMSE:n omaavan mallin sanotaan sovittuvan paremmin opetusdataan kuin korkeammat virhearvot omaavan mallin. \cite{guller15}
+
+Suosittelujärjestelmä luo ennustettuja arvosteluita $\hat{r}_{ui}$ testiaineistolle $\tau$ käyttäjä-tuote pareja $(u,i)$ joille todelliset arviot $r$ tunnetaan. \cite{guller15}
+Ennustettujen ja todellisten arvioiden välinen RMSE saadaan laskettua seuraavasti:
+
+\begin{equation}
+RMSE=\sqrt{\frac{1}{|\tau|} \sum_{(u,i)\in\tau}(\hat{r}_{ui}-r_{ui})^2}
+\end{equation}
+
+Konvergenssilla tarkoitetaan jonkin ilmiön lähestymistä ajan kuluessa jotain tiettyä arvoa, tässä tapauksessa sitä, että RMSE ei enään pienene tarpeeksi.
 
 \end{document}
