@@ -8,7 +8,7 @@ Aineistot on kerätty useiden aikajaksojen aikana, riippuen aineston koosta.
 MovieLens ml-latest-small aineisto sisältää 100 000 arviota, jotka ovat antaneet 700 käyttäjää 9000 elokuvalle.
 Näiden aineistojen haittapuolena on, että ne muuttuvat ajan myötä, eivätkä näin ollen ole sopivia tutkimustulosten raportointiin.
 Nykyinen, lokakuussa 2016 julkistettu versio on saatavilla projektin versionhallinnassa.
-Tämä aineisto valittiin, jotta voitaisiin antaa arvioita elokuville, jotka on oikeasti nähty ja myös laitteiston vuoksi.
+Tämä aineisto valittiin, jotta voitaisiin antaa arvioita elokuville, jotka on oikeasti nähty.
 MovieLens ml-latest-small aineisto koostuu $movies.csv$ and $ratings.csv$ tiedostoista.
 
 \captionof{table}{movies.csv}
@@ -40,14 +40,15 @@ MovieLens ml-latest-small aineisto koostuu $movies.csv$ and $ratings.csv$ tiedos
 	1 & 1339 & 3.5 & 1260759125 \\
 \end{tabular}
 
-Toteutuksessa käytettiin RDD-pohjaista rajapintaa, sillä dataset-pohjainen rajapinta ei ole vielä täysin toiminnallinen yhteisöllisen suodatuksen tehtävissä.
-Aineiston lataaminen voidaan tehdä dataset rajapintaa hyödyntäen, mutta varsinaisen suositus täytyy tehdä RDD rajapintaa käyttäen.
-Dataset rajapinta tarjoaa useita parannuksia, kuten esimerkiksi yksinkertaisemman tiedon lataamisen.
+Toteutuksessa käytettiin RDD-pohjaista rajapintaa, sillä dataset-pohjainen rajapinta ei ole vielä täysin toiminnallinen yhteisöllisen suodatuksen ongelmille.
+Aineiston lataaminen voidaan tehdä dataset-rajapintaa hyödyntäen, mutta varsinaisen suositus täytyy tehdä RDD-rajapintaa käyttäen.
+Dataset-rajapinta tarjoaa useita parannuksia, kuten esimerkiksi yksinkertaisemman tiedon lataamisen.
 
 \section{MovieLensRecommendation.scala}
 
-Ensimmäinen askel itsenäisen spark sovelluksen rakentamisessa on tehdä oikeanlainen kansiorakenne ja luoda $<PROJEKTI>.sbt$ niminen tiedosto, jossa kuvaillaan sovelluksen riippuvuudet.
-Itsenäinen spark sovellus tarkoittaa käyttövalmista $jar$ tiedostoa (Java ARchive), joka voidaan jakaa spark klusterille ja se sisältää sekä koodin että kaikki riippuvuudet.
+Ensimmäinen askel itsenäisen spark-sovelluksen rakentamisessa on tehdä oikeanlainen kansiorakenne ja luoda $<PROJEKTI>.sbt$ niminen tiedosto, jossa kuvaillaan sovelluksen riippuvuudet.
+Itsenäisellä Spark-sovelluksella tarkoitetaan käyttövalmista $jar$-tiedostoa (Java ARchive), joka voidaan jakaa Spark-klusterille ja se sisältää sekä koodin että kaikki riippuvuudet.
+Tiedostomuoto $.sbt$ viittaa Scala Build Tool nimiseen ohjelmaan, joka on käännöstyökalu Scala, Java ja C++-kielille \cite{sbt}.
 
 Sovelluksia voidaan ottaa käyttöön klusterissa spark-submit työkalun avulla, joka mahdollistaa Sparkin kaikkien tuettujen klusterinhoitajien käyttämisen yhteinäisen käyttöliittymän kautta.
 Tällöin käyttäjän ei tarvitse määrittää sovellusta toimimaan erikseen kaikkien kanssa.
@@ -93,7 +94,7 @@ val ratings = sc.textFile("ml-latest-small/ratings.csv")
 
 ~
 
-Alla olevassa esimerkissä 4.4 ladataan työssä käytetyt suositukset Dataset rajapintaa käyttäen.
+Alla olevassa esimerkissä 4.4 ladataan työssä käytetyt suositukset Dataset-rajapintaa käyttäen.
 
 \lstset {
 	language=Scala,
