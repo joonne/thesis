@@ -3,13 +3,13 @@
 
 \chapter{Toteutus}
 
-GroupLens Research on kerännyt ja laittanut saataville arvioaineistoja MovieLens sivustolta.
+GroupLens Research on kerännyt ja laittanut saataville vertailuaineistoja MovieLens sivustolta.
 Aineistot on kerätty useiden aikajaksojen aikana, riippuen aineston koosta.
-MovieLens ml-latest-small aineisto sisältää 100 000 arviota, jotka ovat antaneet 700 käyttäjää 9000 elokuvalle.
+MovieLens 20M aineisto sisältää 20 000 000 arviota, jotka ovat antaneet 138 000 käyttäjää 27 000 elokuvalle.
 Näiden aineistojen haittapuolena on, että ne muuttuvat ajan myötä, eivätkä näin ollen ole sopivia tutkimustulosten raportointiin.
 Nykyinen, lokakuussa 2016 julkistettu versio on saatavilla projektin versionhallinnassa.
 Tämä aineisto valittiin, jotta voitaisiin antaa arvioita elokuville, jotka on oikeasti nähty.
-MovieLens ml-latest-small aineisto koostuu $movies.csv$ and $ratings.csv$ tiedostoista.
+MovieLens 20M aineisto koostuu $movies.csv$ and $ratings.csv$ tiedostoista.
 
 \captionof{table}{movies.csv}
 \begin{tabular}{lll}
@@ -46,21 +46,20 @@ Dataset-rajapinta tarjoaa useita parannuksia, kuten esimerkiksi yksinkertaisemma
 
 \section{MovieLensRecommendation.scala}
 
-Ensimmäinen askel itsenäisen spark-sovelluksen rakentamisessa on tehdä oikeanlainen kansiorakenne ja luoda $<PROJEKTI>.sbt$ niminen tiedosto, jossa kuvaillaan sovelluksen riippuvuudet.
-Itsenäisellä Spark-sovelluksella tarkoitetaan käyttövalmista $jar$-tiedostoa (Java ARchive), joka voidaan jakaa Spark-klusterille ja se sisältää sekä koodin että kaikki riippuvuudet.
-Tiedostomuoto $.sbt$ viittaa Scala Build Tool nimiseen ohjelmaan, joka on käännöstyökalu Scala, Java ja C++-kielille \cite{sbt}.
+Ensimmäinen askel itsenäisen Spark-sovelluksen rakentamisessa on tehdä oikeanlainen kansiorakenne ja luoda $<PROJEKTI>.sbt$ niminen tiedosto, jossa kuvaillaan sovelluksen riippuvuudet.
+Itsenäisellä Spark-sovelluksella tarkoitetaan käyttövalmista $JAR$-tiedostoa (Java ARchive), joka voidaan jakaa Spark-klusterille ja se sisältää sekä koodin että kaikki riippuvuudet.
+Tiedostomuoto $.sbt$ viittaa SBT (Scala Build Tool) nimiseen ohjelmaan, joka on käännöstyökalu Scala, Java ja C++-kielille \cite{sbt}.
+SBT:n avulla lähdekoodi saadaan sekä käännettyä että paketoitua JAR:iksi.
 
-Sovelluksia voidaan ottaa käyttöön klusterissa spark-submit työkalun avulla, joka mahdollistaa Sparkin kaikkien tuettujen klusterinhoitajien käyttämisen yhteinäisen käyttöliittymän kautta.
-Tällöin käyttäjän ei tarvitse määrittää sovellusta toimimaan erikseen kaikkien kanssa.
+Sovelluksia voidaan ottaa käyttöön klusterissa spark-submit työkalun avulla, joka mahdollistaa Sparkin kaikkien tuettujen klusterinhoitajien käyttämisen yhteinäisen käyttöliittymän kautta. ONKO TARPEELLINEN TIETO LAINKAAN?
+Tämän työn toteutuksen "klusteri" tulee sisältämään vain master noodin sekä yhden worker noodin, mutta periaatteessa kyseessä on kuitenkin klusteri, vain erittäin pieni sellainen.
 
 \begin{lstlisting}[caption=Sovelluksen paketointi sbt työkalulla,language=sh]
 sbt package
 \end{lstlisting}
 
 \begin{lstlisting}[caption=Sovelluksen käyttöönotto klusterissa,language=sh]
-spark-submit --class "MovieLensALS" \
-	--master local[4] \
-	movielens-recommendations_2.11-1.0.jar
+spark-submit movielens-recommendations_2.11-1.0.jar
 \end{lstlisting}
 
 ~
@@ -135,135 +134,146 @@ Alla olevassa listauksessa on esitetty toteutetun suosittelujärjestelmän impleme
 	breakatwhitespace=false,
 }
 
-\begin{lstlisting}[caption=MovieLensALS.scala]
-import org.apache.spark.mllib.recommendation._
+- datan lataaminen
+	- siistiä että EMR klusterissa voi ladata suoraan S3 bucketista tiedostot
+- siistiminen?
+- opetus
+	- parametrien arvoille selitys ja että paperin mukaan
+- ennustaminen
+- apufunktiot ja selitys jos tarpeen
 
-object MovieLensALS {
-	def main(args: Array[String]) {
+\begin{lstlisting}[caption=Aineiston lataaminen]
+// ladataan omat suositukset
+val personalRatings = sc.textFile("s3n://bucket/personalRatings.txt")
+	.map { line =>
+	  val fields = line.split(",")
+	  Rating(fields(0).toInt, fields(1).toInt, fields(2).toDouble)
+	}.filter(_.rating > 0.0)
+		
+// ladataan suositukset
+val ratings = sc.textFile("s3n://bucket/ratings.csv")
+  .filter(!isHeader("userId")(_))
+  .map { line =>
+		val fields = line.split(",")
+		val timestamp = fields(3).toLong % 10
+		val userId = fields(0).toInt
+		val movieId = fields(1).toInt
+		val rating = fields(2).toDouble
 
-		val conf = new SparkConf()
-			.setAppName("MovieLensALS")
-			.set("spark.executor.memory", "4g")
-		val sc = new SparkContext(conf)
+		(timestamp, Rating(userId, movieId, rating)
+  }
 	
-		/* load personal ratings */
-		val personalRatings = Source.fromFile("personalRatings.txt")
-			.getLines()
-			.map { line =>
-					val fields = line.split(",")
-					Rating(fields(0).toInt, fields(1).toInt, fields(2).toDouble)
-			}.toSeq
-		
-		val personalRatingsRDD = sc.parallelize(personalRatings, 1)
-		
-		/* load ratings and movie titles */
-		val ratings = sc.textFile("ml-latest-small/ratings.csv")
-			.filter(x => !isHeader("userId", x))
-			.map { line =>
-					val fields = line.split(",")
-					val timestamp = fields(3).toLong % 10
-					val userId = fields(0).toInt
-					val movieId = fields(1).toInt
-					val rating = fields(2).toDouble)
+// ladataan elokuvat
+val movies = sc.textFile("s3n://bucket/movies.csv")
+	.filter(!isHeader("movieId")(_))
+	.map { line =>
+		val fields = line.split(",")
+		(fields(0).toInt, fields(1))
+	}.collect().toMap
+	
+\end{lstlisting}
 
-					(timestamp, Rating(userId, movieId, rating)
-			}
-		
-		val movies = sc.textFile("ml-latest-small/movies.csv")
-			.filter(x => !isHeader("movieId", x))
-			.map { line =>
-					val fields = line.split(",")
-					(fields(0).toInt, fields(1))
-			}.collect().toMap
-		
-		val numRatings = ratings.count
-		val numUsers = ratings.map(_._2.user).distinct.count
-		val numMovies = ratings.map(_._2.product).distinct.count
-		
-		val numPartitions = 4
-		val training = ratings.filter(x => x._1 < 6)
-			.values
-			.union(personalRatingsRDD)
-			.repartition(numPartitions)
-			.cache()
-		val validation = ratings.filter(x => x._1 >= 6 && x._1 < 8)
-			.values
-			.repartition(numPartitions)
-			.cache()
-		val test = ratings.filter(x => x._1 >= 8).values.cache()
-		
-		val numTraining = training.count()
-		val numValidation = validation.count()
-		val numTest = test.count()
-		
-		/* training */
-		
-		val ranks = List(8, 12)
-		val lambdas = List(1.0, 10.0)
-		val numIters = List(10, 20)
-		var bestModel: Option[MatrixFactorizationModel] = None
-		var bestValidationRmse = Double.MaxValue
-		var bestRank = 0
-		var bestLambda = -1.0
-		var bestNumIter = -1
-		for (rank <- ranks; lambda <- lambdas; numIter <- numIters) {
-			val model = ALS.train(training, rank, numIter, lambda)
-			val validationRmse =
-					computeRmse(model, validation, numValidation)
-			
-			if (validationRmse < bestValidationRmse) {
-					bestModel = Some(model)
-					bestValidationRmse = validationRmse
-					bestRank = rank
-					bestLambda = lambda
-					bestNumIter = numIter
-			}
-		}
-		
-		val testRmse = computeRmse(bestModel.get, test, numTest)
-		
-		val myRatedMovieIds = personalRatings.map(_.product).toSet
-		val candidates = sc.parallelize(
-				movies.keys.filter(!myRatedMovieIds.contains(_)).toSeq
-		)
-		val recommendations = bestModel.get
-			.predict(candidates.map((0, _)))
-			.collect()
-			.sortBy(- _.rating)
-			.take(10)
-		
-		var i = 1
-		println("Movies recommended for you:")
-		recommendations.foreach { r =>
-			println("%2d".format(i) + ": " + movies(r.product))
-			i += 1
-		}
-		
-		// clean up
-		sc.stop()
+Alla olevassa esimerkissä...
+
+\begin{lstlisting}[caption=Aineiston lataaminen]
+
+val numRatings = ratings.count
+val numUsers = ratings.map(_._2.user).distinct.count
+val numMovies = ratings.map(_._2.product).distinct.count
+
+val numPartitions = 4
+val training = ratings.filter(x => x._1 < 6)
+	.values
+	.union(personalRatingsRDD)
+	.repartition(numPartitions)
+	.cache()
+val validation = ratings.filter(x => x._1 >= 6 && x._1 < 8)
+	.values
+	.repartition(numPartitions)
+	.cache()
+val test = ratings.filter(x => x._1 >= 8).values.cache()
+
+val numTraining = training.count()
+val numValidation = validation.count()
+val numTest = test.count()
+
+/* training */
+
+val ranks = List(8, 12)
+val lambdas = List(1.0, 10.0)
+val numIters = List(10, 20)
+var bestModel: Option[MatrixFactorizationModel] = None
+var bestValidationRmse = Double.MaxValue
+var bestRank = 0
+var bestLambda = -1.0
+var bestNumIter = -1
+for (rank <- ranks; lambda <- lambdas; numIter <- numIters) {
+	val model = ALS.train(training, rank, numIter, lambda)
+	val validationRmse =
+			computeRmse(model, validation, numValidation)
+	
+	if (validationRmse < bestValidationRmse) {
+			bestModel = Some(model)
+			bestValidationRmse = validationRmse
+			bestRank = rank
+			bestLambda = lambda
+			bestNumIter = numIter
 	}
-	
-	def isHeader(id: String, line: String): Boolean = line.contains(id)
-	
-	/** Compute RMSE */
-	def computeRmse(
-			model: MatrixFactorizationModel,
-			data: RDD[Rating],
-			n: Long
-	): Double = {
-		val predictions: RDD[Rating] =
-			model.predict(data.map(x => (x.user, x.product)))
-		val predictionsAndRatings =
-			predictions.map(x => ((x.user, x.product), x.rating))
-				.join(data.map(x => ((x.user, x.product), x.rating)))
-				.values
+}
+
+val testRmse = computeRmse(bestModel.get, test, numTest)
+
+\end{lstlisting}
+
+Alla olevassa esimerkissä...
+
+\begin{lstlisting}[caption=Aineiston lataaminen]
+
 		
-		math.sqrt(
-			predictionsAndRatings
-				.map(x => (x._1 - x._2) * (x._1 - x._2))
-				.reduce(_ + _) / n
-		)
-	}
+val myRatedMovieIds = personalRatings.map(_.product).toSet
+val candidates = sc.parallelize(
+		movies.keys.filter(!myRatedMovieIds.contains(_)).toSeq
+)
+val recommendations = bestModel.get
+	.predict(candidates.map((0, _)))
+	.collect()
+	.sortBy(- _.rating)
+	.take(10)
+
+var i = 1
+println("Movies recommended for you:")
+recommendations.foreach { r =>
+	println("%2d".format(i) + ": " + movies(r.product))
+	i += 1
+}
+\\
+\end{lstlisting}
+
+Alla olevassa esimerkissä...
+
+\begin{lstlisting}[caption=Apufunktiot]
+
+	
+def isHeader(id: String, line: String): Boolean = line.contains(id)
+
+/** Compute RMSE */
+def computeRmse(
+		model: MatrixFactorizationModel,
+		data: RDD[Rating],
+		n: Long
+): Double = {
+	val predictions: RDD[Rating] =
+		model.predict(data.map(x => (x.user, x.product)))
+	val predictionsAndRatings =
+		predictions.map(x => ((x.user, x.product), x.rating))
+			.join(data.map(x => ((x.user, x.product), x.rating)))
+			.values
+	
+	math.sqrt(
+		predictionsAndRatings
+			.map(x => (x._1 - x._2) * (x._1 - x._2))
+			.reduce(_ + _) / n
+	)
 }
 \end{lstlisting}
 
