@@ -44,7 +44,7 @@ Scala on moniparadigmainen ohjelmointikieli, joka tukee sek‰ olio- ett‰ funktion
 Funktionaalista ohjelmointia varten Scalasta lˆytyy tuki funktionaalisen ohjelmoinnin konsepteille kuten muuttumattomat tietorakenteet ja funktiot ensimm‰isen luokan kansalaisina.
 Olio-ohjelmointia varten Scalasta lˆytyy tuki konsepteille kuten luokat, oliot ja piirre (trait).
 Scala tukee myˆs kapselointia, perint‰‰, moniperint‰‰ ja muita t‰rkeit‰ olio-ohjelmoinnin konsepteja.
-Scala on staattisesti tyypitetty kieli ja sill‰ kirjoitetut ohjelmat k‰‰nnet‰‰n Scala k‰‰nt‰j‰‰ k‰ytt‰en.
+Scala on staattisesti tyypitetty kieli ja sill‰ kirjoitetut ohjelmat k‰‰nnet‰‰n Scala-k‰‰nt‰j‰‰ k‰ytt‰en.
 Scala on JVM-perustainen (Java Virtual Machine, Java-virtuaalikone) kieli, joten Scala k‰‰nt‰j‰ k‰‰nt‰‰ sovelluksen Java-tavukoodiksi, joka voidaan ajaa miss‰ tahansa Java-virtuaalikoneessa.
 Tavukooditasolla Scala ohjelmaa ei voida erottaa Java sovelluksesta.
 Scalan ollessa JVM-perustainen, Scala on t‰ysin yhteensopiva Javan kanssa ja n‰in ollen Java-kirjastoja voidaan k‰ytt‰‰ suoraan Scala-koodissa.
@@ -79,12 +79,12 @@ x = 20
 Muuttumatonta muuttujaa, $val$, ei sen sijaan voida antaa uudelleen luomisen j‰lkeen.
 Syntaksi $val$:in luomiseksi on
 
-\begin{lstlisting}[caption=Muuttumattoman muuttujan luominen]
+\begin{lstlisting}[caption=Vakion luominen]
 val y = 10
 \end{lstlisting}
 
-Mik‰li muuttumatonta muuttujaa koitetaan antaa uudelleen myˆhemmin ohjelmassa, k‰‰nt‰j‰ antaa virheen.
-Huomionarvoista yll‰olevassa syntaksissa on se, ett‰ Scala k‰‰nt‰j‰ ei pakota m‰‰rittelem‰‰n muuttujan tyyppi‰ sillon kuin k‰‰nt‰j‰ pystyy p‰‰ttelem‰‰n sen.
+Mik‰li vakiota yritett‰‰n uudelleenm‰‰ritt‰‰ myˆhemmin ohjelmassa, k‰‰nt‰j‰ antaa virheen.
+Huomionarvoista yll‰olevassa syntaksissa on se, ett‰ Scala k‰‰nt‰j‰ ei pakota m‰‰rittelem‰‰n muuttujan tyyppi‰ sillon kuin k‰‰nt‰j‰ pystyy p‰‰ttelem‰‰n (type deduction) sen.
 
 \begin{lstlisting}[caption=Muuttujan luominen tyyppim‰‰rittelyn avulla]
 var x: Int = 10
@@ -96,7 +96,7 @@ val y: Int = 10
 Funktio on lohko suoritettavaa koodia joka palauttaa arvon.
 Se on konseptuaalisesti samankaltainen kuin matematiikassa: funktio ottaa sis‰‰ntulon ja palauttaa ulostulon. \cite{guller15}
 
-Scalan funktiot ovat ensimm‰isen luokan kansalaisia, jolla tarkoitetaan ett‰ funktiota voidaan:
+Scalan funktiot ovat ensimm‰isen luokan kansalaisia, jolla tarkoitetaan, ett‰ funktiota voidaan:
 
 \begin{itemize}
 	\item k‰ytt‰‰ kuten muuttujaa
@@ -135,7 +135,7 @@ def add(first: Int, second: Int): Int = first + second
 
 Toinen versio tekee t‰sm‰lleen saman asian kuin ensimm‰inenkin, mutta se on vain kirjoitetty k‰ytt‰en lyhyemp‰‰ syntaksia.
 Paluuarvon tyyppi on j‰tetty antamatta, sill‰ k‰‰nt‰j‰ pystyy p‰‰ttelem‰‰n sen koodista.
-Paluuarvo suositellaan kuitenkin annettavan aina.
+Paluuarvon tyyppi suositellaan kuitenkin annettavan aina.
 Aaltosulkeet on myˆskin j‰tetty pois, sill‰ ne ovat pakolliset vain kun funktion runko sis‰lt‰‰ useamman kuin yhden k‰skyn.
 Lis‰ksi, $return$ avainsana on ohitettu, sill‰ se on vapaaehtoinen.
 Scalassa kaikki lausekkeet ovat arvon palauttavia lausekkeita, joten funktion rungon viimeisen lausekkeen arvosta tulee funktion paluuarvo. \cite{guller15}
@@ -168,7 +168,7 @@ Yksinkertaisimmat tyˆt voivat valmistua vain yhden tason j‰lkeen ja monimutkaise
 
 \section{Dataset API}
 
-Dataset (DS) on vahvasti tyypitetty kokoelma aluespesifisi‰ objekteja, jotka voidaan muuntaa rinnakkain k‰ytt‰en funktionaalisia tai relaatio-operaatioita.
+Dataset (DS) on vahvasti tyypitetty kokoelma aluespesifisi‰ (domain specific) objekteja, jotka voidaan muuntaa rinnakkain k‰ytt‰en funktionaalisia tai relaatio-operaatioita.
 DS on RDD:n korvaaja Sparkissa.
 Dataset:ille olemassa olevat operaatiot on jaettu \textit{muunnoksiin} (transformations) ja \textit{toimiin} (actions).
 Muunnokset ovat operaatioita, jotka luovat uusia Dataset objekteja, kuten map, filter, select, aggregate.
@@ -218,7 +218,7 @@ Yleisin tapa on k‰ytt‰‰ $SparkSession$:in tarjoamaa $read$ funktiota ja osoittaa
 
 Dataset voidaan luoda myˆs tekem‰ll‰ muutoksia olemassaoleville Dataset olioille:
 
-\begin{lstlisting}[caption=Creating a new Dataset through a transformation]
+\begin{lstlisting}[caption=Uuden Dataset olion luominen muunnoksella (transformation)]
 
 val people: Dataset<Person> = Dataset(Person())
 val names = people.map(_.name)
@@ -227,7 +227,7 @@ val names = people.map(_.name)
 
 \begin{lstlisting}[caption=Uuden Dataset olion luominen k‰ytt‰en read funktiota]
 
-val people = spark.read.json("./people.json").as[Person]
+val people = spark.read.json("./people.json").as[Person] ,
 
 \end{lstlisting}
 
@@ -239,7 +239,7 @@ case class Person(id: BigInt, firstName: String, lastName: String)
 
 \end{lstlisting}
 
-Case-luokat ovat tavallisia Scala-luokkia jotka ovat:
+Case-luokat ovat tavallisia Scala-luokkia, jotka ovat:
 
 \begin{itemize}
 	\item Oletustarvoisesti muuttumattomia (immutable)
@@ -261,9 +261,7 @@ val spark = SparkSession
 \end{lstlisting}
 
 SparkSession on Spark ohjelmoinnin l‰htˆkohta, kun halutaan k‰ytt‰‰ Dataset ja DataFrame rajapintoja.
-Yll‰olevassa koodinp‰tk‰ss‰ luodaan $SparkSession$ ketjuttamalla rakentajan kutsuja.
-
-\cite{spark-dataset}
+Yll‰olevassa koodinp‰tk‰ss‰ luodaan $SparkSession$ ketjuttamalla rakentajan kutsuja. \cite{spark-dataset}
 
 Dataset oliot ovat samankaltaisia kuin RDD:t, sill‰ nekin tarjoavat vahvan tyypityksen ja mahdollisuuden k‰ytt‰‰ voimakkaita lambda-funktioita \cite{spark-sql-programming-guide}.
 Lambda-funktiolla tarkoitetaan yleisesti anonyymi‰ funktiota, jota ei olla sidottu muuttujaan.
@@ -276,7 +274,7 @@ Enkooderit k‰ytt‰v‰t sellaista muotoa, ett‰ Spark kykenee suorittamaan monenlais
 Seuraavassa koodilistauksessa luodaan uusi Dataset lukemalla $json$-tiedosto tiedostoj‰rjestelm‰st‰.
 Seuraavaksi luodaan uusi Dataset muunnoksen kautta.
 Objektin kloonaamiseksi k‰ytet‰‰n case luokan $copy$ metodia, koska $people$ Dataset oli m‰‰ritelty muuttumattomaksi.
-Lopuksi fyysinen suunnitelma tulostetaan konsoliin kutsumalla $explain$ funktiota uudelle Dataset objektille.
+Lopuksi looginen ja fyysinen suunnitelma tulostetaan konsoliin kutsumalla $explain$ funktiota uudelle Dataset objektille.
 
 \begin{lstlisting}[caption=Dataset olion loogisen ja fyysisen suunnitelman n‰ytt‰minen]
 
@@ -317,9 +315,9 @@ DataFrame on nimettyihin sarakkeisiin j‰rjestetty Dataset.
 Se on k‰sitteellisesti yhtenev‰ relaatiotietokannan taulun tai R/Python kielten tietokehyksen (data frame) kanssa, mutta DataFrame on optimoitu tehokkaammin.
 DataFrame voidaan rakentaa useammalla tavalla, kuten esimerkiksi j‰sennellyist‰ tiedostoista, ulkoisista tietokannoista tai olemassaolevista RDD-olioista.
 DataFrame-rajapinta on saatavilla Scala, Java, Python ja R-ohjelmointikielille.
-Scala-toteutuksessa DataFrame on riveist‰ rakentuva Dataset, se on siis yksinkertaisesti tyyppialias Dataset[Row] (kuten C++:n typedef). \cite{spark-programming-guide}
+Scala-toteutuksessa DataFrame on riveist‰ rakentuva Dataset ($Dataset[Row]$). \cite{spark-programming-guide}
 
-\begin{lstlisting}[caption=DataFrame luominen k‰ytt‰en read funktiota]
+\begin{lstlisting}[caption=DataFrame luominen k‰ytt‰en read-funktiota]
 
 val people = spark.read.json("./people.json")
 

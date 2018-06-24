@@ -9,7 +9,7 @@ Ihmiset voivat kuitenkin tehokkaasti suositella vain niitä asioita, jotka ovat i
 Tällöin suosittelijajärjestelmistä tulee hyödyllisiä, sillä ne voivat mahdollisesti tarjota suosituksia sadoista tai jopa tuhansista erilaisista tuotteista.
 Suosittelijajärjestelmät ovat joukko tekniikoita ja ohjelmistoja, jotka tarjovat suosituksia mahdollisesti hyödyllisistä tuotteista.
 Tuotteella tarkoitetaan tässä yhteydessä yleistä asiaa, jota järjestelmä suosittelee henkilölle.
-Suosittelujärjestelmät on yleensä rakennettu suosittelemaan vain tietyn tyyppisiä tuotteita kuten esimerkiksi kirjoja tai elokuvia. \cite{ricci11}
+Suosittelujärjestelmät rakennetaan yleensä suosittelemaan vain tietyn tyyppisiä tuotteita, kuten esimerkiksi kirjoja tai elokuvia. \cite{ricci11}
 
 Suosittelijajärjestelmien tarkoitus on auttaa asiakkaita päätöksenteossa, tuotteiden määrän ollessa valtava.
 Tavallisesti suositukset ovat räätälöityjä, millä tarkoitetaan että suositukset eroavat käyttäjien tai käyttäjäryhmien välillä.
@@ -41,28 +41,26 @@ Tätä uutta tietoa voidaan myöhemmin käyttää hyödyksi tuotettaessa uusia suosituk
 Verrattuna klassisten tietojärjestelmien, kuten tietokantojen ja hakukoneiden, tutkimukseen, suosittelijajärjestelmien tutkimus on verrattain tuoretta.
 Suositteljiajärjestelmistä tuli itsenäisiä tutkimusalueita 90-luvun puolivälissä.
 Viimeaikoina mielenkiinto suosittelujärjestelmiä kohtaan on kasvanut merkittävästi.
-Esimerkkinä suuren profiilin verkkosivustot kuten Amazon.com, YouTube, Netflix sekä IMDB, joissa suosittelujärjestelmillä on iso rooli.
-Oma lukunsa ovat myös vain suosittelujärjestelmien tutkimiseen ja kehittämiseen tarkoitetut konferenssit kuten RecSys ja AI Communications (2008). \cite{ricci11}
+Esimerkiksi verkkosivustoissa, kuten Amazon.com, YouTube, Netflix sekä IMDB, suosittelujärjestelmillä on iso rooli.
+Suosittelujärjestelmien tutkimiseen ja kehittämiseen omistettuja konferensseja on myös olemassa, kuten RecSys ja AI Communications (2008). \cite{ricci11}
 
-Suosittelujärjestelmällä voidaan ajatella olevan kaksi päätarkoitusta.
-Ensimmäinen on avustaa palveluntarjoajaa ja toinen on tuottaa arvoa palvelun käyttäjälle.
-Suosittelujärjestelmän on siis tasapainoteltava sekä palveluntarjoajan että käyttäjän tarpeiden välillä. \cite{ricci11}
+Suosittelujärjestelmällä voidaan ajatella olevan kaksi päätarkoitusta: palveluntarjoajan avustaminen ja arvon tuottaminen palvelun käyttäjälle.
+Suosittelujärjestelmän on siis tasapainoiteltava sekä palveluntarjoajan että käyttäjän tarpeiden välillä. \cite{ricci11}
 Palveluntarjoaja voi esimerkiksi ottaa suosittelujärjestelmän avuksi parantamaan tai monipuolistamaan myyntiä, lisäämään käyttäjien tyytyväisyyttä, lisäämään käyttäjien uskollisuutta tai ymmärtämään paremmin mitä käyttäjä haluaa \cite{ricci11}.
 Käyttäjä puolestaan saattaa haluta suosituksena tuotesarjan, apua selaamiseen tai mahdollistaa muihin vaikuttamisen. \cite{ricci11}
 
-GroupLens, BookLens ja MovieLens olivat uranuurtajia suosittelujärjestelmissä.
+GroupLens, BookLens ja MovieLens olivat uranuurtajia suosittelujärjestelmien tutkimisessa ja kehittämisessä.
 GroupLens on tutkimuslaboratorio tietojenkäsittelytieteen- ja tekniikan laitoksella Minnesotan Yliopistossa, joka on erikoistunut muun muassa suosittelujärjestelmiin ja verkkoyhteisöihin \cite{aggarwal16}.
 BookLens on on GroupLensin rakentama kirjojen suosittelujärjestelmä \cite{booklens17}.
 MovieLens on GroupLensin ylläpitämä elokuvien suosittelujärjestelmä \cite{movieLens17}.
-Uranuurtavan tutkimuksen lisäksi nämä sivustot julkaisivat aineistoja, joka ei ollut yleistä tuohon aikaan.
-\cite{aggarwal16}
+Uranuurtavan tutkimuksen lisäksi nämä sivustot julkaisivat aineistoja, joka ei ollut yleistä tuohon aikaan. \cite{aggarwal16}
 
 \section{Suositustekniikat}
 
 Suosittelujärjestelmällä täytyy olla ymmärrys tuotteista, jotta se pystyy tekemään suosituksia.
 Tämän mahdollistamiseksi järjestelmän täytyy pystyä ennustamaan tuotteen käytännöllisyys tai ainakin verrata tuotteiden hyödyllisyyttä ja tämän perusteella päättää suositeltavat tuotteet.
 Ennustamista voidaan luonnostella yksinkertaisella personoimattomalla suosittelualgoritmilla, joka suosittelee vain suosituimpia elokuvia.
-Tätä lähestymistapaa voidaan perustella sillä, että tarkemman tiedon puuttuessa käyttäjän mieltymyksistä, elokuva josta muutkin ovat pitäneet on todennäköisesti myös keskivertokäyttäjän mieleen, ainakin enemmän kuin satunaisesti valikoitu elokuva.
+Tätä lähestymistapaa voidaan perustella sillä, että tarkemman tiedon puuttuessa käyttäjän mieltymyksistä, elokuva, josta muutkin ovat pitäneet on todennäköisesti myös keskivertokäyttäjän mieleen, ainakin enemmän kuin satunaisesti valikoitu elokuva.
 Suosittujen elokuvien voidaan siis katsoa olevan kohtuullisen osuvia suosituksia keskivertokäyttäjälle. \cite{ricci11}
 
 Tuotteen $i$ hyödyllisyyttä käyttäjälle $u$ voidaan mallintaa reaaliarvoisella funktiolla $R(u,i)$, kuten yleensä tehdään \textit{yhteisösuodatuksessa} ottamalla huomioon käyttäjien antamat arviot tuotteista.
@@ -183,7 +181,7 @@ val similarities = users.map { user =>
 
 val mostSimilarUsers = similarities.filter(_.score > 0.8)
 
-3. Arvostele samankaltaisimpien käyttäjien ostamat tuotteet. Arvostelu saadaan joko keskiarvona kaikista tai painotettuna keskiarvona, käyttäen samankaltaisuuksia painoina. TODO
+3. Arvostele samankaltaisimpien käyttäjien ostamat tuotteet. Arvostelu saadaan joko keskiarvona kaikista tai painotettuna keskiarvona, käyttäen samankaltaisuuksia painoina.
 
 val ratedItems = mostSimilarUsers.map { user =>
 	user.purchases.map { purchase =>
