@@ -15,6 +15,11 @@ Suosittelu voidaan jakaa kahteen pääkategoriaan: tuotepohjaiseen ja käyttäjäpohj
 Tuotepohjaisessa suosittelussa tarkoituksena on etsiä samankaltaisia tuotteita, sillä käyttäjän ajatellaan olevan mahdollisesti kiinnostunut samankaltaisista tuotteista myös tulevaisuudessa.
 Käyttäjäpohjaisessa suosittelussa käyttäjän ajatellaan olevan kiinnostunut tuotteista, joita samankaltaiset käyttäjät ovat ostaneet, joten siinä on tarkoituksena etsiä samankaltaisia käyttäjiä, jotta voidaan suositella näiden ostamia tuotteita.
 
+Tämän työn päämääränä on tutustua Apache Spark sovelluskehykseen sekä Scala ohjelmointikieleen ja toteuttaa suosittelujärjestelmä näiden teknologioiden avulla.
+Toteutus tehdään toimimaan pilvipalvelussa, joten työssä tutustutaan myös kevyesti kahteen pilvipalvelujätti Amazonin AWS:n (Amazon Web Services) tarjoamaan palveluun: EMR (Elastic Map Reduce) sekä S3 (Simple Storage Service).
+EMR on hallittu klusterialusta, joka yksinkertaistaa big data -sovelluskehysten, kuten Apache Sparkin, käyttämistä AWS:n palveluissa. \cite{emr}
+S3 on tietovarasto, joka on suunniteltu helpottamaan pilvilaskentaa ja se tarjoaa yksinkertaisen rajapinnan tietovaraston hallintaan. \cite{s3}
+
 Apache Spark on sovelluskehys, joka mahdollistaa hajautettujen ohjelmien rakentamisen. \cite{guller15}
 Hajautetussa ohjelmassa suoritus voidaan jakaa useiden käsittelysolmujen kesken.
 Jotkin suositteluongelmat voidaan mallintaa hajautettuna ohjelmana, jossa kaksi matriisia, käyttäjät ja tuotteet, prosessoidaan iteratiivisella algoritmilla, joka mahdollistaa ohjelman suorittamisen rinnakkain. \cite{guller15}
@@ -22,12 +27,6 @@ Jotkin suositteluongelmat voidaan mallintaa hajautettuna ohjelmana, jossa kaksi 
 Apache Spark on rakennettu Scala ohjelmointikielellä. \cite{guller15}
 Scala on monikäyttöinen, moniparadigmainen ohjelmointikieli, joka tarjoaa tuen funktionaaliselle ohjelmoinnille sekä vahvan tyypityksen.
 Työn käytännön osuus on toteutettu Scalaa käyttäen, joten lyhyt johdanto ohjelmointikieleen tarjotaan lukijalle.
-
-Työn päämääränä on tutustua Apache Spark sovelluskehykseen sekä Scala ohjelmointikieleen ja toteuttaa suosittelujärjestelmä näiden teknologioiden avulla.
-Työssä tutustutaan myös kevyesti kahteen AWS:n (Amazon Web Services) tarjoamaan palveluun: EMR (Elastic Map Reduce) sekä S3 (Simple Storage Service).
-AWS on palvelu, joka tarjoaa luotettavia, skaalautuvia ja edullisia pilvilaskentapalveluita. \cite{aws}
-EMR on hallittu klusterialusta, joka yksinkertaistaa big data -sovelluskehysten, kuten Apache Sparkin, käyttämistä AWS:n palveluissa. \cite{emr}
-S3 on tietovarasto Internetille, joka on suunniteltu helpottamaan web-mittakaavan (web scale) laskentaa. \cite{s3}
 
 Tämä työ on rakentuu seuraavista osista.
 Luvuissa kaksi ja kolme esitetään työn kannalta oleellinen teoriaosuus.

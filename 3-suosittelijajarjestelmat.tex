@@ -102,11 +102,9 @@ Tuotepohjaisessa yhteisösuodatuksessa (Item-based collaborative filtering, IBCF)
 Seuraavaksi mallinnetaan käyttäjän mieltymykset tuotteelle perustuen saman käyttäjän tekemiin arvosteluihin \cite{ricci11}.
 Alla oleva koodinpätkä esittelee tuotepohjaisen yhteisösuodatuksen idean jokaiselle uudelle käyttäjälle.
 
-\newpage
-
 \lstset{
 	columns=flexible,
-%	frame=single,
+	frame=single,
 	breaklines=true,
 	tabsize=2
 }
@@ -141,8 +139,6 @@ users.foreach { user =>
 
 \end{lstlisting}
 
-\newpage
-
 Amerikan suurimman verkkokaupan, Amazon.com:in, on aiemmin tiedetty käyttäneen tuote-tuotteeseen yhteisösuodatusta.
 Tässä toteutuksessa algoritmi rakentaa samankaltaisten tuotteiden taulun etsimällä tuotteita joita käyttäjät tapaavat ostaa yhdessä.
 Seuraavaksi algoritmi etsii käyttäjän ostoshistoriaa ja arvosteluita vastaavat tuotteet, yhdistää nämä tuotteet ja palauttaa suosituimmat tai eniten korreloivat tuotteet. \cite{linden03}
@@ -156,11 +152,9 @@ Samankaltaisuus saadaan laskettua vertaamalla käyttäjien ostoshistorioiden saman
 
 Askeleet jokaiselle uudelle käyttäjälle käyttäjäpohjaisessa yhteisösuodatuksessa ovat:
 
-\newpage
-
 \lstset{
 	columns=flexible,
-%	frame=single,
+	frame=single,
 	keywords={val}
 	breaklines=true,
 	tabsize=2
@@ -204,7 +198,6 @@ Muistipohjaisen yhteisösuodatuksen käyttäessä tallennettuja suosituksia suoraan 
 Perusajatus on mallintaa käyttäjä-tuote vuorovaikutuksia tekijöillä jotka edustavat käyttäjien ja tuotteiden piileviä ominaisuuksia (latent factors) järjestelmässä.
 Piileviä ominaisuuksia ovat esimerkiksi käyttäjän mieltymykset ja tuotteiden kategoriat.
 Tämä malli opetetaan käyttämällä saatavilla olevaa dataa ja myöhemmin käytetään ennustamaan käyttäjien arvioita uusille tuotteille. \cite{ricci11}
-
-Vuorottelevat pienimmät neliöt (Alternating Least Squares, ALS) algoritmi on esimerkki mallipohjaisesta yhteisösuodatusalgoritmista ja se esitetään seuraavassa luvussa.
+ALS-algoritmi on esimerkki mallipohjaisesta yhteisösuodatusalgoritmista.
 
 \end{document}
