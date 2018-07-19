@@ -4,9 +4,9 @@
 \chapter{Apache Spark}
 
 Apache Spark on avoimen lähdekoodin sovelluskehys, joka yhdistää hajautettujen ohjelmien kirjoittamiseen tarkoitetun järjestelmän sekä elegantin mallin ohjelmien kirjoittamiseen \cite{ryza15}.
-Spark tarjoaa korkean tason rajapinnat Java, Scala, Python sekä R ohjelmointikielille.
+Spark-ohjelmia voidaan kirjoittaa Java-, Scala-, Python- sekä R-ohjelmointikielillä.
 
-Jokainen Spark sovelus koostuu driver-ohjelmasta sekä yhdestä tai useammasta executor-ohjelmasta.
+Jokainen Spark-sovellus koostuu driver-ohjelmasta sekä yhdestä tai useammasta executor-ohjelmasta.
 Driver on ohjelma, joka ajaa käyttäjän pääohjelmaa ja suorittaa erilaisia rinnakkaisia operaatioita klusterissa.
 Executor on yksi kone klusterissa. \cite{ryza15}
 
@@ -17,20 +17,19 @@ Suoritusaikaa hallitaan lisäämällä lisää tietokoneita suorittamaan tehtävää. \ci
 
 Apache Spark säilyttää MapReduce:n lineaarisen skaalautuvuuden ja vikasietokyvyn mutta laajentaa sitä kolmella merkittävällä tavalla.
 Ensiksi, MapReducessa map- ja reduce-tehtävien väliset tulokset täytyy kirjoittaa levylle kun taas Spark kykenee välittämään tulokset suoraan putkiston (pipeline) seuraavalle vaiheelle.
-Toiseksi, Apache Spark:in voidaan ajatella kohtelevan kehittäjiä paremmin tarjoamalla rikkaan joukon muunnoksia (transformations) joiden avulla voidaan muutamalla koodirivillä ilmaista monimutkaisia putkistoja. (ESIMERKKI?)
+Toiseksi, Apache Sparkin voidaan ajatella kohtelevan kehittäjiä paremmin tarjoamalla rikkaan joukon muunnoksia (transformations) joiden avulla voidaan muutamalla koodirivillä ilmaista monimutkaisia putkistoja.
 Kolmanneksi, Spark esittelee muistissa tapahtuvan prosessoinnin tarjoamalla abstraktion nimeltä Resilient Distributed Dataset (RDD). RDD tarjoaa kehittäjälle mahdollisuuden materialisoida minkä tahansa askeleen putkistossa ja tallentaa sen muistiin.
 Tämä tarkoittaa sitä, että tulevien askelien ei tarvitse laskea aiempia tuloksia uudelleen ja tällöin on mahdollista jatkaa juuri käyttäjän haluamasta askeleesta.
 Aiemmin tämänkaltaista ominaisuutta ei ole ollut saatavilla hajautetun laskennan järjestelmissä. \cite{ryza15}
 
-Spark ohjelmia voidaan kirjottaa Java, Scala, Python tai R-ohjelmointikielellä.
-Scalan käyttämisellä saavutetaan kuitenkin muutamia etuja, joita muut kielet eivät tarjoa.
+Vaikka Spark-ohjelmia voidaankin kirjottaa usealla ohjelmointikielellä, Scalan käyttämisellä saavutetaan kuitenkin muutamia etuja, joita muut kielet eivät tarjoa.
 Tehokkuus saatta parantua, sillä datan siirtäminen eri kerrosten välillä tai muunnosten suorittaminen datalle voi johtaa heikompaan tehokkuuteen.
-Spark on kirjoitettu Scala-ohjelmointikielellä, joten viimeisimmät ja parhaimmat ominaisuudet ovat aina käytössä, eikä niiden käännöstä tarvitse odotella.
+Spark on kirjoitettu Scala-ohjelmointikielellä, joten viimeisimmät ja parhaimmat (latest and greatest) ominaisuudet ovat aina käytössä, eikä niiden käännöstä tarvitse odotella.
 Spark ohjelmoinnin filosofia on helpompi ymmärtää kun Sparkia käytetään kielellä, jolla se on rakennettu.
 Suurin hyöty, jonka Scalan käyttäminen tarjoaa, on kuitenkin kehittäjäkokemus joka tulee saman ohjelmointikielen käyttämisestä kaikkeen.
 Datan tuonti, manipulointi ja koodin lähettäminen klustereihin hoituvat samalla kielellä. \cite{ryza15}
 
-Spark-jakelun mukana toimitetaan luku-evaluointi-tulostus-silmukka, komentorivityökalu, (Read eval print loop, REPL), joka mahdollistaa uusien asioiden nopean testailun konsolissa, eikä sovelluksista tarvitse rakentaa itsenäisiä (self-contained) alusta asti.
+Spark-jakelun mukana toimitetaan luku-evaluointi-tulostus-silmukka (Read Eval Print Loop, REPL), komentorivityökalu, joka mahdollistaa uusien asioiden nopean testailun konsolissa, eikä sovelluksista tarvitse rakentaa itsenäisiä (self-contained) alusta asti.
 Kun REPLissä kehitetyn sovelluksen tai sovelluksen osan voidaan katsoa olevan tarpeeksi valmis, on järkevää tehdä siitä koottu kirjasto (JAR).
 Näin varmistutaan ettei ohjelmakoodia tai tuloksia pääse katoamaan, vaikkakin REPL tarjoaa samantapaisen muistin komentohistoriasta kuin perinteinen komentorivikin.
 
