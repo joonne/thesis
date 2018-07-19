@@ -11,7 +11,7 @@ Ennustusten kerääminen mallin avulla.
 
 \section{Opetusdata}
 
-GroupLens Research on kerännyt ja laittanut saataville vertailuaineistoja MovieLens -sivustolta.
+GroupLens Research on kerännyt ja laittanut saataville aineistoja MovieLens-sivustolta.
 Aineistot on kerätty useiden aikajaksojen aikana, riippuen aineiston koosta.
 MovieLens 20M aineisto sisältää 20 000 000 (kaksikymmentä miljoonaa) arviota, jotka ovat antaneet 138 000 käyttäjää 27 000 elokuvalle.
 MovieLens 20M aineisto koostuu $movies.csv$ and $ratings.csv$ tiedostoista.
@@ -57,20 +57,20 @@ Tiedostomuoto $.sbt$ viittaa SBT (Scala Build Tool) nimiseen ohjelmaan, joka on 
 SBT:n avulla lähdekoodi saadaan sekä käännettyä että paketoitua JAR:iksi.
 
 Sovelluksia voidaan ottaa käyttöön klusterissa \textit{spark-submit} työkalun avulla, joka mahdollistaa Sparkin kaikkien tuettujen klusterinhoitajien käyttämisen yhteinäisen käyttöliittymän kautta.
-Tämä ominaisuus osoittautui erittäin hyödylliseksi kun sovellusta ajettiin EMR-klusterissa, sillä spark-submit työkalu otti parametrinaan vain käännetyn JAR:in ja alkoi tekemään laskentaa.
+Tämä ominaisuus osoittautui erittäin hyödylliseksi kun sovellusta ajettiin EMR-klusterissa, sillä spark-submit työkalu otti parametrinaan vain käännetyn JAR:in ja alkoi ajamaan sovellusta.
 Tässö työssä "klusteri" tulee sisältämään vain master noodin sekä yhden worker noodin, mutta periaatteessa kyseessä on kuitenkin klusteri, vain erittäin pieni sellainen.
 
-\begin{lstlisting}[caption=Sovelluksen paketointi sbt työkalulla,language=sh]
+\begin{lstlisting}[caption=Sovelluksen paketointi sbt-työkalulla,language=sh]
 sbt package
 \end{lstlisting}
 
-\begin{lstlisting}[caption=Sovelluksen käyttöönotto klusterissa,language=sh]
+\begin{lstlisting}[caption=Sovelluksen ajaminen klusterissa,language=sh]
 spark-submit movielens-recommendations_2.11-1.0.jar
 \end{lstlisting}
 
 ~
 
-Alla olevassa esimerkissä 4.3 ladataan työssä käytetyt suositukset RDD rajapintaa käyttäen.
+Alla olevassa esimerkissä 5.3 ladataan työssä käytetyt suositukset RDD rajapintaa käyttäen.
 
 \lstset {
 	language=Scala,
@@ -99,7 +99,7 @@ val ratings = sc.textFile("ml-latest-small/ratings.csv")
 
 ~
 
-Alla olevassa esimerkissä 4.4 ladataan työssä käytetyt suositukset Dataset-rajapintaa käyttäen.
+Alla olevassa esimerkissä 5.4 ladataan työssä käytetyt suositukset Dataset-rajapintaa käyttäen.
 
 \lstset {
 	language=Scala,
@@ -126,24 +126,6 @@ val ratings = spark.read.csv("ml-latest-small/ratings.csv")
 \end{lstlisting}
 
 ~
-
-Alla olevassa listauksessa on esitetty toteutetun suosittelujärjestelmän implementaatio.
-
-\lstset {
-	language=Scala,
-	basicstyle=\footnotesize,
-	numbers=left,
-	stepnumber=1,
-	showstringspaces=false,
-	tabsize=2,
-	breaklines=true,
-	breakatwhitespace=false,
-}
-
-- opetus
-	- parametrien arvoille selitys ja että paperin mukaan
-- ennustaminen
-- apufunktiot ja selitys jos tarpeen
 
 \section{Opetusdatan lataaminen Spark sovellukseen}
 
@@ -242,9 +224,12 @@ Koodin tasolla opetus tapahtuu käyttäen MLlib / ALS kirjaston funktiota $train$,
 	\item $lambda$ on regularisaatio-parametri, jolla yritetään ehkäistä mallin ylioppimista
 \end{itemize}
 
-Eräässä tutkimuksessa \cite{miryala17} tutkittiin parhaita parametreja ALS-algoritmille ja päädytty lambda-arvoon 0.1 ja iteraatioiden määrään 20.
-Parhautta oltiin tutkittu RMSE metriikan kautta ja kyseisillä paramtreilla RMSE saatiin pienimmillään eli mallin voidaan sanoa sovittuvan parhaiten opetusdataan.
-Tutkimuksessa oltiin päädytty arvoon XXX, kun taas paras itse opetettu malli päätyi RMSE arvoon 0.8071669083077276, jolloin ne ovat hyvin lähellä toisiaan.
+Eräässä tutkimuksessa \cite{miryala17} on tutkittu parhaita parametreja ALS-algoritmille ja päädytty lambda-arvoon 0.1 sekä iteraatioiden määrään 20.
+Parhautta on tutkittu RMSE-metriikan kautta ja kyseisillä parametreilla RMSE saadaan pienimmilleen eli mallin voidaan sanoa sovittuvan parhaiten opetusdataan.
+Tutkimuksessa oltiin päädytty arvoon 0.819942, kun taas paras itse opetettu malli päätyi RMSE arvoon 0.807167.
+Omassa opetuksessa eroavaisuuksina olivat tämän hetken lähin vastaava datasetti, joka ei ollut aivan niin suuri kuin tutkimuksessa käytetty, myös opetus datojen suhde oli hieman eri, sillä oman toteutuksen RMSE-validointi tarvitsi oman osansa datasta, olisi tietysti voitu käyttää validointiin myös samaa dataa kuten ilmeisesti tutkimuksessa oli tehty tai sitten RMSE oli arvioitu eri tekniikkaa käyttäen.
+Tutkimuksessa paras arvo saatiin 80-20 datasettiä käyttäen ja omassa opetuksessa käytössä oli 60-20-20 datasetti.
+taulukko omien koulutusten tuloksista miten lambda omissa vaikutti?
 
 \cite{miryala17}
 

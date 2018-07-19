@@ -18,7 +18,7 @@
 \title{Suosittelijajärjestelmän rakentaminen Apache Sparkilla}      % primary title (for front page)
 \titleB{Building a Recommendation Engine with Apache Spark} % translated title for abstract
 \thesistype{Diplomityö} % or Bachelor of Science, Laboratory Report... 
-\examiner{????} % without title Prof., Dr., MSc or such
+\examiner{Timo Aaltonen} % without title Prof., Dr., MSc or such
 
 % Special trick to use internal macros outside the cls file
 % (e.g. \@author). Trick is reversed with \makeatother a bit later.
@@ -28,7 +28,7 @@
 \hypersetup{   
   pdftitle={\@title},
   pdfauthor={\@author},
-  pdfkeywords={recommmendation}
+  pdfkeywords={Apache Spark, Recommendation, MovieLens, Scala, AWS, EMR, S3}
 }
 
 \usepackage[finnish]{babel}
@@ -51,11 +51,10 @@
 \begin{flushright}  
   \begin{minipage}[c]{6.8cm}
     \begin{spacing}{1.0}
-      \textsf{Examiner: \@examiner}\\
-      \textsf{Examiner and topic approved by the}\\ 
-      \textsf{Faculty Council of the Faculty of}\\
-      \textsf{xxxx}\\
-      \textsf{on 1st September 2014}\\
+      \textsf{Tarkastaja: \@examiner}\\
+      \textsf{Tarkastaja ja aihe hyväksytty}\\ 
+      \textsf{tiedekuntaneuvoksen kokouksessa}\\
+      \textsf{2. Toukokuuta 2018}\\
     \end{spacing}
   \end{minipage}
 \end{flushright}
@@ -79,30 +78,36 @@
 \begin{spacing}{1.0}
          {\bf \textsf{\MakeUppercase{\@author}}}: \@titleB\\   % use \@titleB when thesis is in Finnish
          \textsf{Tampere University of Technology}\\
-         \textsf{\@thesistype, xx pages} \\
-         \textsf{September 2016}\\
+         \textsf{Master of Science, 40 pages} \\
+         \textsf{September 2018}\\
          \textsf{Master's Degree Program in Signal Processing}\\
          \textsf{Major: Data Engineering}\\
          \textsf{Examiner: \@examiner}\\
-         \textsf{Keywords: }\\
+         \textsf{Keywords: Apache Spark, Recommendation, MovieLens, Scala, AWS, EMR, S3}\\
 \end{spacing}
 
 The amount of recommendation engines around the Internet is constantly growing.
-
-This paper studies the usage of Apache Spark when building a recommendation engine.
+Even the most common everyday tasks, such as reading the news, incorporate an existence of a recommender system.
+A recommendation engine is a system that tries to form an opinion about user's preferences and recommend items of use.
+This paper studies the usage of Apache Spark when building a recommendation engine with Scala programming language and Amazon Web Services.
 
 \chapter*{Tiivistelmä}
 
 \begin{spacing}{1.0}
-         {\bf \textsf{\MakeUppercase{\@author}}}: \@titleB\\  % or use \@title when thesis is in Finnish
+         {\bf \textsf{\MakeUppercase{\@author}}}: \@title\\  % or use \@title when thesis is in Finnish
          \textsf{Tampereen teknillinen yliopisto}\\
-         \textsf{Diplomityö, xx sivua}\\ %
-         \textsf{syyskuu 2016}\\
+         \textsf{Diplomityö, 40 sivua}\\ %
+         \textsf{syyskuu 2018}\\
          \textsf{Signaalinkäsittelyn koulutusohjelma}\\
          \textsf{Pääaine: Data Engineering}\\
-         \textsf{Tarkastajat: \@examiner}\\
-         \textsf{Avainsanat: }\\
+         \textsf{Tarkastaja: \@examiner}\\
+         \textsf{Avainsanat: Apache Spark, Recommendation, MovieLens, Scala, AWS, EMR, S3}\\
 \end{spacing}
+
+Suosittelujärjestelmien määrä Internetissä on kasvanut jatkuvasti.
+Jopa kaikista arkipäiväisimmät toimet, kuten uutisien lukeminen, sisällyttävät suosittelujärjestelmän.
+Suosittelujärjestelmä on järjestelmä, joka yrittää muodostaa käyttäjän mieltymyksistä mielipiteeen ja suositella hyödyllisiä asioita.
+Tässä työssä tutustutaan Apache Sparkiin, Scala ohjelmointikieleen ja Amazon Web Services palveluun ja rakennetaan suosittelujärjestelmä näiden teknologioiden avulla.
 
 \makeatother % Make the @ a special symbol again, as \@author and \@title are not neded after this
 
@@ -165,6 +170,12 @@ Jonne Pihlanen
 	\item [MapReduce] Hajautetun laskennan malli, Sparkin edeltäjä
 	\item [RDD] Sparkin tarjoama tietorakenne
 	\item [REPL] komentorivityökalu
+	\item [JAR] Koottu kirjasto, tiedostoformaatti
+	\item [JVM] Abstrakti tietokone, joka suorittaa JAR tiedostoja
+	\item [ZIP] Tiedostoformaatti, joka yhdistää monta tiedostoa yhdeksi
+	\item [Dataset] Sparkin tarjoama tietorakenne
+	\item [DAG] Directed Acyclic Graph
+	\item [DataFrame] Sparkin tarjoama tietorakenne
 \end{termlist}
 
 % Leave the backside of abbreviation list empty in twoside mode

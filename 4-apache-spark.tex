@@ -33,9 +33,12 @@ Spark-jakelun mukana toimitetaan luku-evaluointi-tulostus-silmukka (Read Eval Pr
 Kun REPLiss‰ kehitetyn sovelluksen tai sovelluksen osan voidaan katsoa olevan tarpeeksi valmis, on j‰rkev‰‰ tehd‰ siit‰ koottu kirjasto (JAR).
 N‰in varmistutaan ettei ohjelmakoodia tai tuloksia p‰‰se katoamaan, vaikkakin REPL tarjoaa samantapaisen muistin komentohistoriasta kuin perinteinen komentorivikin.
 
-JAR eli Java ARchive on suosittuun ZIP tiedostoformaattiin perustuva alustariippumaton tiedostoformaatti, jota k‰ytet‰‰n kokoamaan monta tiedostoa yhdeksi tiedostoksi. \cite{JAR}
+JAR eli Java ARchive on suosittuun ZIP-tiedostoformaattiin perustuva alustariippumaton tiedostoformaatti, jota k‰ytet‰‰n kokoamaan monta tiedostoa yhdeksi tiedostoksi. \cite{JAR}
 
-JVM (Java Virtual Machine, Java-virtuaalikone) on abstrakti laskentakone (computing machine). Kuten oikea laskentakone, se omaa k‰skykannan ja muokkaa useita muistialueita ajon aikana. JVM ei tied‰ mit‰‰n ohjelmointikielist‰, kuten Scala tai Java, vaan se operoi ainoastaan class-tiedostoilla, jotka ovat tietynlaisia bin‰‰ritiedostoja. Class-tiedosto sis‰lt‰‰ JVM k‰skyt sek‰ symbolitaulun. \cite{JVM}
+JVM (Java Virtual Machine, Java-virtuaalikone) on abstrakti tietokone.
+Kuten oikea tietokone, se omaa k‰skykannan ja muokkaa useita muistialueita ajon aikana.
+JVM ei tied‰ mit‰‰n ohjelmointikielist‰, kuten Scala tai Java, vaan se operoi ainoastaan \textit{class}-tiedostoilla, jotka ovat bin‰‰ritiedostoja.
+Class-tiedosto sis‰lt‰‰ JVM-k‰skyt sek‰ symbolitaulun. \cite{JVM}
 
 \section{Scala}
 
@@ -179,6 +182,7 @@ Dataset on pohjimmiltaan looginen suunnitelma, jolla kuvataan datan tuottamiseen
 Toimea kutsuttaessa, Sparkin kyselyoptimoija (query optimizer) optimoi loogisen suunnitelman ja generoi fyysisen suunnitelman.
 Fyysinen suunnitelma takaa rinnakkaisesti ja hajautetusti tapahtuvan tehokkaan suorituksen.
 Loogista suunnitelmaa, kuten myˆs optimoitua fyysist‰ suunnitelmaa, voidaan tutkia k‰ytt‰m‰ll‰ DS:n $explain$ funktiota. \cite{spark-dataset}
+TODO: tarkennus viel‰ n‰ille suunnitelmille?
 
 Domain-spesifisten olioiden tehokkaaseen tukemiseen tarvitaan enkooderia.
 Enkooderilla tarkoitetaan ohjelmaa, joka muuntaa tietoa jonkin algoritmin mukaisesti ja t‰ss‰ tapauksessa sit‰ k‰ytet‰‰n yhdist‰m‰‰n domain-spesifinen tyyppi $T$ Sparkin sis‰iseen tyyppij‰rjestelm‰‰n.
@@ -272,7 +276,7 @@ Enkooderit k‰ytt‰v‰t sellaista muotoa, ett‰ Spark kykenee suorittamaan monenlais
 
 Seuraavassa koodilistauksessa luodaan uusi Dataset lukemalla $json$-tiedosto tiedostoj‰rjestelm‰st‰.
 Seuraavaksi luodaan uusi Dataset muunnoksen kautta.
-Objektin kloonaamiseksi k‰ytet‰‰n case luokan $copy$ metodia, koska $people$ Dataset oli m‰‰ritelty muuttumattomaksi.
+Objektin kloonaamiseksi k‰ytet‰‰n case-luokan $copy$ metodia, koska $people$ Dataset oli m‰‰ritelty muuttumattomaksi.
 Lopuksi looginen ja fyysinen suunnitelma tulostetaan konsoliin kutsumalla $explain$ funktiota uudelle Dataset objektille.
 
 \begin{lstlisting}[caption=Dataset olion loogisen ja fyysisen suunnitelman n‰ytt‰minen]
@@ -313,7 +317,7 @@ SerializeFromObject [staticinvoke(class org.apache.spark.unsafe.types.UTF8String
 DataFrame on nimettyihin sarakkeisiin j‰rjestetty Dataset.
 Se on k‰sitteellisesti yhtenev‰ relaatiotietokannan taulun tai R/Python kielten tietokehyksen (data frame) kanssa, mutta DataFrame on optimoitu tehokkaammin.
 DataFrame voidaan rakentaa useammalla tavalla, kuten esimerkiksi j‰sennellyist‰ tiedostoista, ulkoisista tietokannoista tai olemassaolevista RDD-olioista.
-DataFrame-rajapinta on saatavilla Scala, Java, Python ja R-ohjelmointikielille.
+DataFrame-rajapinta on saatavilla Scala-, Java-, Python- ja R-ohjelmointikielille.
 Scala-toteutuksessa DataFrame on riveist‰ rakentuva Dataset ($Dataset[Row]$). \cite{spark-programming-guide}
 
 \begin{lstlisting}[caption=DataFrame luominen k‰ytt‰en read-funktiota]
