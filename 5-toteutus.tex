@@ -31,6 +31,8 @@ MovieLens 20M aineisto koostuu $movies.csv$ and $ratings.csv$ tiedostoista.
 	10 & GoldenEye (1995) & Action|Adventure|Thriller \\
 \end{tabular}
 
+\newpage
+
 \captionof{table}{Näyte \textit{ratings.csv} tiedostosta}
 \begin{tabular}{llll}
 	userId & movieId & rating & timestamp \\ \hline
@@ -44,6 +46,8 @@ MovieLens 20M aineisto koostuu $movies.csv$ and $ratings.csv$ tiedostoista.
 	1 & 1293 & 2.0 & 1260759148 \\
 	1 & 1339 & 3.5 & 1260759125 \\
 \end{tabular}
+
+~
 
 Toteutuksessa käytettiin RDD-pohjaista rajapintaa, sillä dataset-pohjainen rajapinta ei ole vielä täysin toiminnallinen yhteisöllisen suodatuksen ongelmille.
 Aineiston lataaminen voidaan tehdä dataset-rajapintaa hyödyntäen, mutta varsinainen suositus täytyy tehdä RDD-rajapintaa käyttäen.
@@ -59,6 +63,8 @@ SBT:n avulla lähdekoodi saadaan sekä käännettyä että paketoitua JAR:iksi.
 Sovelluksia voidaan ottaa käyttöön klusterissa \textit{spark-submit} työkalun avulla, joka mahdollistaa Sparkin kaikkien tuettujen klusterinhoitajien käyttämisen yhteinäisen käyttöliittymän kautta.
 Tämä ominaisuus osoittautui erittäin hyödylliseksi kun sovellusta ajettiin EMR-klusterissa, sillä spark-submit työkalu otti parametrinaan vain käännetyn JAR:in ja alkoi ajamaan sovellusta.
 Tässö työssä "klusteri" tulee sisältämään vain master noodin sekä yhden worker noodin, mutta periaatteessa kyseessä on kuitenkin klusteri, vain erittäin pieni sellainen.
+
+\newpage
 
 \begin{lstlisting}[caption=Sovelluksen paketointi sbt-työkalulla,language=sh]
 sbt package
@@ -125,7 +131,7 @@ val ratings = spark.read.csv("ml-latest-small/ratings.csv")
   }
 \end{lstlisting}
 
-~
+\newpage
 
 \section{Opetusdatan lataaminen Spark sovellukseen}
 
@@ -166,7 +172,7 @@ Riveillä 2-6 luodaan RDD $personalRatings$ lataamalla henkilökohtaiset suosituks
 Riveillä 22-36 luodaan RDD:t $ratings$ ja $movies$ lataamalla kaksi erillistä csv-tiedostoa.
 Tiedostoista suodatetaan ensin pois otsikkorivit ja tämän jälkeen tiedosto käydään läpi rivi kerrallaan ja pätkitään pilkulla erotetut arvot taulukkoon käyttäen Scalan String luokan sisäänrakennettua $split$ funktiota.
 Tämän jälkeen taulukossa olevista arvoista muodostetaan pareja (tuple).
-Huomionarvoista on se, kuinka tiedostoihin voidaan viitata suoraan S3:n tiedoston nimellä ja Spark osaa hakea tiedostot suoraan S3 bucketista.
+Huomionarvoista on se, kuinka tiedostoihin voidaan viitata suoraan S3:n tiedoston nimellä ja Spark osaa hakea tiedostot suoraan S3-bucketista.
 Opetusdataa ei juuri tarvinnut siistiä, sillä opetukseen käytettiin valmista, hyvin jäsenneltyä datasettiä.
 
 \section{Mallin opettaminen}
@@ -229,9 +235,10 @@ Parhautta on tutkittu RMSE-metriikan kautta ja kyseisillä parametreilla RMSE saa
 Tutkimuksessa oltiin päädytty arvoon 0.819942, kun taas paras itse opetettu malli päätyi RMSE arvoon 0.807167.
 Omassa opetuksessa eroavaisuuksina olivat tämän hetken lähin vastaava datasetti, joka ei ollut aivan niin suuri kuin tutkimuksessa käytetty, myös opetus datojen suhde oli hieman eri, sillä oman toteutuksen RMSE-validointi tarvitsi oman osansa datasta, olisi tietysti voitu käyttää validointiin myös samaa dataa kuten ilmeisesti tutkimuksessa oli tehty tai sitten RMSE oli arvioitu eri tekniikkaa käyttäen.
 Tutkimuksessa paras arvo saatiin 80-20 datasettiä käyttäen ja omassa opetuksessa käytössä oli 60-20-20 datasetti.
-taulukko omien koulutusten tuloksista miten lambda omissa vaikutti?
 
-\cite{miryala17}
+% TODO: taulukko omien koulutusten tuloksista miten lambda omissa vaikutti?
+
+\newpage
 
 \section{Ennustaminen}
 
@@ -257,8 +264,12 @@ recommendations.foreach { r =>
 }
 \end{lstlisting}
 
+~
+
 Yllä olevassa koodilistauksessa haetaan henkilökohtaiset suositukset käyttämällä mallin $predict$ metodia, joka ottaa parametrinaan mahdollisten elokuvien joukon.
-Mahdollisilla elokuvilla tarkoitetaan elokuvia joita käyttäjä ei ole vielä nähnyt, eli ne eivät sisälly $personalRatings$ muuttujan sisältämiin elokuviin.
+Mahdollisilla elokuvilla tarkoitetaan elokuvia, joita käyttäjä ei ole vielä nähnyt, eli ne eivät sisälly $personalRatings$ muuttujan sisältämiin elokuviin.
+
+\newpage
 
 \section{Apufunktiot}
 
@@ -286,5 +297,7 @@ def computeRmse(
 \end{lstlisting}
 
 Yllä olevassa koodilistauksessa esitetään apufunktio $computeRMSE$, jonka avulla evaluoidaan opetetun mallin virhettä.
+Apufunktio on ehkä hieman vähäinen nimitys, sillä kuten kappaleessa 2 todettiin, käytetään RMSE:tä kriteerinä sille, että kuinka hyvin malli sovittuu opetusdataan.
+Lisäksi vertailevassa tutkimuksessa RMSE-arvoa käytettiin toteamaan paras malli vaihtoehdoista.
 
 \end{document}

@@ -281,6 +281,8 @@ Seuraavaksi luodaan uusi Dataset muunnoksen kautta.
 Objektin kloonaamiseksi k‰ytet‰‰n case-luokan $copy$ metodia, koska $people$-Dataset oli m‰‰ritelty vakioksi.
 Lopuksi looginen- ja fyysinen suunnitelma tulostetaan konsoliin kutsumalla $explain$-funktiota uudelle Dataset-objektille.
 
+\newpage
+
 \begin{lstlisting}[caption=Dataset olion loogisen ja fyysisen suunnitelman n‰ytt‰minen]
 
 val people = spark.read.json("./people.json").as[Person]
@@ -313,8 +315,9 @@ SerializeFromObject [staticinvoke(class org.apache.spark.unsafe.types.UTF8String
 +- *DeserializeToObject newInstance(class $line32.$read$$iw$$iw$Person), obj#65: $line32.$read$$iw$$iw$Person
 +- *FileScan json [name#55,salary#56L] Batched: false, Format: JSON, Location: InMemoryFileIndex[file:/home/joonne/Documents/GitHub/thesis-code/people.json], PartitionFilters: [], PushedFilters: [], ReadSchema: struct<name:string,salary:bigint>
 
-
 \end{lstlisting}
+
+\newpage
 
 \section{DataFrame API}
 
