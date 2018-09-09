@@ -16,7 +16,7 @@ Tavallisesti suositukset ovat räätälöityjä, millä tarkoitetaan että suositukset 
 Suositukset voivat olla myös räätälöimättömiä ja niiden tuottaminen onkin usein yksinkertaisempaa.
 Lista, joka sisältää 10 suosituinta tuotetta, on esimerkki räätälöimättömästä suosittelusta.
 Järjestäminen tehdään ennustamalla kaikista sopivimmat tuotteet käyttäjän mieltymysten tai vaatimusten perusteella.
-Tämän suorittamiseksi suosittelijajärjestelmän on kerättävä käyttäjältä tämän mieltymykset.
+Tämän mahdollistamiseksi suosittelijajärjestelmän on kerättävä käyttäjältä tämän mieltymykset.
 Mieltymykset voivat olla suoraan käyttäjältä kysyttyjä tai käyttäjän antamia tuotearvioita tai ne voidaan tulkita käyttäjän toiminnasta kuten klikkauksista, sivun katselukerroista tai ajasta jonka käyttäjä on viipynyt tietyllä tuotesivulla.
 Suosittelijajärjestelmä voisi esimerkiksi tulkita tuotesivulle päätymisen todisteeksi mieltymyksestä sivun tuotteista. \cite{ricci11}
 
@@ -49,11 +49,11 @@ Suosittelujärjestelmän on siis tasapainoiteltava sekä palveluntarjoajan että käy
 Palveluntarjoaja voi esimerkiksi ottaa suosittelujärjestelmän avuksi parantamaan tai monipuolistamaan myyntiä, lisäämään käyttäjien tyytyväisyyttä, lisäämään käyttäjien uskollisuutta tai ymmärtämään paremmin mitä käyttäjä haluaa \cite{ricci11}.
 Käyttäjä puolestaan saattaa haluta suosituksena tuotesarjan, apua selaamiseen tai mahdollistaa muihin vaikuttamisen. \cite{ricci11}
 
-GroupLens, BookLens ja MovieLens olivat uranuurtajia suosittelujärjestelmien tutkimisessa ja kehittämisessä.
-GroupLens on tutkimuslaboratorio tietojenkäsittelytieteen- ja tekniikan laitoksella Minnesotan Yliopistossa, joka on erikoistunut muun muassa suosittelujärjestelmiin ja verkkoyhteisöihin \cite{aggarwal16}.
+GroupLens \cite{aggarwal16}, BookLens \cite{booklens17} ja MovieLens \cite{movieLens17} olivat uranuurtajia suosittelujärjestelmien tutkimisessa ja kehittämisessä.
+GroupLens on tutkimuslaboratorio \textit{computer science and engineering} -laitoksella Minnesotan Yliopistossa, joka on erikoistunut muun muassa suosittelujärjestelmiin ja verkkoyhteisöihin \cite{aggarwal16}.
 BookLens on on GroupLensin rakentama kirjojen suosittelujärjestelmä \cite{booklens17}.
 MovieLens on GroupLensin ylläpitämä elokuvien suosittelujärjestelmä \cite{movieLens17}.
-Uranuurtavan tutkimuksen lisäksi nämä sivustot julkaisivat aineistoja, joka ei ollut yleistä tuohon aikaan. \cite{aggarwal16}
+Uranuurtavan tutkimuksen lisäksi nämä sivustot julkaisivat kaikkien saataville aineistoja, joka ei ollut yleistä tuohon aikaan. \cite{aggarwal16}
 
 \section{Suositustekniikat}
 
@@ -103,42 +103,49 @@ Tuotepohjaisessa yhteisösuodatuksessa (Item-based collaborative filtering, IBCF)
 Seuraavaksi mallinnetaan käyttäjän mieltymykset tuotteelle perustuen saman käyttäjän tekemiin arvosteluihin \cite{ricci11}.
 Alla oleva ohjelma 3.1 esittelee tuotepohjaisen yhteisösuodatuksen idean jokaiselle uudelle käyttäjälle.
 
+\definecolor{scalacomment}{rgb}{0,0.6,0}
+
 \lstset{
 	columns=flexible,
-	frame=single,
 	breaklines=true,
 	tabsize=2,
-	language=Scala
+	language=Scala,
+	commentstyle=\color{scalacomment},
+	keywordstyle=\color{blue},
+	numbers=left,
+	numbersep=15pt,
 }
 
 \begin{lstlisting}[caption=Tuotepohjaisen yhteisösuodatuksen algoritmi \cite{gorakala15}]
-
-1. Jokaiselle kahdelle tuotteelle, mittaa kuinka samankaltaisia ne ovat saatujen arvioiden suhteen. Samankaltaisuutta voidaan arvioida esimerkiksi kosinimitan avulla.
+// Jokaiselle kahdelle tuotteelle,
+// mittaa kuinka samankaltaisia ne ovat saatujen arvioiden suhteen.
+// Samankaltaisuutta voidaan arvioida esimerkiksi kosinimitan avulla.
 
 case class Item(id: Int, feature1: String, feature2: String)
 val items: Seq[Item] = Seq(Item(), Item(), Item())
 case class Similarity(item1: Item, item2: Item, similarity: Double)
 
 val similarItems: Seq[Similarity] = items.map { item1 =>
-	items.map { item2 => Similarity (item1, item2, cosineSimilarity(item1, item2)) }
+	items.map { item2 =>
+	  Similarity (item1, item2, cosineSimilarity(item1, item2))
+	}
 }
 
-2. Tunnista k samankaltaisinta tuotetta jokaiselle tuotteelle
+// Tunnista k samankaltaisinta tuotetta jokaiselle tuotteelle
 
 case class Similarities(item: Item, kMostSimilarItems: Seq[Similarity])
 val similarities = findKMostSimilarItems(similarItems)
 
-3. Jokaiselle käyttäjälle, tunnista tuotteet jotka ovat eniten samankaltaisia käyttäjän ostoshistorian kanssa.
+// Jokaiselle käyttäjälle, tunnista tuotteet,
+// jotka ovat eniten samankaltaisia käyttäjän ostoshistorian kanssa.
 
-users.foreach { user =>
-	user.purchases.foreach { purchase =>
-		val mostSimilar = findSimilarItem(purchase, similarities)
-	}
+val similars = users.map { user =>
+	user.purchases.map { purchase => findSimilarItem(purchase, similarities) }
 }
 
 \end{lstlisting}
 
-Amerikan suurimman verkkokaupan, Amazon.com:in, on aiemmin tiedetty käyttäneen tuote-tuotteeseen yhteisösuodatusta.
+Amerikan suurimman verkkokaupan, Amazon.com:in, on aiemmin tiedetty käyttäneen tuote-tuotteeseen-yhteisösuodatusta.
 Tässä toteutuksessa algoritmi rakentaa samankaltaisten tuotteiden taulun etsimällä tuotteita, joita käyttäjät tapaavat ostaa yhdessä.
 Seuraavaksi algoritmi etsii käyttäjän ostoshistoriaa ja arvosteluita vastaavat tuotteet, yhdistää nämä tuotteet ja palauttaa suosituimmat tai eniten korreloivat tuotteet. \cite{linden03}
 
@@ -153,16 +160,19 @@ Askeleet jokaiselle uudelle käyttäjälle käyttäjäpohjaisessa yhteisösuodatuksessa
 
 \lstset{
 	columns=flexible,
-	frame=single,
-	keywords={val}
 	breaklines=true,
 	tabsize=2,
-	language=Scala
+	language=Scala,
+	commentstyle=\color{scalacomment},
+	keywordstyle=\color{blue},
+	numbers=left,
+	numbersep=15pt,
 }
 
-\begin{lstlisting}[caption=Käyttäjäpohjainen yhteisösuodatus algoritmi \cite{gorakala15}]
-
-1. Mittaa jokaisen käyttäjän samankaltaisuus uuteen käyttäjään. Kuten IBCF:ssä, suosittuja samankaltaisuusarvioita ovat korrelaatio sekä kosinimitta.
+\begin{lstlisting}[caption=Käyttäjäpohjainen yhteisösuodatus algoritmi osa 1/2 \cite{gorakala15}]
+// Mittaa jokaisen käyttäjän samankaltaisuus uuteen käyttäjään
+//  Kuten IBCF:ssä, suosittuja samankaltaisuusarvioita ovat korrelaatio
+// sekä kosinimitta.
 
 case class Similarity(userId1: Int, userId2: Int, score: Int)
 
@@ -171,7 +181,10 @@ val similarities = users.map { user =>
 	Similarity(newUser.id, user.id, cosineSimilarity(user, newUser)
 }
 
-2. Tunnista samankaltaisimmat käyttäjät. Vaihtoehtoja on kaksi: Voidaan valita joko parhaat k käyttäjää (k-nearest neighbors) tai voidaan valita käyttäjät, joiden samankaltaisuus ylittää tietyn kynnysarvon.
+// Tunnista samankaltaisimmat käyttäjät.
+// Vaihtoehtoja on kaksi: Voidaan valita joko parhaat k käyttäjää
+// (k-nearest neighbors) tai voidaan valita käyttäjät,
+// joiden samankaltaisuus ylittää tietyn kynnysarvon.
 
 val mostSimilarUsers = similarities.filter(_.score > 0.8)
 
@@ -179,9 +192,21 @@ val mostSimilarUsers = similarities.filter(_.score > 0.8)
 
 \newpage
 
-\begin{lstlisting}[caption=Käyttäjäpohjainen yhteisösuodatus algoritmi \cite{gorakala15}]
+\lstset{
+	columns=flexible,
+	breaklines=true,
+	tabsize=2,
+	language=Scala,
+	commentstyle=\color{scalacomment},
+	keywordstyle=\color{blue},
+	numbers=left,
+	numbersep=15pt,
+}
 
-3. Arvostele samankaltaisimpien käyttäjien ostamat tuotteet. Arvostelu saadaan joko keskiarvona kaikista tai painotettuna keskiarvona, käyttäen samankaltaisuuksia painoina.
+\begin{lstlisting}[caption=Käyttäjäpohjainen yhteisösuodatus algoritmi osa 2/2 \cite{gorakala15}]
+// Arvostele samankaltaisimpien käyttäjien ostamat tuotteet.
+// Arvostelu saadaan joko keskiarvona kaikista tai painotettuna keskiarvona,
+// käyttäen samankaltaisuuksia painoina.
 
 val ratedItems = mostSimilarUsers.map { user =>
 	user.purchases.map { purchase =>
@@ -192,7 +217,7 @@ val ratedItems = mostSimilarUsers.map { user =>
 	}
 }
 
-4. Valitse parhaiten arvostellut tuotteet.
+// Valitse parhaiten arvostellut tuotteet.
 
 val topRatedItems = ratedItems.take(10)
 
@@ -201,7 +226,7 @@ val topRatedItems = ratedItems.take(10)
 \subsection{Mallipohjainen yhteisösuodatus}
 
 Muistipohjaisen yhteisösuodatuksen käyttäessä tallennettuja suosituksia suoraan ennustamisen apuna, mallipohjaisissa lähestymistavoissa näitä arvosteluita käytetään ennustavan mallin oppimiseen.
-Perusajatus on mallintaa käyttäjä-tuote vuorovaikutuksia tekijöillä jotka edustavat käyttäjien ja tuotteiden piileviä ominaisuuksia (latent factors) järjestelmässä.
+Perusajatus on mallintaa käyttäjä-tuote-vuorovaikutuksia tekijöillä jotka edustavat käyttäjien ja tuotteiden piileviä ominaisuuksia (latent factors) järjestelmässä.
 Piileviä ominaisuuksia ovat esimerkiksi käyttäjän mieltymykset ja tuotteiden kategoriat.
 Tämä malli opetetaan käyttämällä saatavilla olevaa dataa ja myöhemmin käytetään ennustamaan käyttäjien arvioita uusille tuotteille. \cite{ricci11}
 ALS-algoritmi on esimerkki mallipohjaisesta yhteisösuodatusalgoritmista.

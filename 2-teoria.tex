@@ -3,20 +3,21 @@
 
 \chapter{Teoria}
 
-Seuraava kappale kuvailee matriisin tekijöihinjakoa yleisellä tasolla sekä vuorottelevien pienenmpien neliöiden (Alternating Least Squares, ALS) algoritmia.
-Työssä tarkasteltava Spark-sovelluskehys sisältää toteutuksen ALS-algoritmille, joka on matriisin tekijöihinjako-algoritmi ja se perustuu samalle ajatukselle erään kuuluisan kilpailun voittajan, matriisin tekijöihinjako-mallin kanssa. \cite{ryza15}
+Seuraava kappale kuvailee matriisin tekijöihinjakoa yleisellä tasolla sekä vuorottelevien pienimpien neliöiden (Alternating Least Squares, ALS) -algoritmia.
+Työssä tarkasteltava Spark-sovelluskehys sisältää toteutuksen ALS-algoritmille, joka on matriisin tekijöihinjako-algoritmi. \cite{ryza15}
 
 \section{Matriisin tekijöihinjako}
 
 Matriisin tekijöihinjaossa matriisi hajoitetaan pienempien matriisien tuloksi.
-Matriisi voidaan hajoittaa tekijöihinsä usealla eri tavalla.
+Tekijöihinjako voidaan toteuttaa usealla eri tavalla.
 Matriisin tekijöihinjako kuuluu suureen algoritmien luokkaan nimeltä latenttien tekijöiden mallit (Latent-factor models).
-Latenttien tekijöiden mallit yrittävät selittää usean käyttäjän ja tuotteen välillä havaittuja vuorovaikutuksia käyttämällä suhteellisen pientä määrää havaitsemattomia, latentteja tekijöitä.
+Latenttien tekijöiden mallit yrittävät selittää usean käyttäjän ja tuotteen välillä havaittuja vuorovaikutuksia käyttämällä suhteellisen pientä määrää piileviä, latentteja tekijöitä.
 Voidaan esimerkiksi yrittää selittää miksi ihminen ostaisi tietyn albumin lukemattomien mahdolisuuksien joukosta kuvailemalla käyttäjiä ja tuotteita mieltymysten perusteella, joista ei ole mahdollista saada tietoa. \cite{ryza15}
 Latenttia tekijää ei ole mahdollista tarkastella sellaisenaan.
 Esimerkiksi ihmisen terveys on latentti tekijä, sillä sitä ei ole mahdollista mitata kuten esimerkiksi verenpainetta.
 
 \begin{figure}[h]
+	\label{matrix-factorization}
 	\caption{Matrisin tekijöihinjako \cite{ryza15}}
 	\centering
 	\includegraphics[scale=0.8]{matrix_factorization}
@@ -40,22 +41,23 @@ Implisiittistä tietoa on esimerkiksi sivujen katselukerrat tai tieto siitä, onko
 \cite{spark14} \cite{ryza15}
 
 Usein monissa tosielämän käyttötapauksissa on käytettävissä ainoastaan implisiittistä tietoa, kuten katselukerrat, klikkaukset, ostokset, tykkäykset tai jakamiset.
-Spark MLlib kohtelee tietoa numeroina, jotka esittävät havaintojen vahvuutta kuten klikkausten määrä tai kumulatiivinen aika, joka käytetään elokuvan katseluun, sen sijaan että mallinnettaisiin arviomatriisia suoraan.
+Spark MLlib kohtelee tietoa lukuina, jotka esittävät havaintojen vahvuutta, kuten klikkausten määrä tai kumulatiivinen aika, joka käytetään elokuvan katseluun.
+MLlib ei siis yritä mallintaa arviomatriisia suoraan.
 Ekplisiittisten arvioiden sijaan, nämä numerot liittyvät havaittujen käyttäjämieltymysten varmuuteen.
 Tämän tiedon perusteella malli koettaa etsiä latentteja tekijöitä, joiden avulla voidaan ennustaa käyttäjän arvio tuotteelle. \cite{spark14}
 
 Näihin algoritmeihin viitataan joskus matriisin täyttö (matrix completion) -algoritmeina.
 Tämä johtuu siitä, että alkuperäinen matriisi $A$ saattaa olla harva vaikka matriisitulo $XY^T$ on tiheä.
-Vaikka tulosmatriisi sisältää arvon kaikille alkioille, se on kuitenkin vain arvio $A$:sta. \cite{ryza15}
+Vaikka tulosmatriisi sisältää arvon kaikille alkioille, se on kuitenkin vain likiarvo $A$:sta. \cite{ryza15}
 
 \subsection{Alternating Least Squares (ALS)}
 
 Yhteisöllistä suodatusta käytetään usein suosittelijajärjestelmissä.
 Nämä tekniikat pyrkivät täyttämään käyttäjä-tuote-assosiaatiomatriisin puuttuvat kohdat.
 Spark MLlib tukee mallipohjaista yhteisösuodatusta, jossa käyttäjiä ja tuotteita kuvaillaan pienellä määrällä latentteja tekijöitä, joita voidaan käyttää puuttuvien kohtien ennustamiseen.
-Spark MLlib käyttää vuorottelevien pienimpien neliöiden (Alternating Least Squares, ALS) algoritmia näiden latenttien tekijöiden oppimiseen. \cite{spark14}
+Spark MLlib käyttää \textit{vuorottelevien pienimpien neliöiden} (Alternating Least Squares, ALS) -algoritmia näiden latenttien tekijöiden oppimiseen. \cite{spark14}
 
-Spark ALS yrittää arvata arvostelumatriisin $A$ kahden alemman arvon matriisin, $X$ ja $Y$, tulona. \cite{als14}
+Spark ALS yrittää arvata arvostelumatriisin $A$ kahden alemman dimension matriisin, $X$ ja $Y$, tulona. \cite{als14}
 
 \begin{equation}
 A = XY^T
@@ -63,7 +65,8 @@ A = XY^T
 
 Tyypillisesti näihin arvioihin viitataan tekijämatriiseina.
 Perinteinen lähestymistapa on iteratiivinen.
-Jokaisen iteraation aikana, toista tekijämatriisia pidetään vakiona ja toinen ratkaistaan käyttäen pienimpien summien algoritmia.
+Jokaisen iteraation aikana, toista tekijämatriisia pidetään vakiona ja toinen ratkaistaan käyttäen \textit{pienimpien summien} -algoritmia.
+Pienimpien summien algoritmeja käsitellään aliluvussa \ref{rmse}.
 Juuri ratkaistua tekijämatriisia pidetään vuorostaan vakiona kun ratkaistaan toista tekijämatriisia. \cite{als14}
 Spark ALS mahdollistaa massiivisen rinnakkaistamisen, sillä algoritmia voidaan suorittaa rinnakkain, toisistaan erillään.
 Tämä on erinomainen ominaisuus suuren mittakaavan (large-scale) laskenta-algoritmille. \cite{ryza15}
@@ -71,15 +74,15 @@ Tämä on erinomainen ominaisuus suuren mittakaavan (large-scale) laskenta-algorit
 Spark ALS on lohkotettu versio ALS tekijöihinjako-algoritmista.
 Ajatuksena on ryhmittää kaksi tekijäryhmää, $käyttäjät$ ja $tuotteet$, lohkoihin.
 Ryhmittämistä seuraa kommunikaation vähentäminen lähettämällä jokaiseen tuotelohkoon vain yksi kopio jokaisesta käyttäjävektorista iteraation aikana.
-Vain ne käyttäjä vektorit lähetetään, joita tarvitaan tuotelohkoissa.
-Vähennetty kommunikaatio saavutetaan valmiiksi laskemalla joitain tietoja suositusmatriisista, jotta voidaan päätellä jokaisen käyttäjän ulostulot ja jokaisen tuotteen sisääntulot.
+Vain ne käyttäjä-vektorit lähetetään, joita tarvitaan tuotelohkoissa.
+Vähennetty kommunikaatio saavutetaan laskemalla valmiiksi joitain tietoja suositusmatriisista, jotta voidaan päätellä jokaisen käyttäjän ulostulot ja jokaisen tuotteen sisääntulot.
 Ulostulolla tarkoitetaan niitä tuotelohkoja, joihin käyttäjä tulee myötävaikuttamaan.
 Sisääntulolla tarkoitetaan niitä ominaisuusvektoreita jotka jokainen tuote ottaa vastaan niiltä käyttäjälohkoilta joista ne ovat riippuvaisia.
 Tämä mahdollistaa sen, että voidaan lähettää vain taulukollinen ominaisuusvektoreita jokaisen käyttäjä- ja tuotelohkon välillä.
 Vastaavasti tuotelohko löytää käyttäjän arviot ja päivittää tuotteita näiden viestien perusteella. \cite{als14}
 
-Sen sijaan että etsittäisiin alemman tason arviot suositusmatriisille $A$, etsitäänkin arviot mieltymysmatriisi $P$:lle, jossa $P$:n alkiot saavat arvon 1 kun $r > 0$ ja arvon 0 kun $r< = 0$.
-Eksplisiittisen tuotearvion sijaan arvostelut kuvaavat käyttäjän mieltymyksen vahvuuden luottamusarvoa. \cite{als14}
+Sen sijaan, että etsittäisiin alemman dimension arviot suositusmatriisille $A$, etsitäänkin arviot mieltymysmatriisi $P$:lle, jossa $P$:n alkiot saavat arvon 1 kun $r > 0$ ja arvon 0 kun $r< = 0$.
+Eksplisiittisen tuotearvion sijaan arvostelut kuvaavat käyttäjän mieltymyksen ($r$, rating) vahvuuden luottamusarvoa. \cite{als14}
 
 \begin{equation}
 A_iY(Y^T Y)^{-1} = X_i
@@ -88,7 +91,8 @@ A_iY(Y^T Y)^{-1} = X_i
 ALS operoi kiinnittämällä yhden tuntemattomista $u_i$ ja $v_j$ ja vaihtelemalla tätä kiinnittämistä.
 Kun toinen on kiinnitetty, toinen voidaan laskea ratkaisemalla pienimpien neliöiden ongelma.
 Tämä lähestymistapa on hyödyllinen, koska se muuttaa aiemman, ei-konveksin, ongelman neliömäiseksi, jolloin se voidaan ratkaista optimaalisesti. \cite{aberger14} Ei-konveksilla tarkoitetaan sellaista ongelmaa, jolla saattaa olla olemassa useita paikallisia ratkaisuja ja saattaa kestää kauan tunnistaa, onko ongelmalla ratkaisua lainkaan, tai että löydetty ratkaisu on myös globaali ratkaisu. \cite{non_convex}
-Alla on \cite{aberger14} mukainen yleinen kuvaus ALS algoritmista:
+Alla on \cite{aberger14} mukainen yleinen kuvaus ALS-algoritmista.
+Esimerkissä mainittu RMSE-funktio esitellään tarkemmin aliluvussa \ref{rmse}.
 
 \begin{lstlisting}[caption=ALS-algoritmin kuvaus \cite{aberger14}]
 
@@ -102,9 +106,11 @@ Alla on \cite{aberger14} mukainen yleinen kuvaus ALS algoritmista:
 
 \end{lstlisting}
 
-Matriisi V alustetaan asettamalla ensimmäiseksi riviksi elokuvan keskimääräinen arvio ja pieni satunnaisluku jäljelläoleviin alkioihin.
+Matriisi V alustetaan asettamalla ensimmäiseksi riviksi arvioitavan kohteen keskimääräinen arvio ja pieni satunnaisluku jäljelläoleviin alkioihin.
 Konvergenssilla tarkoitetaan jonkin ilmiön lähestymistä ajan kuluessa jotain tiettyä arvoa, tässä tapauksessa sitä, että RMSE ei enää pienene tarpeeksi.
 
+\subsection{RMSE}
+\label{rmse}
 RMSE (Root Mean Square Error) on kenties suosituin ennustettujen arvosteluiden tarkkuuden evaluointiin käytetty metriikka.
 Sitä käytetään yleisesti regressioalgoritmien avulla luotujen mallien evaluointiin.
 Regressioalgoritmien yhteydessä virheellä tarkoitetaan havainnon todellisen sekä ennustetun numeroarvon välistä eroa.
@@ -124,17 +130,19 @@ RMSE=\sqrt{\frac{1}{|\tau|} \sum_{(u,i)\in\tau}(\hat{r}_{ui}-r_{ui})^2}
 
 \section{Amazon Web Services (AWS)}
 
-AWS (Amazon Web Services) on Amazonin tarjoama kokoelma pilvilaskentaan (cloud computing) tarkoitettuja tai sitä avustavia palveluita.
+\textit{AWS (Amazon Web Services)} on Amazonin tarjoama kokoelma pilvilaskentaan (cloud computing) tarkoitettuja tai sitä avustavia palveluita.
 Tässä työssä käytetään pääasiassa hyödyksi kahta AWS:n palvelua, EMR:ää (Elastic Map Reduce) sekä S3:a (Simple Storage Service).
 EMR:n avulla on mahdollista käyttää Big Data sovelluskehyksiä, kuten Apache Sparkia.
 S3 on skaalautuva tietovarasto internetin tarpeisiin, jonka tarkoitus on helpottaa ohjelmistokehittäjien elämää.
 \cite{aws} \cite{emr} \cite{s3}
 
 \subsection{Elastic Map Reduce (EMR)}
+\label{emr}
 
 Amazon EMR tarjoaa hallitun klusterialustan (managed cluster platform), joka mahdollistaa suurten datamäärien prosessoinnin.
 EMR:ssä on mahdollista ajaa Apache Spark:ia ja se on kyvykäs liikuttelemaan suuria datamääriä AWS:n tietovarastoista, kuten S3:sta, ulos ja sisään.
-Dynaamisesti skaalautuvat Amazon EC2 (Elastic Compute Cloud) instanssit tekevät prosessoinnista helppoa, nopeaa ja kustannustehokasta. \cite{emr}
+EMR käyttää hyväkseen dynaamisesti skaalautuvia Amazon EC2 (Elastic Compute Cloud) instansseja.
+Niiden tarkoituksena on tehdä prosessoinnista helppoa, nopeaa ja kustannustehokasta. \cite{emr}
 
 Klusteri on Amazon EMR:n keskeisin komponentti.
 Klusteri on kokoelma Amazon Elastic Compute Cloud (Amazon EC2) instansseja.
@@ -143,7 +151,7 @@ Jokaisella solmulla on rooli eli tyyppi klusterin sisällä.
 Amazon EMR asentaa erilaisia sovelluskomponentteja jokaiseen solmuun, antaen jokaiselle solmulle roolin hajautetussa sovelluksessa kuten Apache Spark. \cite{emr}
 
 Amazon EMR:ssä on seuraavanlaisia solmuja: Master, Core ja Task.
-Master on solmu, joka tarkkailee tehtävien ja klusterin tilaa ajamalla ajaa sovelluskomponentteja, jotka ovat vastuussa datan ja tehtävien jakamisesta Slave-solmuille.
+Master on solmu, joka tarkkailee tehtävien ja klusterin tilaa ajamalla sovelluskomponentteja, jotka ovat vastuussa datan ja tehtävien jakamisesta Slave-solmuille.
 Core on Slave-solmu, jossa sijaitsee sovelluskompontteja, jotka ajavat tehtäviä ja tallentavat dataa HDFS:ään klusterissa.
 Task on Slave-solmu, jossa sijaitsee sovelluskomponentteja, jotka ajavat vain tehtäviä, Task-solmujen määrittäminen on vapaaehtoista. \cite{emr}
 
@@ -157,10 +165,9 @@ Yllä oleva kuva esittää klusterin, jossa on master-solmu sekä neljä slave-solmua
 
 \subsection{Simple Storage Service (S3)}
 
-Amazon S3 (Simple Storage Service) on tietovarasto Internetin tarpeisiin.
-Se tarjoaa yksinkertaisen rajapinnan, jonka avulla voidaan tallettaa tai noutaa minkä verran dataa tahansa, milloin vain ja mistä tahansa webissä.
+Amazon S3 (Simple Storage Service) on tietovarasto, joka tarjoaa yksinkertaisen rajapinnan, jonka avulla voidaan tallettaa tai noutaa minkä verran dataa tahansa, milloin vain ja mistä tahansa webissä.
 Se on suunniteltu tekemään web-mittakaavan (web-scale) laskennasta yksinkertaisempaa kehittäjille.
-Se antaa kehittäjille pääsyn samoihin hyvin skaalautuvaan, luotettavaan, nopeaan ja edulliseen tietovarasto infrastruktuuriin, jota Amazon käyttää itse globaalin verkkosivustokatraansa ajamiseen. \cite{s3}
+Se antaa kehittäjille pääsyn samoihin hyvin skaalautuvaan, luotettavaan, nopeaan ja edulliseen tietovarasto-infrastruktuuriin, jota Amazon käyttää itse globaalin verkkosivustokatraansa ajamiseen. \cite{s3}
 
 Tässä työssä S3:a käytetään varastoimaan opetusdataa.
 Tarvittaessa Apache Sparkin laskennan välivaiheita voidaan tallentaa muistiin jolloin niiden tulokset voitaisiin lukea suoraan ilman että niitä tarvitsee laskea uudelleen.

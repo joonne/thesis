@@ -96,7 +96,7 @@ This paper studies the usage of Apache Spark when building a recommendation engi
 \chapter*{Tiivistelmä}
 
 \begin{spacing}{1.0}
-         {\bf \textsf{\MakeUppercase{\@author}}}: \@title\\  % or use \@title when thesis is in Finnish
+         {\bf \textsf{\MakeUppercase{\@author}}}:\@title\\  % or use \@title when thesis is in Finnish
          \textsf{Tampereen teknillinen yliopisto}\\
          \textsf{Diplomityö, 40 sivua}\\ %
          \textsf{syyskuu 2018}\\
@@ -109,7 +109,7 @@ This paper studies the usage of Apache Spark when building a recommendation engi
 Suosittelujärjestelmien määrä Internetissä on kasvanut jatkuvasti.
 Jopa kaikista arkipäiväisimmät toimet, kuten uutisien lukeminen, sisällyttävät suosittelujärjestelmän.
 Suosittelujärjestelmä on järjestelmä, joka yrittää muodostaa käyttäjän mieltymyksistä mielipiteeen ja suositella hyödyllisiä asioita.
-Tässä työssä tutustutaan Apache Sparkiin, Scala ohjelmointikieleen sekä Amazon Web Services (AWS) palveluun ja rakennetaan suosittelujärjestelmä näiden teknologioiden avulla.
+Tässä työssä tutustutaan Apache Sparkiin, Scala-ohjelmointikieleen sekä Amazon Web Services (AWS) palveluun ja rakennetaan suosittelujärjestelmä näiden teknologioiden avulla.
 
 \makeatother % Make the @ a special symbol again, as \@author and \@title are not neded after this
 
@@ -122,12 +122,12 @@ Tässä työssä tutustutaan Apache Sparkiin, Scala ohjelmointikieleen sekä Amazon W
 
 Vihdoinkin loppumetreillä.
 
-Tämän työn tekemiseen kului noin 900 päivää, työpaikan vaihto, epätoivoa, laiskuutta, kaaos AWS:n laskun kanssa, mutta onneksi myös muutamia oivalluksen hetkiä.
+Tämän työn tekemiseen kului noin 900 päivää, työpaikan vaihto, epätoivoa, laiskuutta ja lopuksi vielä kaaos AWS:n laskun kanssa, mutta onneksi myös muutamia oivalluksen hetkiä.
 
-Kiitos kaikille ketkä jaksoivat muistuttaa, hoputtaa ja välillä hymähdelläkin tämän työn tekemiselle ja tekemisestä, ilman tuota hoputusta olisin varmaankin täyttämässä toista jatkoaikahakemustani.
+Erityiskiitos tuesta ja avusta vaimolleni Nooralle.
+Kiitos myös kaikille muille ketkä jaksoivat muistuttaa, hoputtaa ja välillä hymähdelläkin tämän työn tekemiselle ja tekemisestä, ilman tuota hoputusta olisin varmaankin täyttämässä jo toista jatkoaikahakemustani!
 
-Tampere,
-
+Tampere, XX.XX.2018
 
 Jonne Pihlanen
 
@@ -168,8 +168,8 @@ Jonne Pihlanen
 	\item [ALS] Alternating Least Squares
 	\item [Latentti tekijä] Piilevä tekijä, vaikea tai mahdoton havainnoida
 	\item [Sparse] Harva
-	\item [Eksplisiittinen] Tarkasti määritelty
-	\item [Implisiittinen]
+	\item [Eksplisiittinen] Suoraan, selvästi ilmaistu
+	\item [Implisiittinen] Epäsuorasti, epäselvästi ilmaistu
 	\item [MLlib] Apache Sparkin tarjoama koneoppimis-kirjasto
 	\item [RMSE] Root Mean Square Error
 	\item [MSE] Mean Square Error
@@ -177,7 +177,7 @@ Jonne Pihlanen
 	\item [RDD] Sparkin tarjoama tietorakenne
 	\item [REPL] komentorivityökalu
 	\item [JAR] Koottu kirjasto, tiedostoformaatti
-	\item [JVM] Abstrakti tietokone, joka suorittaa JAR tiedostoja
+	\item [JVM] Virtuaalikone, joka suorittaa JAR-tiedostoja
 	\item [ZIP] Tiedostoformaatti, joka yhdistää monta tiedostoa yhdeksi
 	\item [Dataset] Sparkin tarjoama tietorakenne
 	\item [DAG] Directed Acyclic Graph
@@ -213,7 +213,8 @@ Jonne Pihlanen
 % The bibliography, i.e the list of references (3 options available)
 \newpage
 
-\renewcommand{\bibname}{Bibliography}
+\selectlanguage{finnish}
+\renewcommand{\bibname}{Lähdeluettelo}
 \addcontentsline{toc}{chapter}{\bibname}
 \bibliographystyle{IEEEtranS}
 \bibliography{thesis_refs}

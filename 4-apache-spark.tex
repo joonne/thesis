@@ -3,11 +3,10 @@
 
 \chapter{Apache Spark}
 
-Apache Spark on avoimen l‰hdekoodin sovelluskehys, joka yhdist‰‰ hajautettujen ohjelmien kirjoittamiseen tarkoitetun j‰rjestelm‰n sek‰ elegantin mallin ohjelmien kirjoittamiseen \cite{ryza15}.
+Apache Spark on sovelluskehys hajautettujen ohjelmien kirjoittamiseen. \cite{ryza15}.
 Spark-ohjelmia voidaan kirjoittaa Java-, Scala-, Python- sek‰ R-ohjelmointikielill‰.
-
 Jokainen Spark-sovellus koostuu driver-ohjelmasta sek‰ yhdest‰ tai useammasta executor-ohjelmasta.
-Driver on ohjelma, joka ajaa k‰ytt‰j‰n p‰‰ohjelmaa ja suorittaa erilaisia rinnakkaisia operaatioita klusterissa.
+Driver on ohjelma, joka ajaa k‰ytt‰j‰n p‰‰ohjelmaa ja hajauttaa laskennan klusteriin.
 Executor on yksi kone klusterissa. \cite{ryza15}
 
 Spark voidaan esitell‰ kuvailemalla sen edelt‰j‰‰, MapReduce:a, ja sen tarjoamia etuja.
@@ -16,14 +15,14 @@ MapReduce skaalautuu l‰hes lineaarisesti datan koon kasvaessa.
 Suoritusaikaa hallitaan lis‰‰m‰ll‰ lis‰‰ tietokoneita suorittamaan teht‰v‰‰. \cite{ryza15}
 
 Apache Spark s‰ilytt‰‰ MapReduce:n lineaarisen skaalautuvuuden ja vikasietokyvyn mutta laajentaa sit‰ kolmella merkitt‰v‰ll‰ tavalla.
-Ensiksi, MapReducessa map- ja reduce-teht‰vien v‰liset tulokset t‰ytyy kirjoittaa levylle kun taas Spark kykenee v‰litt‰m‰‰n tulokset suoraan putkiston (pipeline) seuraavalle vaiheelle.
-Toiseksi, Apache Sparkin voidaan ajatella kohtelevan kehitt‰ji‰ paremmin tarjoamalla rikkaan joukon muunnoksia (transformations) joiden avulla voidaan muutamalla koodirivill‰ ilmaista monimutkaisia putkistoja.
+Ensiksi, MapReducessa map- ja reduce-teht‰vien v‰liset tulokset t‰ytyy kirjoittaa levylle kun taas Spark kykenee v‰litt‰m‰‰n tulokset suoraan liukuhihnan (pipeline) seuraavalle vaiheelle.
+Toiseksi, Apache Sparkin voidaan ajatella kohtelevan kehitt‰ji‰ paremmin tarjoamalla monipuolisen joukon transformataatioita, joiden avulla voidaan muutamalla koodirivill‰ ilmaista monimutkaisia liukuhihnoja (pipelines, ohjelmistoja).
 Kolmanneksi, Spark esittelee muistissa tapahtuvan prosessoinnin tarjoamalla abstraktion nimelt‰ \textit{Resilient Distributed Dataset (RDD)}. RDD tarjoaa kehitt‰j‰lle mahdollisuuden materialisoida mink‰ tahansa askeleen putkistossa ja tallentaa sen muistiin.
 T‰m‰ tarkoittaa sit‰, ett‰ tulevien askelien ei tarvitse laskea aiempia tuloksia uudelleen ja t‰llˆin on mahdollista jatkaa juuri k‰ytt‰j‰n haluamasta askeleesta.
 Aiemmin t‰m‰nkaltaista ominaisuutta ei ole ollut saatavilla hajautetun laskennan j‰rjestelmiss‰. \cite{ryza15}
 
 Vaikka Spark-ohjelmia voidaankin kirjottaa usealla ohjelmointikielell‰, Scalan k‰ytt‰misell‰ saavutetaan kuitenkin muutamia etuja, joita muut kielet eiv‰t tarjoa.
-Tehokkuus saatta parantua, sill‰ datan siirt‰minen eri kerrosten v‰lill‰ tai muunnosten suorittaminen datalle voi johtaa heikompaan tehokkuuteen.
+Tehokkuus saattaa parantua, sill‰ datan siirt‰minen eri kerrosten v‰lill‰ tai muunnosten suorittaminen datalle voi johtaa heikompaan tehokkuuteen.
 Spark on kirjoitettu Scala-ohjelmointikielell‰, joten viimeisimm‰t ja parhaimmat (latest and greatest) ominaisuudet ovat aina k‰ytˆss‰, eik‰ niiden k‰‰nnˆst‰ tarvitse odotella.
 Spark ohjelmoinnin filosofia on helpompi ymm‰rt‰‰ kun Sparkia k‰ytet‰‰n kielell‰, jolla se on rakennettu.
 Suurin hyˆty, jonka Scalan k‰ytt‰minen tarjoaa, on kuitenkin kehitt‰j‰kokemus joka tulee saman ohjelmointikielen k‰ytt‰misest‰ kaikkeen.
@@ -44,7 +43,7 @@ Class-tiedosto sis‰lt‰‰ JVM-k‰skyt sek‰ symbolitaulun. \cite{JVM}
 
 Scala on moniparadigmainen ohjelmointikieli, joka tukee sek‰ olio- ett‰ funktionaalista ohjelmointia.
 Funktionaalista ohjelmointia varten Scalasta lˆytyy tuki funktionaalisen ohjelmoinnin konsepteille kuten muuttumattomat tietorakenteet ja funktiot ensimm‰isen luokan kansalaisina.
-Olio-ohjelmointia varten Scalasta lˆytyy tuki konsepteille kuten luokat, oliot ja piirre (trait).
+Olio-ohjelmointia varten Scalasta lˆytyy tuki k‰sitteille kuten luokat, oliot ja piirre (trait).
 Scala tukee myˆs kapselointia, perint‰‰, moniperint‰‰ ja muita t‰rkeit‰ olio-ohjelmoinnin konsepteja.
 Scala on staattisesti tyypitetty kieli ja sill‰ kirjoitetut ohjelmat k‰‰nnet‰‰n Scala-k‰‰nt‰j‰‰ k‰ytt‰en.
 Scala on JVM-perustainen (Java Virtual Machine, Java-virtuaalikone) kieli, joten Scala k‰‰nt‰j‰ k‰‰nt‰‰ sovelluksen Java-tavukoodiksi, joka voidaan ajaa miss‰ tahansa Java-virtuaalikoneessa.
