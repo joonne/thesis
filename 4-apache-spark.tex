@@ -1,5 +1,16 @@
 \documentclass[main.tex]{thesis.tex}
 \begin{document}
+	
+\lstset{
+	columns=flexible,
+	breaklines=true,
+	tabsize=2,
+	language=Scala,
+	commentstyle=\color{scalacomment},
+	keywordstyle=\color{blue},
+	numbers=left,
+	numbersep=15pt,
+}
 
 \chapter{Apache Spark}
 
@@ -17,7 +28,7 @@ Suoritusaikaa hallitaan lisäämällä lisää tietokoneita suorittamaan tehtävää. \ci
 Apache Spark säilyttää MapReduce:n lineaarisen skaalautuvuuden ja vikasietokyvyn mutta laajentaa sitä kolmella merkittävällä tavalla.
 Ensiksi, MapReducessa map- ja reduce-tehtävien väliset tulokset täytyy kirjoittaa levylle kun taas Spark kykenee välittämään tulokset suoraan liukuhihnan (pipeline) seuraavalle vaiheelle.
 Toiseksi, Apache Sparkin voidaan ajatella kohtelevan kehittäjiä paremmin tarjoamalla monipuolisen joukon transformataatioita, joiden avulla voidaan muutamalla koodirivillä ilmaista monimutkaisia liukuhihnoja (pipelines, ohjelmistoja).
-Kolmanneksi, Spark esittelee muistissa tapahtuvan prosessoinnin tarjoamalla abstraktion nimeltä \textit{Resilient Distributed Dataset (RDD)}. RDD tarjoaa kehittäjälle mahdollisuuden materialisoida minkä tahansa askeleen putkistossa ja tallentaa sen muistiin.
+Kolmanneksi, Spark esittelee muistissa tapahtuvan prosessoinnin tarjoamalla abstraktion nimeltä \textit{Resilient Distributed Dataset (RDD)}. RDD tarjoaa kehittäjälle mahdollisuuden materialisoida minkä tahansa askeleen liukuhihnassa ja tallentaa sen muistiin.
 Tämä tarkoittaa sitä, että tulevien askelien ei tarvitse laskea aiempia tuloksia uudelleen ja tällöin on mahdollista jatkaa juuri käyttäjän haluamasta askeleesta.
 Aiemmin tämänkaltaista ominaisuutta ei ole ollut saatavilla hajautetun laskennan järjestelmissä. \cite{ryza15}
 
@@ -28,7 +39,8 @@ Spark ohjelmoinnin filosofia on helpompi ymmärtää kun Sparkia käytetään kielellä
 Suurin hyöty, jonka Scalan käyttäminen tarjoaa, on kuitenkin kehittäjäkokemus joka tulee saman ohjelmointikielen käyttämisestä kaikkeen.
 Datan tuonti, manipulointi ja koodin lähettäminen klustereihin hoituvat samalla kielellä. \cite{ryza15}
 
-Spark-jakelun mukana toimitetaan luku-evaluointi-tulostus-silmukka (Read Eval Print Loop, REPL), komentorivityökalu, joka mahdollistaa uusien asioiden nopean testailun konsolissa, eikä sovelluksista tarvitse rakentaa itsenäisiä (self-contained) alusta asti.
+Spark-jakelun mukana toimitetaan luku-evaluointi-tulostus-silmukka (Read Eval Print Loop, REPL).
+REPL on komentorivityökalu, joka mahdollistaa uusien asioiden nopean testailun konsolissa, eikä sovelluksista tarvitse rakentaa itsenäisiä (self-contained) alusta asti.
 Kun REPLissä kehitetyn sovelluksen tai sovelluksen osan voidaan katsoa olevan tarpeeksi valmis, on järkevää tehdä siitä koottu kirjasto (JAR).
 Näin varmistutaan ettei ohjelmakoodia tai tuloksia pääse katoamaan, vaikkakin REPL tarjoaa samantapaisen muistin komentohistoriasta kuin perinteinen komentorivikin.
 
@@ -42,7 +54,7 @@ Class-tiedosto sisältää JVM-käskyt sekä symbolitaulun. \cite{JVM}
 \section{Scala}
 
 Scala on moniparadigmainen ohjelmointikieli, joka tukee sekä olio- että funktionaalista ohjelmointia.
-Funktionaalista ohjelmointia varten Scalasta löytyy tuki funktionaalisen ohjelmoinnin konsepteille kuten muuttumattomat tietorakenteet ja funktiot ensimmäisen luokan kansalaisina.
+Funktionaalista ohjelmointia varten Scalasta löytyy tuki funktionaalisen ohjelmoinnin käsitteille, kuten muuttumattomat tietorakenteet ja funktiot ensimmäisen luokan kansalaisina.
 Olio-ohjelmointia varten Scalasta löytyy tuki käsitteille kuten luokat, oliot ja piirre (trait).
 Scala tukee myös kapselointia, perintää, moniperintää ja muita tärkeitä olio-ohjelmoinnin konsepteja.
 Scala on staattisesti tyypitetty kieli ja sillä kirjoitetut ohjelmat käännetään Scala-kääntäjää käyttäen.
@@ -56,7 +68,7 @@ Vaikka Scala tukee sekä olio- että funktionaalista ohjelmointia, funktionaalista
 
 Scalan perustyypit numeroiden esittämiseen ovat Byte, Short, Int, Long, Float ja Double.
 Lisäksi Scalassa on perustyypit Char, String ja Boolean.
-Char on 16 bittinen etumerkitön Unicode merkki.
+Char on 16 bittinen etumerkitön Unicode-merkki.
 String on jono Char:eja.
 Boolean esittää totuusarvoa tosi (true) tai epätosi (false). \cite{guller15}
 
@@ -68,19 +80,14 @@ Käännöksen aikana kääntäjä tarvittaessa automaattisesti muuntaa Scala tyypit Jav
 Scalassa on kahdentyyppisiä muuttujia: muuttuvia ja vakioita.
 Muuttuva muuttuja määritellään avainsanan $var$ avulla.
 Muuttuvaa muuttujaa ei voida asettaa uudelleen luomisen jälkeen.
-Var:ien käyttöä ei suositella, mutta joskus niiden käyttämisellä saadaan aikaan yksinkertaisempaa ohjelmakoodia ja tästä syystä Scala tukee myös muuttuvia muuttujia. \cite{guller15}
+Var:ien käyttöä ei suositella, mutta joskus niiden käyttämisellä saadaan aikaan yksinkertaisempaa ohjelmakoodia ja tästä syystä Scala tukee myös muuttuvia muuttujia.
+Vakiota, $val$, ei sen sijaan voida antaa uudelleen luomisen jälkeen. \cite{guller15}
 
-Syntaksi $var$:in luomiseksi on
+Syntaksi $val$:in ja $var$:in luomiseksi on
 
-\begin{lstlisting}[caption=Muuttuvan muuttujan luominen ja uudelleen asettaminen]
+\begin{lstlisting}[caption=Muuttujien luominen ja uudelleen asettaminen]
 var x = 10
 x = 20
-\end{lstlisting}
-
-Muuttumatonta muuttujaa, $val$, ei sen sijaan voida antaa uudelleen luomisen jälkeen.
-Syntaksi $val$:in luomiseksi on
-
-\begin{lstlisting}[caption=Vakion luominen]
 val y = 10
 \end{lstlisting}
 
@@ -131,13 +138,13 @@ Scala sallii myös lyhyemmän version samasta funktiosta:
 \lstset{language=Scala,tabsize=2}
 
 \begin{lstlisting}[caption=Funktio]
-def add(first: Int, second: Int): Int = first + second
+def add(first: Int, second: Int) = first + second
 \end{lstlisting}
 
 Toinen versio tekee täsmälleen saman asian kuin ensimmäinenkin, mutta se on vain kirjoitettu lyhyemmin.
 Paluuarvon tyyppi on jätetty antamatta, sillä kääntäjä pystyy päättelemään sen koodista.
 Paluuarvon tyyppi suositellaan kuitenkin annettavan aina.
-Aaltosulkeet on myöskin jätetty pois, sillä ne ovat pakolliset vain kun funktion runko sisältää useamman kuin yhden käskyn.
+Aaltosulkeet on myöskin jätetty pois, sillä ne ovat pakolliset vain kun funktion runko sisältää useamman kuin yhden lausekkeen.
 Lisäksi, $return$ avainsana on ohitettu, sillä se on vapaaehtoinen.
 Scalassa kaikki lausekkeet ovat arvon palauttavia lausekkeita, joten funktion rungon viimeisen lausekkeen arvosta tulee funktion paluuarvo. \cite{guller15}
 
@@ -146,15 +153,24 @@ Scalassa kaikki lausekkeet ovat arvon palauttavia lausekkeita, joten funktion ru
 Resilient Distributed Dataset (RDD) on Sparkin tarjoama pääabstraktio.
 RDD on muuttumaton, partitioitu elementtikokoelma, joka voidaan hajauttaa klusterin useiden koneiden välillä. \cite{spark-rdd}
 
-RDD:t ovat laiskasti evaluoituvia, jolla tarkoitetaan sitä, että lausekkeen evaluointia viivytetään siihen asti kun sen arvoa tarvitaan.
+RDD:t tukevat kahdenlaisia operaatioita: transformaatioita ja toimia (actions).
+Transformaatioilla luodaan uusia datasettejä olemassaolevista dataseteistä.
+Toimet palauttavat arvon driver-ohjelmaan laskennan valmistuttua.
+$map$-operaatio on esimerkki transformaatiosta ja $reduce$-operaatio on esimerkki toimesta.
+Molemmat operaatiot käyvät annetun datasetin läpi ja kohdistavat annetun funktion jokaiselle elementille, mutta $map$ palauttaa uuden RDD:n ja $reduce$ palauttaa tuloksensa driver-ohjelmalle. \cite{spark-programming-guide}
+
+Kaikki transformaatiot Sparkissa ovat laiskasti evaluoituvia, jolla tarkoitetaan sitä, että lausekkeen evaluointia viivytetään siihen asti kun sen arvoa tarvitaan.
 Kun uusi RDD luodaan, mitään laskentaa ei oikeasti vielä tapahdu, vaan Spark tietää missä data sijaitsee tai miten data saadaan laskettua kun tulee aika tehdä sille jotain.
+Tämä suunnittelu mahdollistaa Sparkin tehokkaamman toiminnan.
+Esimerkiksi $map$ ja $reduce$ -operaatioista koostuva liukuhihna suoriutuu tehokkaammin, sillä $map$-transformaation luoma datasetti voidaan jättää palauttamatta driver-ohjelmaan, koska $reduce$-toimen vastaus palautuu.
+\cite{spark-sql-programming-guide}
 
 RDD voidaan luoda kahdella tavalla, rinnakkaistamalla (parallelize) tai viittaamalla ulkoiseen aineistoon.
-Rinnakkaistamisessa olemassaoleva Scala kokoelma voidaan rinnakkaistaa RDD:ksi.
-Ulkoiseen ainestoon viittaamisella tarkoitetaan viittaamista aineistoon ulkoisessa varastointijärjestelmässä kuten \textit{HDFS}:sä, \textit{HBase}:ssa tai missä tahansa \textit{Hadoop}:in tuntemassa tiedostojärjestelmässä. \cite{spark-programming-guide}
+Rinnakkaistamisessa olemassaoleva Scala-kokoelma saadaan muunnettua RDD:ksi.
+Ulkoiseen ainestoon viittaamisella tarkoitetaan viittaamista aineistoon ulkoisessa varastointijärjestelmässä kuten \textit{HDFS}:sä tai \textit{HBase}:ssa. \cite{spark-programming-guide}
 
 RDD:t voidaan tallentaa muistiin, jolloin ohjelmistokehittäjä voi uudelleenkäyttää niitä tehokkaasti rinnakkaisissa operaatioissa.
-RDD:t voivat palautua solmuvirheistä automaattisesti käyttäen Directed Acyclic Graph (DAG) moottoria.
+RDD:t voivat palautua solmuvirheistä automaattisesti käyttäen Directed Acyclic Graph (DAG) -moottoria.
 DAG tukee asyklistä datavirtaa, jolla tarkoitetaan sitä, että jokainen graafin kaari kulkee topologisessa järjestyksessä aiemmasta myöhempään.
 Jokaista Spark-työtä kohti luodaan DAG klusterissa suoritettavan tehtävän tasoista.
 Verrattuna MapReduceen, joka luo DAGin kahdesta ennaltamäärätystä tilasta (Map ja Reduce), Sparkin luomat DAGit voivat sisältää minkä tahansa määrän tasoja.
@@ -169,14 +185,14 @@ Yksinkertaisimmat työt voivat valmistua vain yhden tason jälkeen ja monimutkaise
 
 \section{Dataset API}
 
-Dataset (DS) on vahvasti tyypitetty kokoelma aluespesifisiä (domain specific) objekteja, jotka voidaan muuntaa rinnakkain käyttäen funktionaalisia tai relaatio-operaatioita.
-DS on RDD:n korvaaja Sparkissa.
-Dataset:ille olemassa olevat operaatiot on jaettu \textit{muunnoksiin} (transformations) ja \textit{toimiin} (actions).
-Muunnokset ovat operaatioita, jotka luovat uusia Dataset objekteja, kuten map, filter, select, aggregate.
+Dataset (DS) on vahvasti tyypitetty kokoelma domain spesifisiä objekteja, jotka voidaan muuntaa rinnakkain käyttäen funktionaalisia tai relaatio-operaatioita.
+DS on kehitetty korvaamaan RDD Sparkissa.
+Dataset:ille olemassa olevat operaatiot on jaettu \textit{transformaatioihin} (transformations) ja \textit{toimiin} (actions).
+Transformaatiot ovat operaatioita, jotka luovat uusia Dataset-objekteja, kuten $map$, $filter$, $select$ ja $aggregate$.
 Toimet ovat operaatioita jotka suorittavat laskentaa ja palauttavat tuloksia.
-Toimia ovat esimerkiksi count, show tai datan kirjoittaminen tiedostojärjestelmään. \cite{spark-dataset}
+Toimia ovat esimerkiksi \textit{count}, \textit{show} tai datan kirjoittaminen tiedostojärjestelmään. \cite{spark-dataset}
 
-Dataset-instanssit ovat laiskasti evaluoituvia, jolla tarkoitetaan sitä, että laskenta aloitetaan vasta kun toimintoa kutsutaan tai instanssin arvoa tarvitaan.
+Kuten RDD:t, Dataset-instanssit ovat laiskasti evaluoituvia, jolla tarkoitetaan sitä, että laskenta aloitetaan vasta kun toimintoa kutsutaan tai instanssin arvoa tarvitaan.
 Dataset on pohjimmiltaan looginen suunnitelma, jolla kuvataan datan tuottamiseen tarvittava laskenta.
 Toimea kutsuttaessa, Sparkin kyselyoptimoija (query optimizer) optimoi loogisen suunnitelman ja generoi fyysisen suunnitelman.
 Fyysinen suunnitelma takaa rinnakkaisesti ja hajautetusti tapahtuvan tehokkaan suorituksen.
@@ -222,7 +238,7 @@ Yleisin tapa on käyttää $SparkSession$:in tarjoamaa $read$ funktiota ja osoittaa
 
 Dataset voidaan luoda myös tekemällä muutoksia olemassaoleville Dataset olioille:
 
-\begin{lstlisting}[caption=Uuden Dataset olion luominen muunnoksella (transformation)]
+\begin{lstlisting}[caption=Uuden Dataset olion luominen transformaatiolla]
 
 val people: Dataset<Person> = Dataset(Person())
 val names = people.map(_.name)
@@ -231,15 +247,8 @@ val names = people.map(_.name)
 
 \begin{lstlisting}[caption=Uuden Dataset olion luominen käyttäen read funktiota]
 
-val people = spark.read.json("./people.json").as[Person] ,
-
-\end{lstlisting}
-
-jossa $Person$ olisi Scala case-luokka, esimerkiksi:
-
-\begin{lstlisting}[caption=case class Person]
-
 case class Person(id: BigInt, firstName: String, lastName: String)
+val people = spark.read.json("./people.json").as[Person]
 
 \end{lstlisting}
 

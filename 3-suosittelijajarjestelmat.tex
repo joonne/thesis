@@ -1,5 +1,18 @@
 \documentclass[main.tex]{thesis.tex}
 \begin{document}
+	
+\definecolor{scalacomment}{rgb}{0,0.6,0}
+
+\lstset{
+	columns=flexible,
+	breaklines=true,
+	tabsize=2,
+	language=Scala,
+	commentstyle=\color{scalacomment},
+	keywordstyle=\color{blue},
+	numbers=left,
+	numbersep=15pt,
+}
 
 \chapter{Suosittelijajärjestelmät}
 
@@ -103,19 +116,6 @@ Tuotepohjaisessa yhteisösuodatuksessa (Item-based collaborative filtering, IBCF)
 Seuraavaksi mallinnetaan käyttäjän mieltymykset tuotteelle perustuen saman käyttäjän tekemiin arvosteluihin \cite{ricci11}.
 Alla oleva ohjelma 3.1 esittelee tuotepohjaisen yhteisösuodatuksen idean jokaiselle uudelle käyttäjälle.
 
-\definecolor{scalacomment}{rgb}{0,0.6,0}
-
-\lstset{
-	columns=flexible,
-	breaklines=true,
-	tabsize=2,
-	language=Scala,
-	commentstyle=\color{scalacomment},
-	keywordstyle=\color{blue},
-	numbers=left,
-	numbersep=15pt,
-}
-
 \begin{lstlisting}[caption=Tuotepohjaisen yhteisösuodatuksen algoritmi \cite{gorakala15}]
 // Jokaiselle kahdelle tuotteelle,
 // mittaa kuinka samankaltaisia ne ovat saatujen arvioiden suhteen.
@@ -127,7 +127,7 @@ case class Similarity(item1: Item, item2: Item, similarity: Double)
 
 val similarItems: Seq[Similarity] = items.map { item1 =>
 	items.map { item2 =>
-	  Similarity (item1, item2, cosineSimilarity(item1, item2))
+	  Similarity (item1, item2, calculateSimilarity(item1, item2))
 	}
 }
 
@@ -158,17 +158,6 @@ Samankaltaisuus saadaan laskettua vertaamalla käyttäjien ostoshistorioiden saman
 
 Askeleet jokaiselle uudelle käyttäjälle käyttäjäpohjaisessa yhteisösuodatuksessa ovat:
 
-\lstset{
-	columns=flexible,
-	breaklines=true,
-	tabsize=2,
-	language=Scala,
-	commentstyle=\color{scalacomment},
-	keywordstyle=\color{blue},
-	numbers=left,
-	numbersep=15pt,
-}
-
 \begin{lstlisting}[caption=Käyttäjäpohjainen yhteisösuodatus algoritmi osa 1/2 \cite{gorakala15}]
 // Mittaa jokaisen käyttäjän samankaltaisuus uuteen käyttäjään
 //  Kuten IBCF:ssä, suosittuja samankaltaisuusarvioita ovat korrelaatio
@@ -191,17 +180,6 @@ val mostSimilarUsers = similarities.filter(_.score > 0.8)
 \end{lstlisting}
 
 \newpage
-
-\lstset{
-	columns=flexible,
-	breaklines=true,
-	tabsize=2,
-	language=Scala,
-	commentstyle=\color{scalacomment},
-	keywordstyle=\color{blue},
-	numbers=left,
-	numbersep=15pt,
-}
 
 \begin{lstlisting}[caption=Käyttäjäpohjainen yhteisösuodatus algoritmi osa 2/2 \cite{gorakala15}]
 // Arvostele samankaltaisimpien käyttäjien ostamat tuotteet.
