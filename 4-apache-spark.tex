@@ -197,7 +197,6 @@ Dataset on pohjimmiltaan looginen suunnitelma, jolla kuvataan datan tuottamiseen
 Toimea kutsuttaessa, Sparkin kyselyoptimoija (query optimizer) optimoi loogisen suunnitelman ja generoi fyysisen suunnitelman.
 Fyysinen suunnitelma takaa rinnakkaisesti ja hajautetusti tapahtuvan tehokkaan suorituksen.
 Loogista suunnitelmaa, kuten myˆs optimoitua fyysist‰ suunnitelmaa, voidaan tutkia k‰ytt‰m‰ll‰ DS:n $explain$ funktiota. \cite{spark-dataset}
-TODO: tarkennus viel‰ n‰ille suunnitelmille?
 
 Domain-spesifisten olioiden tehokkaaseen tukemiseen tarvitaan enkooderia.
 Enkooderilla tarkoitetaan ohjelmaa, joka muuntaa tietoa jonkin algoritmin mukaisesti ja t‰ss‰ tapauksessa sit‰ k‰ytet‰‰n yhdist‰m‰‰n domain-spesifinen tyyppi $T$ Sparkin sis‰iseen tyyppij‰rjestelm‰‰n.
@@ -238,14 +237,14 @@ Yleisin tapa on k‰ytt‰‰ $SparkSession$:in tarjoamaa $read$ funktiota ja osoittaa
 
 Dataset voidaan luoda myˆs tekem‰ll‰ muutoksia olemassaoleville Dataset olioille:
 
-\begin{lstlisting}[caption=Uuden Dataset olion luominen transformaatiolla]
+\begin{lstlisting}[caption=Uuden Dataset-olion luominen transformaatiolla]
 
 val people: Dataset<Person> = Dataset(Person())
 val names = people.map(_.name)
 
 \end{lstlisting}
 
-\begin{lstlisting}[caption=Uuden Dataset olion luominen k‰ytt‰en read funktiota]
+\begin{lstlisting}[caption=Uuden Dataset-olion luominen k‰ytt‰en read funktiota]
 
 case class Person(id: BigInt, firstName: String, lastName: String)
 val people = spark.read.json("./people.json").as[Person]
@@ -256,9 +255,9 @@ Case-luokat ovat tavallisia Scala-luokkia, jotka ovat:
 
 \begin{itemize}
 	\item Oletustarvoisesti muuttumattomia (immutable)
-	\item Hajoitettavia (decomposable) hahmonsovitusta hyv‰ksik‰ytt‰en
+	\item Hajoitettavia (decomposable) hahmonsovituksen (pattern matching) avulla
 	\item Vertailtavissa viitteiden sijasta rakenteellisen samankaltaisuuden mukaan
-	\item Lyhyit‰ luoda (instantiate) ja k‰ytt‰‰
+	\item Yksinkertaisempia luoda (instantiate) ja k‰ytt‰‰
 \end{itemize}
 
 Mik‰li tyyppimuunnos (casting) j‰tett‰isiin tekem‰tt‰, p‰‰dytt‰isiin luomaan DataFrame-olio, jonka sis‰inen mallin (schema) Spark pyrkisi arvaamaan.
@@ -269,19 +268,18 @@ Tyyppimuunnos tehd‰‰n k‰ytt‰m‰ll‰ $as$ avainsanaa.
 val spark = SparkSession
 .builder
 .appName("MovieLensALS")
-.config("spark.executor.memory", "2g")
 .getOrCreate()
 \end{lstlisting}
 
-SparkSession on Spark ohjelmoinnin l‰htˆkohta, kun halutaan k‰ytt‰‰ Dataset ja DataFrame rajapintoja.
-Yll‰olevassa koodinp‰tk‰ss‰ luodaan $SparkSession$ ketjuttamalla rakentajan kutsuja. \cite{spark-dataset}
+\textit{SparkSession} on Spark-ohjelmoinnin l‰htˆkohta, kun halutaan k‰ytt‰‰ Dataset ja DataFrame -rajapintoja.
+Yll‰olevassa koodinp‰tk‰ss‰ luodaan SparkSession ketjuttamalla rakentajan kutsuja. \cite{spark-dataset}
 
 Dataset-oliot ovat samankaltaisia kuin RDD:t, sill‰ nekin tarjoavat vahvan tyypityksen ja mahdollisuuden k‰ytt‰‰ voimakkaita lambda-funktioita \cite{spark-sql-programming-guide}.
 Lambda-funktiolla tarkoitetaan yleisesti anonyymi‰ funktiota, jota ei olla sidottu muuttujaan.
-Perinteisen serialisoinnin, kuten Java-serialisoinnin, sijaan k‰ytet‰‰n erikoistunutta enkooderia olioiden sarjallistamiseen.
-Serialisaatiolla tarkoitetaan olion muuntamista tavuiksi, jolloin olion muistijalanj‰lki pienenee.
-Yleisesti serialisointia tarvitaan datan prosessointiin tai verkon yli l‰hett‰miseen.
-Molempia, sek‰ enkoodereita ett‰ serialisointia k‰ytet‰‰n olioiden muuntamiseen tavuiksi, mutta enkooderit luodaan dynaamisesti koodissa.
+Perinteisen sarjallistamisen, kuten Java-sarjallistamisen, sijaan k‰ytet‰‰n erikoistunutta enkooderia olioiden sarjallistamiseen.
+Sarjallistamisella tarkoitetaan olion muuntamista tavuiksi, jolloin olion muistijalanj‰lki pienenee.
+Yleisesti sarjallistamista tarvitaan datan prosessointiin tai verkon yli l‰hett‰miseen.
+Molempia, sek‰ enkoodereita ett‰ sarjallistamista k‰ytet‰‰n olioiden muuntamiseen tavuiksi, mutta enkooderit luodaan dynaamisesti koodissa.
 Enkooderit k‰ytt‰v‰t sellaista muotoa, ett‰ Spark kykenee suorittamaan monenlaisia operaatioita, kuten suodattamista, j‰rjest‰mist‰ ja hajautusta (hashing), ilman ett‰ tavuja tarvitsee purkaa takaisin objektiksi. \cite{spark-programming-guide}
 
 Seuraavassa koodilistauksessa luodaan uusi Dataset lukemalla $json$-tiedosto tiedostoj‰rjestelm‰st‰.
@@ -303,42 +301,16 @@ peopleWithDoubleSalary.explain(true)
 
 \end{lstlisting}
 
-\begin{lstlisting}[caption=Dataset-olion looginen suunnitelma]
-
-== Optimized Logical Plan ==
-SerializeFromObject [staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, assertnotnull(input[0, $line32.$read$$iw$$iw$Person, true], top level Product input object).name, true) AS name#67, staticinvoke(class org.apache.spark.sql.types.Decimal$, DecimalType(38,0), apply, assertnotnull(input[0, $line32.$read$$iw$$iw$Person, true], top level Product input object).salary, true) AS salary#68]
-+- MapElements <function1>, class $line32.$read$$iw$$iw$Person, [StructField(name,StringType,true), StructField(salary,DecimalType(38,0),true)], obj#66: $line32.$read$$iw$$iw$Person
-+- DeserializeToObject newInstance(class $line32.$read$$iw$$iw$Person), obj#65: $line32.$read$$iw$$iw$Person
-+- Relation[name#55,salary#56L] json
-
-\end{lstlisting}
-
-\newpage
-
-\begin{lstlisting}[caption=Dataset-olion fyysinen suunnitelma]
-
-== Physical Plan ==
-*SerializeFromObject [staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, assertnotnull(input[0, $line32.$read$$iw$$iw$Person, true], top level Product input object).name, true) AS name#67, staticinvoke(class org.apache.spark.sql.types.Decimal$, DecimalType(38,0), apply, assertnotnull(input[0, $line32.$read$$iw$$iw$Person, true], top level Product input object).salary, true) AS salary#68]
-+- *MapElements <function1>, obj#66: $line32.$read$$iw$$iw$Person
-+- *DeserializeToObject newInstance(class $line32.$read$$iw$$iw$Person), obj#65: $line32.$read$$iw$$iw$Person
-+- *FileScan json [name#55,salary#56L] Batched: false, Format: JSON, Location: InMemoryFileIndex[file:/home/joonne/Documents/GitHub/thesis-code/people.json], PartitionFilters: [], PushedFilters: [], ReadSchema: struct<name:string,salary:bigint>
-
-\end{lstlisting}
-
-\newpage
-
 \section{DataFrame API}
 
-DataFrame on nimettyihin sarakkeisiin j‰rjestetty Dataset.
-Se on k‰sitteellisesti yhtenev‰ relaatiotietokannan taulun tai R/Python kielten tietokehyksen (data frame) kanssa, mutta DataFrame on optimoitu tehokkaammin.
+\textit{DataFrame} on nimettyihin sarakkeisiin j‰rjestetty Dataset.
+Se on k‰sitteellisesti yhtenev‰ relaatiotietokannan taulun tai R/Python kielten tietokehyksen (data frame) kanssa.
 DataFrame voidaan rakentaa useammalla tavalla, kuten esimerkiksi j‰sennellyist‰ tiedostoista, ulkoisista tietokannoista tai olemassaolevista RDD-olioista.
 DataFrame-rajapinta on saatavilla Scala-, Java-, Python- ja R-ohjelmointikielille.
 Scala-toteutuksessa DataFrame on riveist‰ rakentuva Dataset ($Dataset[Row]$). \cite{spark-programming-guide}
 
 \begin{lstlisting}[caption=DataFrame luominen k‰ytt‰en read-funktiota]
-
 val people = spark.read.json("./people.json")
-
 \end{lstlisting}
 
 DataFrame-oliota luotaessa Spark arvaa luodun objektin sis‰isen mallin.
