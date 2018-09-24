@@ -289,8 +289,7 @@ Lopuksi looginen- ja fyysinen suunnitelma tulostetaan konsoliin kutsumalla $expl
 
 \newpage
 
-\begin{lstlisting}[caption=Dataset olion loogisen ja fyysisen suunnitelman näyttäminen]
-
+\begin{lstlisting}[caption=Dataset-esimerkki]
 val people = spark.read.json("./people.json").as[Person]
 
 val peopleWithDoubleSalary = people.map { person => 
@@ -298,7 +297,6 @@ val peopleWithDoubleSalary = people.map { person =>
 }
 
 peopleWithDoubleSalary.explain(true)
-
 \end{lstlisting}
 
 \section{DataFrame API}
@@ -309,7 +307,7 @@ DataFrame voidaan rakentaa useammalla tavalla, kuten esimerkiksi jäsennellyistä 
 DataFrame-rajapinta on saatavilla Scala-, Java-, Python- ja R-ohjelmointikielille.
 Scala-toteutuksessa DataFrame on riveistä rakentuva Dataset ($Dataset[Row]$). \cite{spark-programming-guide}
 
-\begin{lstlisting}[caption=DataFrame luominen käyttäen read-funktiota]
+\begin{lstlisting}[caption=DataFramen luominen käyttäen read-funktiota]
 val people = spark.read.json("./people.json")
 \end{lstlisting}
 
