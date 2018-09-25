@@ -1,5 +1,16 @@
 \documentclass[main.tex]{thesis.tex}
 \begin{document}
+	
+\lstset{
+	columns=flexible,
+	breaklines=true,
+	tabsize=2,
+	language=Scala,
+	commentstyle=\color{scalacomment},
+	keywordstyle=\color{blue},
+	numbers=left,
+	numbersep=15pt,
+}
 
 \chapter{Toteutus}
 
@@ -139,7 +150,7 @@ val ratings = sc.textFile("s3n://bucket/ratings.csv")
   .mapPartitionsWithIndex((i, it) => if (i == 0) it.drop(1) else it)
   .map { line =>
 		val fields = line.split(",")
-		val timestamp = fields(3).toLong % 10
+		val timestamp = fields(3).toLong
 		val userId = fields(0).toInt
 		val movieId = fields(1).toInt
 		val rating = fields(2).toDouble
@@ -201,29 +212,21 @@ Tutkimuksessa paras arvo saatiin 80-20 datasettiä käyttäen ja omassa opetuksessa
 Alla olevassa koodilistauksessa 5.7 on esitetty esimerkki suositusten ennustamisesta.
 
 \begin{lstlisting}[caption=Suositusten ennustaminen]
-		
 val myRatedMovieIds = personalRatings.map(_.product).toSet
-val candidates = sc.parallelize(
-		movies.keys.filter(!myRatedMovieIds.contains(_)).toSeq
-)
+val candidates = sc.parallelize(movies.keys.filter(!myRatedMovieIds.contains(_)).toSeq)
+
 val recommendations = bestModel.get
 	.predict(candidates.map((0, _)))
 	.collect()
 	.sortBy(- _.rating)
 	.take(10)
-
-var i = 1
-println("Movies recommended for you:")
-recommendations.foreach { r =>
-	println("%2d".format(i) + ": " + movies(r.product))
-	i += 1
-}
 \end{lstlisting}
 
 ~
 
-Yllä olevassa koodilistauksessa haetaan henkilökohtaiset suositukset käyttämällä mallin $predict$ metodia, joka ottaa parametrinaan mahdollisten elokuvien joukon.
+Yllä olevassa koodilistauksessa haetaan henkilökohtaiset suositukset käyttämällä mallin $predict$-metodia, joka ottaa parametrinaan mahdollisten elokuvien joukon.
 Mahdollisilla elokuvilla tarkoitetaan elokuvia, joita käyttäjä ei ole vielä nähnyt, eli ne eivät sisälly $personalRatings$ muuttujan sisältämiin elokuviin.
+$bestModel$ on aiemmin talteen otettu parhaan RMSE-arvon omaava malli. Tarkemmin sanottuna se on mallin sisältämä $Option$ muuttuja, jonka sisällä olevaan malliin päästään käsiksi $get$-funktion avulla.
 
 \newpage
 
@@ -233,16 +236,15 @@ Alla olevassa kooodilistauksessa 5.8 esitetään käytetyt apufunktiot.
 
 \begin{lstlisting}[caption=Apufunktiot]
 def computeRmse(
-		model: MatrixFactorizationModel,
-		data: RDD[Rating],
-		n: Long
+	model: MatrixFactorizationModel,
+	data: RDD[Rating],
+	n: Long
 ): Double = {
-	val predictions: RDD[Rating] =
-		model.predict(data.map(x => (x.user, x.product)))
-	val predictionsAndRatings =
-		predictions.map(x => ((x.user, x.product), x.rating))
-			.join(data.map(x => ((x.user, x.product), x.rating)))
-			.values
+	val predictions: RDD[Rating] = model.predict(data.map(x => (x.user, x.product)))
+	val predictionsAndRatings = predictions
+		.map(x => ((x.user, x.product), x.rating))
+		.join(data.map(x => ((x.user, x.product), x.rating)))
+		.values
 	
 	math.sqrt(
 		predictionsAndRatings
