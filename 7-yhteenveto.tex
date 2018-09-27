@@ -14,6 +14,33 @@ AWS-palveluiden tuntemus on varsin hyˆdyllinen taito ja t‰ss‰ tyˆss‰ tuli pieni 
 Olemassaolevien suositteluj‰rjestelmien tai analytiikkaj‰rjestelmien evaluointi tulisi suorittaa ennen suositteluj‰rjestelm‰n valintaa.
 Suuremman datasetin k‰ytt‰minen sek‰ isomman arvostelum‰‰r‰n tarjoaminen j‰rjestelm‰lle voisi parantaa tuloksia.
 
+AWS analyysi t‰h‰n?
+
+- mink‰laista laskutus / toiminta voisi mieluummin olla?
+- miten tein
+- miten olisi pit‰nyt tehd‰
+
+Pystytin AWS EMR liukuhihnan (pipeline) ohjeiden VIITE mukaisesti. Nimi on On-Demand, kuten VIITE sanotaan, mutta tosiasiassa varatut EC2 instanssit pysyv‰tkin ajossa kellon ymp‰ri. T‰t‰ ei varsinaisesti kommunikoitu miss‰‰n vaiheessa, vaan asiaan havahtui vasta laskun saavuttua. Kuukauden mittaisesta EC2 (malli medium?) instanssien ajamisesta olisi tullut maksettavaa 1000 dollarin verran (verojen kanssa 1200 euroa?). Onneksi asian sai selvitetty‰ asiakaspalvelun kanssa ja AWS insinˆˆrit tarkistivat pyynnˆst‰ni lokeista ett‰ olin tosiasiassa k‰ytt‰nyt EMR liukuhihnaani vain muutaman kerran kuten kerroinkin. AWS supportille kiitosta siit‰ kuinka mutkattomasti asia hoitui lopulta: pyyhkiv‰t kuukauden laskun kokonaan ja lis‰siv‰t kuluvalle kuulle krediittej‰ sen verran ett‰ lasku tulisi kuitattua.
+
+Oikea keino olisi ollut ajaa tarvittavat er‰ajot ja tuloksien saannin j‰lkeen pys‰ytt‰‰ liukuhihna, jolloin varatut resurssit olisi vapautettu. Huonoa t‰ss‰ on se ett‰ samaa liukuhihnaa ei ehk‰ saa uudestaan k‰yntiin?
+
+Parempaa asiakaskokemusta olisi tiedottaa paremmin ett‰ t‰m‰ palvelu tosiaan varaa X m‰‰r‰n resursseja koko ajan, mutta se taitaa periaatteessa olla sertifikaattien tarkoitus osittain ett‰ oppii n‰m‰ nippelinappelit?
+EMR pipeline olisi myˆs voinut mennn‰ "nukkumaan" kuten jotkut pilvipalvelut toimivat.
+EMR pipeline olisi voinut terminoitua kokonaan X ajan k‰ytt‰m‰ttˆmyyden takia -> ehk‰ ei koska tulokset voisi kadota virtuaalikoneelta.
+
+EMR pystytys
+
+- lessons learnt
+- mik‰ meni vikaan
+
+EMR pystytys komentorivilt‰
+
+- workflow?
+
+En saanut hyvi‰ tuloksia
+
+Saadut tulokset eiv‰t ole palveluiden kuten Netflix tasolla, mutta ei sit‰ varmaan kannattanut odottaakaan. Yll‰tt‰v‰‰ oli tosin se, kuinka huonoja saadut suositukset olivat. Yll‰tt‰vi‰ kyll‰, mutta mik‰‰n elokuvista ei kuulostanut soveliailta.
+
 \section{Tulevaa tyˆt‰}
 
 MLlib-kirjastoa voitaisiin tutkia uudestaan siin‰ vaiheessa, kun Dataset-rajapintaa voidaan k‰ytt‰‰ MLlib:n kanssa.
