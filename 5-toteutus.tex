@@ -1,24 +1,58 @@
 \documentclass[main.tex]{thesis.tex}
 \begin{document}
-	
-\lstset{
-	columns=flexible,
-	breaklines=true,
-	tabsize=2,
-	language=Scala,
-	commentstyle=\color{scalacomment},
-	keywordstyle=\color{blue},
-	numbers=left,
-	numbersep=15pt,
-}
 
 \chapter{Toteutus}
 
 Tässä luvussa esitetään työn toteutuksen oleelliset osat.
 Opetusdata, sen lataaminen ja siistiminen Sparkia varten.
+EMR-klusterin pystyttäminen.
 Projektin rakenne.
 Mallin opettaminen.
 Ennustusten kerääminen mallin avulla.
+
+\section{EMR-klusterin pystyttäminen}
+
+Tässä osiossa esitetään EMR-klusterin pystyttäminen sekä työssä käytetyllä tavalla että vaihtoehtoisesti komentorivin kautta tapahtuvalla keinolla.
+Voidaan pystyttää esimerkiksi myös suoraan Spark-sovelluksesta.
+
+MITEN ITSE TEIN? MISSÄ SE PIRUN LINKKI ON
+
+\lstset{
+	columns=flexible,
+	breaklines=true,
+	tabsize=2,
+	language=sh,
+	keywordstyle=,
+	numbers=left,
+	numbersep=15pt,
+}
+
+\begin{lstlisting}[caption=Liukuhihnan pystytys komentoriviltä \cite{create_cluster},language=sh]
+aws emr create-cluster \
+	--name "cluster" \
+	--release-label emr-5.17.0 \
+	--applications Name=Spark \
+	--ec2-attributesKeyName=myKey \
+	--instance-type m4.large \
+	--instance-count 3 \
+	--use-default-roles
+\end{lstlisting}
+
+Yllä olevassa esimerkissä pystytetään EMR klusteri AWS:n komentorivityökalun avulla.
+Rivinvaihtomerkit \textit{\mybs} on lisätty selkeyden takia, joten ne eivät ole merkityksellisiä komennon kannalta. \cite{create_cluster}
+
+\begin{lstlisting}[caption=Sovelluksen ajaminen AWS EMR:ssä]
+> sbt package
+> aws s3 cp movielens.jar s3://movielens/movielens.jar
+> aws s3 cp s3://movielens/movielens.jar .
+> spark-submit ./movielens.jar
+\end{lstlisting}
+
+Yllä olevassa ohjelmassa esitetään askeleet, jolla sovellus saadaan paketoitua, lähetettyä AWS:n virtuaalikoneelle ja ajettua EMR-klusterissa.
+Ensin ohjelma paketoidaan $jar$-tiedostoksi.
+Seuraavaksi $jar$-tiedosto läheteään S3-palveluun, jossa sijaitsee \textit{movielens} niminen bucket.
+Tämän jälkeen otetaan ssh-yhteys virtuaalikoneelle ja ladataan $jar$-tiedosto samaisesta bucketista.
+Lopuksi käytetään \textit{spark-submit} -työkalua sovelluksen ajamiseen EMR-klusterissa.
 
 \section{Opetusdata}
 
@@ -84,17 +118,17 @@ spark-submit movielens-recommendations_2.11-1.0.jar
 
 ~
 
-Alla olevassa esimerkissä 5.3 ladataan työssä käytetyt suositukset RDD rajapintaa käyttäen.
+Alla olevassa esimerkissä ladataan työssä käytetyt suositukset RDD rajapintaa käyttäen.
 
-\lstset {
-	language=Scala,
-	basicstyle=\footnotesize,
-	numbers=left,
-	stepnumber=1,
-	showstringspaces=false,
-	tabsize=2,
+\lstset{
+	columns=flexible,
 	breaklines=true,
-	breakatwhitespace=false,
+	tabsize=2,
+	language=Scala,
+	commentstyle=\color{scalacomment},
+	keywordstyle=\color{blue},
+	numbers=left,
+	numbersep=15pt,
 }
 
 \begin{lstlisting}[caption=Suositusten lataaminen RDD rajapintaa käyttäen]
@@ -113,18 +147,7 @@ val ratings = sc.textFile("ml-latest-small/ratings.csv")
 
 ~
 
-Alla olevassa esimerkissä 5.4 ladataan työssä käytetyt suositukset Dataset-rajapintaa käyttäen.
-
-\lstset {
-	language=Scala,
-	basicstyle=\footnotesize,
-	numbers=left,
-	stepnumber=1,
-	showstringspaces=false,
-	tabsize=2,
-	breaklines=true,
-	breakatwhitespace=false,
-}
+Alla olevassa esimerkissä ladataan työssä käytetyt suositukset Dataset-rajapintaa käyttäen.
 
 \begin{lstlisting}[caption=Suositusten lataaminen Dataset rajapintaa käyttäen]
 val ratings = spark.read.csv("ml-latest-small/ratings.csv")
@@ -139,11 +162,9 @@ val ratings = spark.read.csv("ml-latest-small/ratings.csv")
   }
 \end{lstlisting}
 
-\newpage
-
 \section{Opetusdatan lataaminen Spark sovellukseen}
 
-Alla olevassa koodilistauksessa 5.5 on esimerkki opetusdatan lataamisesta S3:sta.
+Alla olevassa koodilistauksessa on esimerkki opetusdatan lataamisesta S3:sta.
 
 \begin{lstlisting}[caption=Aineiston lataaminen]
 val ratings = sc.textFile("s3n://bucket/ratings.csv")
@@ -167,7 +188,7 @@ Opetusdataa ei juuri tarvinnut siistiä, sillä opetukseen käytettiin valmista, hy
 
 \section{Mallin opettaminen}
 
-Alla olevassa koodilistauksessa 5.6 on esitetty esimerkki mallin opettamisesta.
+Alla olevassa koodilistauksessa on esitetty esimerkki mallin opettamisesta.
 
 \begin{lstlisting}[caption=Mallin opettaminen]
 for (rank <- ranks; lambda <- lambdas; numIter <- numIters) {
@@ -203,13 +224,9 @@ Tutkimuksessa oltiin päädytty arvoon 0.819942, kun taas paras itse opetettu mall
 Omassa opetuksessa eroavaisuuksina olivat tämän hetken lähin vastaava datasetti, joka ei ollut aivan niin suuri kuin tutkimuksessa käytetty, myös opetus datojen suhde oli hieman eri, sillä oman toteutuksen RMSE-validointi tarvitsi oman osansa datasta, olisi tietysti voitu käyttää validointiin myös samaa dataa kuten ilmeisesti tutkimuksessa oli tehty tai sitten RMSE oli arvioitu eri tekniikkaa käyttäen.
 Tutkimuksessa paras arvo saatiin 80-20 datasettiä käyttäen ja omassa opetuksessa käytössä oli 60-20-20 datasetti.
 
-% TODO: taulukko omien koulutusten tuloksista miten lambda omissa vaikutti?
-
-\newpage
-
 \section{Ennustaminen}
 
-Alla olevassa koodilistauksessa 5.7 on esitetty esimerkki suositusten ennustamisesta.
+Alla olevassa koodilistauksessa on esitetty esimerkki suositusten ennustamisesta.
 
 \begin{lstlisting}[caption=Suositusten ennustaminen]
 val myRatedMovieIds = personalRatings.map(_.product).toSet
@@ -228,11 +245,9 @@ Yllä olevassa koodilistauksessa haetaan henkilökohtaiset suositukset käyttämällä
 Mahdollisilla elokuvilla tarkoitetaan elokuvia, joita käyttäjä ei ole vielä nähnyt, eli ne eivät sisälly $personalRatings$ muuttujan sisältämiin elokuviin.
 $bestModel$ on aiemmin talteen otettu parhaan RMSE-arvon omaava malli. Tarkemmin sanottuna se on mallin sisältämä $Option$ muuttuja, jonka sisällä olevaan malliin päästään käsiksi $get$-funktion avulla.
 
-\newpage
-
 \section{Apufunktiot}
 
-Alla olevassa kooodilistauksessa 5.8 esitetään käytetyt apufunktiot.
+Alla olevassa kooodilistauksessa esitetään käytetyt apufunktiot.
 
 \begin{lstlisting}[caption=Apufunktiot]
 def computeRmse(

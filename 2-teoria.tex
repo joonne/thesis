@@ -155,22 +155,130 @@ Master on solmu, joka tarkkailee teht‰vien ja klusterin tilaa ajamalla sovellusk
 Core on Slave-solmu, jossa sijaitsee sovelluskompontteja, jotka ajavat teht‰vi‰ ja tallentavat dataa HDFS:‰‰n klusterissa.
 Task on Slave-solmu, jossa sijaitsee sovelluskomponentteja, jotka ajavat vain teht‰vi‰, Task-solmujen m‰‰ritt‰minen on vapaaehtoista. \cite{emr}
 
-\begin{figure}[h]
-	\caption{EMR-klusteri \cite{emr}}
-	\centering
-	\includegraphics[scale=0.8]{cluster-node-types}
-\end{figure}
+%\begin{figure}[h]
+%	\caption{EMR-klusteri \cite{emr}}
+%	\centering
+%	\includegraphics[scale=0.8]{cluster-node-types}
+%\end{figure}
 
-Yll‰ oleva kuva esitt‰‰ klusterin, jossa on master-solmu sek‰ nelj‰ slave-solmua.
+%Yll‰ oleva kuva esitt‰‰ klusterin, jossa on master-solmu sek‰ nelj‰ slave-solmua.
 
 \subsection{Simple Storage Service (S3)}
 
 Amazon S3 (Simple Storage Service) on tietovarasto, joka tarjoaa yksinkertaisen rajapinnan, jonka avulla voidaan tallettaa tai noutaa mink‰ verran dataa tahansa, milloin vain ja mist‰ tahansa webiss‰.
 Se on suunniteltu tekem‰‰n web-mittakaavan (web-scale) laskennasta yksinkertaisempaa kehitt‰jille.
-Se antaa kehitt‰jille p‰‰syn samoihin hyvin skaalautuvaan, luotettavaan, nopeaan ja edulliseen tietovarasto-infrastruktuuriin, jota Amazon k‰ytt‰‰ itse globaalin verkkosivustokatraansa ajamiseen. \cite{s3}
+Se antaa kehitt‰jille p‰‰syn samaan hyvin skaalautuvaan, luotettavaan, nopeaan ja edulliseen tietovarasto-infrastruktuuriin, jota Amazon k‰ytt‰‰ itse globaalin verkkosivustokatraansa ajamiseen. \cite{s3}
 
 T‰ss‰ tyˆss‰ S3:a k‰ytet‰‰n varastoimaan opetusdataa.
 Tarvittaessa Apache Sparkin laskennan v‰livaiheita voidaan tallentaa muistiin jolloin niiden tulokset voitaisiin lukea suoraan ilman ett‰ niit‰ tarvitsee laskea uudelleen.
 Myˆs koko opetettu malli voitaisiin tallentaa S3:een ja esimerkiksi ladata vaikka omalle koneelle, jolloin AWS:‰‰ tulisi myˆs k‰ytetty‰ optimaalisesti, sill‰ EC2 instanssien varaaminen aiheuttaa maksuja koko ajan.
+
+\section{Scala}
+
+\lstset{
+	columns=flexible,
+	breaklines=true,
+	tabsize=2,
+	language=Scala,
+	commentstyle=\color{scalacomment},
+	keywordstyle=\color{blue},
+	numbers=left,
+	numbersep=15pt,
+}
+
+Scala on moniparadigmainen ohjelmointikieli, joka tukee sek‰ olio- ett‰ funktionaalista ohjelmointia.
+Funktionaalista ohjelmointia varten Scalasta lˆytyy tuki funktionaalisen ohjelmoinnin k‰sitteille, kuten muuttumattomat tietorakenteet ja funktiot ensimm‰isen luokan kansalaisina.
+Olio-ohjelmointia varten Scalasta lˆytyy tuki k‰sitteille kuten luokat, oliot ja piirre (trait).
+Scala tukee myˆs kapselointia, perint‰‰, moniperint‰‰ ja muita t‰rkeit‰ olio-ohjelmoinnin konsepteja.
+Scala on staattisesti tyypitetty kieli ja sill‰ kirjoitetut ohjelmat k‰‰nnet‰‰n Scala-k‰‰nt‰j‰‰ k‰ytt‰en.
+Scala on JVM-perustainen (Java Virtual Machine, Java-virtuaalikone) kieli, joten Scala k‰‰nt‰j‰ k‰‰nt‰‰ sovelluksen Java-tavukoodiksi, joka voidaan ajaa miss‰ tahansa Java-virtuaalikoneessa.
+Tavukooditasolla Scala ohjelmaa ei voida erottaa Java sovelluksesta.
+Scalan ollessa JVM-perustainen, Scala on t‰ysin yhteensopiva Javan kanssa ja n‰in ollen Java-kirjastoja voidaan k‰ytt‰‰ suoraan Scala-koodissa.
+T‰st‰ syyst‰ Scala-sovellukset hyˆtyv‰t suuresta Java-koodin m‰‰r‰st‰.
+Vaikka Scala tukee sek‰ olio- ett‰ funktionaalista ohjelmointia, funktionaalista ohjelmointia suositaan. \cite{guller15}
+
+\subsection{Perustyypit}
+
+Scalan perustyypit numeroiden esitt‰miseen ovat Byte, Short, Int, Long, Float ja Double.
+Lis‰ksi Scalassa on perustyypit Char, String ja Boolean.
+Char on 16 bittinen etumerkitˆn Unicode-merkki.
+String on jono Char:eja.
+Boolean esitt‰‰ totuusarvoa tosi (true) tai ep‰tosi (false). \cite{guller15}
+
+Javasta poiketen Scalassa ei ole ollenkaan primitiivisi‰ tyyppej‰ vaan jokainen tyyppi on toteutettu luokkana.
+K‰‰nnˆksen aikana k‰‰nt‰j‰ tarvittaessa automaattisesti muuntaa Scala tyypit Javan primitiivisiksi tyypeiksi. \cite{guller15}
+
+\subsection{Muuttujat}
+
+Scalassa on kahdentyyppisi‰ muuttujia: muuttuvia ja vakioita.
+Muuttuva muuttuja m‰‰ritell‰‰n avainsanan $var$ avulla.
+Muuttuvaa muuttujaa ei voida asettaa uudelleen luomisen j‰lkeen.
+Var:ien k‰yttˆ‰ ei suositella, mutta joskus niiden k‰ytt‰misell‰ saadaan aikaan yksinkertaisempaa ohjelmakoodia ja t‰st‰ syyst‰ Scala tukee myˆs muuttuvia muuttujia.
+Vakiota, $val$, ei sen sijaan voida antaa uudelleen luomisen j‰lkeen. \cite{guller15}
+
+Syntaksi $val$:in ja $var$:in luomiseksi on
+
+\begin{lstlisting}[caption=Muuttujien luominen ja uudelleen asettaminen]
+var x = 10
+x = 20
+val y = 10
+\end{lstlisting}
+
+Mik‰li vakiota yritett‰‰n uudelleenm‰‰ritt‰‰ myˆhemmin ohjelmassa, k‰‰nt‰j‰ antaa virheen.
+Huomionarvoista yll‰olevassa syntaksissa on se, ett‰ Scala k‰‰nt‰j‰ ei pakota m‰‰rittelem‰‰n muuttujan tyyppi‰ sillon kuin k‰‰nt‰j‰ pystyy p‰‰ttelem‰‰n (type deduction) sen.
+
+\begin{lstlisting}[caption=Muuttujan luominen tyyppim‰‰rittelyn avulla]
+var x: Int = 10
+val y: Int = 10
+\end{lstlisting}
+
+\subsection{Funktiot}
+
+Funktio on lohko suoritettavaa koodia joka palauttaa arvon.
+Se on konseptuaalisesti samankaltainen kuin matematiikassa: funktio ottaa sis‰‰ntulon ja palauttaa ulostulon. \cite{guller15}
+
+Scalan funktiot ovat ensimm‰isen luokan kansalaisia, jolla tarkoitetaan, ett‰ funktiota voidaan:
+
+\begin{itemize}
+	\item k‰ytt‰‰ kuten muuttujaa
+	\item antaa syˆtteen‰ toiselle funktiolle
+	\item m‰‰ritell‰ nimettˆm‰n‰ funktioliteraalina
+	\item asettaa muuttujaan
+	\item m‰‰ritell‰ toisen funktion sis‰ll‰
+	\item palauttaa toisen funktion ulostulona
+\end{itemize}
+
+\cite{guller15}
+
+Scalassa funktio m‰‰ritell‰‰n avainsanalla $def$.
+Funktion m‰‰rittely aloitetaan funktion nimell‰, jota seuraa sulkeissa olevat, pilkulla erotetut, parametrit tyyppim‰‰rittelyineen.
+Parametrien j‰lkeen funktiom‰‰rittelyyn tulee kaksoispiste, funktion ulostulon tyyppi, yht‰suuruusmerkki sek‰ funktion runko joko aaltosulkeissa tai ilman. \cite{guller15}
+
+\lstset{language=Scala,tabsize=2}
+
+\begin{lstlisting}[caption=Funktio]
+def add(first: Int, second: Int): Int = {
+	val sum = first + second
+	return sum
+}
+\end{lstlisting}
+
+Yll‰olevassa esimerkiss‰ funktion nimi on $add$ ja se ottaa kaksi $Int$ tyyppist‰ sis‰‰ntuloa.
+Funktio palauttaa $Int$ tyyppisen arvon jonka se muodostaa lis‰‰m‰ll‰ annetut sis‰‰ntulot yhteen ja palauttamalla tuloksen.
+
+Scala sallii myˆs lyhyemm‰n version samasta funktiosta:
+
+\lstset{language=Scala,tabsize=2}
+
+\begin{lstlisting}[caption=Funktio]
+def add(first: Int, second: Int) = first + second
+\end{lstlisting}
+
+Toinen versio tekee t‰sm‰lleen saman asian kuin ensimm‰inenkin, mutta se on vain kirjoitettu lyhyemmin.
+Paluuarvon tyyppi on j‰tetty antamatta, sill‰ k‰‰nt‰j‰ pystyy p‰‰ttelem‰‰n sen koodista.
+Paluuarvon tyyppi suositellaan kuitenkin annettavan aina.
+Aaltosulkeet on myˆskin j‰tetty pois, sill‰ ne ovat pakolliset vain kun funktion runko sis‰lt‰‰ useamman kuin yhden lausekkeen.
+Lis‰ksi, $return$ avainsana on ohitettu, sill‰ se on vapaaehtoinen.
+Scalassa kaikki lausekkeet ovat arvon palauttavia lausekkeita, joten funktion rungon viimeisen lausekkeen arvosta tulee funktion paluuarvo. \cite{guller15}
 
 \end{document}
