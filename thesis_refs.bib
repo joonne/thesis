@@ -15,6 +15,10 @@
 
 @STRING(p-ieee    = "Proc. IEEE")
 
+@IEEEtranBSTCTL{IEEEexample:BSTcontrol,
+	CTLdash_repeated_names    = "no"
+}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% AAA
@@ -23,15 +27,16 @@
 
 @Article{aberger14,
 	author = {C. Aberger},
-	title = {Recommender: An Analysis of Collaborative Filtering Techniques},
+	title = {{Recommender: An Analysis of Collaborative Filtering Techniques}},
 	year = {2014},
-	url = {http://cs229.stanford.edu/proj2014/Christopher%20Aberger,%20Recommender.pdf}
+	url = {http://cs229.stanford.edu/proj2014/Christopher%20Aberger,%20Recommender.pdf},
+	language={english}
 	}
  
 @Article{adomavicious11,
   author = 	 {G. Adomavicius and B. Mobasher and F. Ricci and A. Tuzhilin},
-  title = 	 {Context-Aware Recommender Systems},
-  journal = 	 {AI Magazine},
+  title = 	 {{Context-Aware Recommender Systems}},
+  journal =  {AI Magazine},
   year = 	 {2011},
   OPTkey = 	 {},
   volume = 	 {},
@@ -44,7 +49,7 @@
 
 @Book{aggarwal16,
 	author = {Charu. C. Aggarwal},
-	title = {Recommender Systems},
+	title = {{Recommender Systems}},
 	year = {2016},
 	publisher = {Springer International Publishing},
 	doi = {10.1007/978-3-319-29659-3}}	
@@ -65,7 +70,7 @@
 
 @Online{create_cluster,
 	author = {Amazon},
-	title = {Create a Cluster With Spark},
+	title = {{Create a Cluster With Spark}},
 	year = {2018},
 	url = {https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-spark-launch.html}
 }
@@ -329,11 +334,6 @@
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-@Article{bots16,
-	author = {Microsoft},
-	title = {Bots},
-	url = {https://docs.botframework.com/en-us/}}
-
 @Online{mapRSpark,
 	author={MapR Technologies},
 	title={Apache Spark},
@@ -345,9 +345,14 @@
 	url={http://www.jgrcs.info/index.php/jgrcs/article/view/1015/644}}
 
 @Online{movieLens17,
-	author={MovieLens},
-	url={https://movielens.org/info/about}
-	}
+	author={{GroupLens Research}},
+	title={MovieLens},
+	url={https://movielens.org/info/about}}
+
+@Online{mllib,
+	author={{Apache Software Foundation}},
+	title={{Machine Learning Library (MLlib) Guide}},
+	url={https://spark.apache.org/docs/latest/ml-guide.html}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%

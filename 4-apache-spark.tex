@@ -86,6 +86,8 @@ Yksinkertaisimmat työt voivat valmistua vain yhden tason jälkeen ja monimutkaise
 	\includegraphics[scale=1.0]{directed_acyclic_graph}
 \end{figure}
 
+\newpage
+
 \section{Dataset API}
 
 Dataset (DS) on vahvasti tyypitetty kokoelma domain spesifisiä objekteja, jotka voidaan muuntaa rinnakkain käyttäen funktionaalisia tai relaatio-operaatioita.
@@ -216,5 +218,21 @@ DataFrame-oliota luotaessa Spark arvaa luodun objektin sisäisen mallin.
 %	\centering
 %	\includegraphics[scale=1.0]{dataframe}
 %\end{figure}
+
+\section{Mllib}
+
+MLlib on Sparkin koneoppimiskirjasto.
+Projektin tavoitteena on tehdä käytännönläheisestä koneoppimisesta skaalautuvaa ja helppoa.
+MLlib tarjoaa muunmuassa seuraavanlaisia palveluita:
+
+\begin{itemize}
+	\item \textbf{Koneoppimisalgoritmit} oppimisalgoritmeja kuten luokittelua, regressiota, klusterointia ja yhteisöllistä suodatusta
+	\item \textbf{Featurization} piirreirroituis (feature extraction), transformaatiot, dimensioiden vähentäminen (dimensionality reduction) -ja valitseminen
+	\item \textbf{Liukuhihnat} työkalut koneoppimisliukuhihnojen rakentamiseen, arviointiin ja muokkaamiseen
+	\item \textbf{Persistointi} algoritmien, mallien ja liukuhihnojen tallentaminen ja lataaminen
+	\item \textbf{Apuohjelmat} esimerkiksi lineaari algebra, statistiikka ja datan käsittely
+\end{itemize}
+
+\cite{mllib}
 
 \end{document}
