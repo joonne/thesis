@@ -213,17 +213,17 @@ val people = spark.read.json("./people.json")
 
 DataFrame-oliota luotaessa Spark arvaa luodun objektin sisäisen mallin.
 
-%\begin{figure}[h]
-%	\caption{DataFrame}
-%	\centering
-%	\includegraphics[scale=1.0]{dataframe}
-%\end{figure}
+\begin{figure}[h]
+	\caption{DataFrame}
+	\centering
+	\includegraphics[scale=1.0]{dataframe}
+\end{figure}
 
 \section{Mllib}
 
 MLlib on Sparkin koneoppimiskirjasto.
 Projektin tavoitteena on tehdä käytännönläheisestä koneoppimisesta skaalautuvaa ja helppoa.
-MLlib tarjoaa muunmuassa seuraavanlaisia palveluita:
+MLlib tarjoaa muun muassa seuraavanlaisia palveluita:
 
 \begin{itemize}
 	\item \textbf{Koneoppimisalgoritmit} oppimisalgoritmeja kuten luokittelua, regressiota, klusterointia ja yhteisöllistä suodatusta
@@ -234,5 +234,7 @@ MLlib tarjoaa muunmuassa seuraavanlaisia palveluita:
 \end{itemize}
 
 \cite{mllib}
+
+Tässä työssä tutustutaan MLlib-kirjaston tarjoamaan ALS-kirjastoon, jolla malli opetetaan.
 
 \end{document}

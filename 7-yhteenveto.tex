@@ -14,11 +14,35 @@ AWS-palveluiden tuntemus on varsin hyödyllinen taito ja tässä työssä tuli pieni 
 Olemassaolevien suosittelujärjestelmien tai analytiikkajärjestelmien evaluointi tulisi suorittaa ennen suosittelujärjestelmän valintaa.
 Suuremman datasetin käyttäminen sekä isomman arvostelumäärän tarjoaminen järjestelmälle voisi parantaa tuloksia.
 
-Pystytin EMR-liukuhihnan (pipeline) ohjeiden VIITE mukaisesti.
-Nimi on On-Demand, kuten VIITE sanotaan, mutta tosiasiassa varatut EC2-instanssit pysyvätkin ajossa kellon ympäri.
+Aluksi EMR-liukuhihnan pystyttämistä yritettiin vain Amazonin WEB käyttöliittymän konsolin kautta, mutta ilman lisäohjeistusta kaikkien valintojen tutkiminen ja varsinkin ymmärtäminen vaikutti turhan työläältä.
+Etsinnän jälkeen sopivat ohjeistukset löytyivät ja EMR saatiin konfiguroitua. Aiemman EMR opiskelun ansiosta videolla mainitut asiat olivat helposti omaksuttavissa, kuten esimerkiksi salaisuuksien (credentials) lisääminen ja EMR:n virtuaalikoneisiin yhdistäminen.
+Lisäksi aiemmat tiedot Amazon S3:sta sekä yleiset komentorivitaidot olivat hyödyksi.
+Jälkeen päin mietittynä sopivan ohjeistuksen etsimiseen käytetyn ajan olisi voinut tietysti myös käyttää EMR:n opiskeluun Amazonin omien ohjeistusten mukaan.
+
+Jälkeen päin opiskeltuani lisää että miten olisin voinut välttää laskun, selvisi että on olemassa erilliset AWS:n palvelut laskujen monitorointiin ja tulevan laskun ennustamiseen.
+Amazon Cost Explorer mahdollistaa laskujen tutkimisen, Amazon Budget puolestaan valvoo tulevan laskun määrää ja ilmoittaa mikäli ollaan menossa asetetuista rajoista yli.
+
+Oletusarvoisesti EMR kirjottaa logit S3:een ja siitä seuranneet sähköpostiviestit Free Tier pyyntöjen rajan ylittämisestä olivat ensimmäinen indikaatio, että jokin saattaa alkaa tekemään laskua.
+Liukuhihnaa ei ole mahdollista muokata jälkeenpäin, joten se piti poistaa jotta loki-tiedostojen kirjoittaminen saattin poistettua käytöstä.
+Free Tieriin kuuluu 2000 kutsua kuukaudessa ja koska kaikki logit kirjoitettiin niin tämä raja tuli vastaan nopeasti.
+
+Kuva EMR?
+
+Työssä käytetty EMR-liukuhihna pystytettiin ohjeiden \cite{levelup} mukaisesti.
+Pystytettävän palvelun nimi on On-Demand Pipeline, mutta tosiasiassa varatut EC2-instanssit pysyvät ajossa kellon ympäri.
+Tämän olisi voinut välttää laittamalla valintaruutuun valinnan, joka olisi sulkenut liukuhihnan ohjelman suorituksen jälkeen, mutta tässä työssä tavoitteena oli päästä ajelemaan silloin kun oli tehty uusi versio.
 Tätä ei varsinaisesti kommunikoitu missään vaiheessa, vaan asiaan havahtui vasta laskun saavuttua.
-Kuukauden mittaisesta EC2 (malli medium?) instanssien ajamisesta olisi tullut maksettavaa 1000 dollarin verran (verojen kanssa 1200 euroa?).
-Onneksi asian sai selvitettyä asiakaspalvelun kanssa ja AWS asiakaspalvelun insinöörit tarkistivat pyynnöstäni lokeista että olin tosiasiassa käyttänyt EMR-liukuhihnaani vain muutaman kerran, kuten kerroinkin.
+Kuukauden mittaisesta EC2 (m3.xlarge) -instanssien ajamisesta olisi tullut maksettavaa reilu 1000 dollarin verran.
+
+\begin{figure}[h]
+	\caption{AWS lasku}
+	\centering
+	\includegraphics[scale=0.3]{aws_bill}
+\end{figure}
+
+Laskutus menee myös niin, että joutuu erikseen maksamaan 0.266/h lisäksi 0.07/h dollaria erilistä EMR lisää.
+Katastrofin ainekset olivat siis ilmassa.
+Onneksi asian sai selvitettyä asiakaspalvelun kanssa ja AWS-asiakaspalvelun insinöörit tarkistivat pyynnöstäni lokeista että olin tosiasiassa käyttänyt EMR-liukuhihnaani vain muutaman kerran, kuten kerroinkin.
 AWS:n asiakaspalvelulle kiitosta siitä kuinka mutkattomasti asia hoitui lopulta: pyyhkivät kuukauden laskun kokonaan ja lisäsivät kuluvalle kuulle krediittejä sen verran että lasku tulisi kuitattua.
 
 Oikea keino olisi ollut pystyttää liukuhihna, ajaa tarvittavat eräajot ja tuloksien saannin jälkeen pysäyttää liukuhihna, jolloin varatut resurssit olisi vapautettu.
