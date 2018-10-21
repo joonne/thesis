@@ -53,7 +53,7 @@ Parempaa asiakaskokemusta olisi tiedottaa paremmin että tämä palvelu tosiaan var
 EMR-liukuhihna olisi myös voinut mennnä "nukkumaan" kuten jotkut pilvipalvelut toimivat.
 EMR-liukuhihna olisi voinut terminoitua kokonaan X ajan käyttämättömyyden takia -> ehkä ei koska tulokset voisi kadota virtuaalikoneelta.
 
-EMR pystytys piti tehdä käytännössä kolmannen osapuolen videon perusteella, sillä AWS:n omat ohjeistukset eivät olleet riittävät, tai ainakin ne olivat vaikeaselkoiset. Osa sertifikaattien tarkoitusta? LINKKI
+EMR pystytys piti tehdä käytännössä kolmannen osapuolen videon perusteella, sillä AWS:n omat ohjeistukset eivät olleet riittävät, tai ainakin ne olivat vaikeaselkoiset. \cite{levelup}
 
 Saadut tulokset eivät ole palveluiden kuten Netflix tasolla, mutta ei sitä varmaan kannattanut odottaakaan.
 Mielenkiintoista oli se, kuinka "huonoja" saadut suositukset olivat.
@@ -67,18 +67,20 @@ Elokuvan julkaisuvuosi, ohjaajan tunnettuus, näyttelijät ja jopa kansikuva herät
 MLlib-kirjastoa voitaisiin tutkia uudestaan siinä vaiheessa, kun Dataset-rajapintaa voidaan käyttää MLlib:n kanssa.
 Toteutusta yritettiin myös Dataset-rajapintaa hyväksikäyttäen, mutta kaikki ominaisuudet eivät olleet tuolloin vielä käytössä.
 
-Työtä aloittaessa MLlib-kirjasto
+Työtä aloittaessa MLlib-kirjasto oli versiossa 1.6 ja työtä lopettaessa versiossa 2.3.
+Ohjelmointimalli on vaihtunut RDD-perusteisesta rajapinnasta DataFrame-perusteiseen rajapintaan.
+MLlib-kirjasto on vaihtunut ML nimiseen kirjastoon.
 
 Yhteisöllistä suodatusta voidaan tietenkin käyttää muuhunkin tarkoitukseen kuin elokuvien suositteluun, kuten esimerkiksi kirjojen.
 Olisikin mielenkiintoista tutkia myös jotain muuta ongelmaa ja soveltaa siihen ALS-algoritmia.
 
-Verratun tutkimuksen \cite{miryala17} mukaista mallia voitaisiin vielä tutkia lisää, jos selviäisi keino, jolla RMSE:tä arvioitiin.
+Verratun tutkimuksen \cite{miryala17} mukaista mallia olisi mahdollista tutkia lisää, jos selviäisi keino, jolla RMSE:tä arvioitiin.
 Pitäisi siis esimerkiksi selvittää, oliko kyseisen tutkimuksen 60-40 suhteessa jaetun aineiston testidatasta osa käytetty validointiin kuten omassa toteutuksessa tehtiin, jossa aineisto jaettiin 60-20-20 suhteessa.
-Mikäli AWS-resursseja olisi runsaammin käytössä, niin olisi myös melko suoraviivaista testailla montaa muutakin kombinaatiota mallin parametreille.
+Mikäli AWS-resursseja olisi runsaammin käytössä, niin olisi myös melko suoraviivaista tutkia useampaakin kombinaatiota mallin parametreille.
 
 Työssä mainituista teknologioista esimerkiksi \textit{spark-submit} -työkalua voitaisiin tutkia lisää.
 Olisi mielenkiintoista ymmärtää, kuinka klusterinhallinta toimii ja miten Spark-tehtäviä (Spark Job) jaetaan eri solmuille.
-Nykyisessä toteutuksessa voidaan olettaa, että \textit{spark-submit} etsii tarvittavat parametrit automaattisesti EMR-klusterista.
+Nykyisessä toteutuksessa on oletettu, että \textit{spark-submit} etsii tarvittavat parametrit automaattisesti EMR-klusterista, sillä niitä ei annettu eksplisiittisesti.
 Kuten aliluvussa \ref{emr} mainittiin, EMR-klusteri on Hadoop-klusteri ja \textit{spark-submit} työkalun avainominaisuutena pidetään klusterinhallinnan helpottumista.
 Sparkin hajautetun ohjelmointimallin kannalta olisi myös mielenkiintoista tutkia sulkeumia ja erityisesti sitä, kuinka ne toimivat oikeassa klusterissa.
 

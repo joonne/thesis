@@ -1,0 +1,175 @@
+\documentclass[12pt,a4paper,finnish]{tutthesis}
+
+\usepackage{mathtools}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+\usepackage{lmodern}
+\usepackage{enumitem}
+\usepackage{subfiles}
+\usepackage{xcolor}
+
+\definecolor{scalacomment}{rgb}{0,0.6,0}
+\def\mybs{\char092}
+
+\renewcommand{\lstlistingname}{Ohjelma}
+
+% Ensure the correct Pdf size (not needed in all environments)
+\special{papersize=210mm,297mm}
+
+% Define your basic information
+\author{Jonne Petteri Pihlanen}
+\title{Suosittelijajärjestelmän rakentaminen Apache Sparkilla}      % primary title (for front page)
+\titleB{Building a Recommendation Engine with Apache Spark} % translated title for abstract
+\thesistype{Tiivistelmä} % or Bachelor of Science, Laboratory Report... 
+\examiner{Timo Aaltonen} % without title Prof., Dr., MSc or such
+
+% Special trick to use internal macros outside the cls file
+% (e.g. \@author). Trick is reversed with \makeatother a bit later.
+\makeatletter
+
+% Define the pdf document properties.  Fill in your own keywords.
+\hypersetup{   
+  pdftitle={\@title},
+  pdfauthor={\@author},
+  pdfkeywords={Apache Spark, Recommendation, MovieLens, Scala, AWS, EMR, S3}
+}
+
+\usepackage[finnish]{babel}
+\usepackage{babelbib}
+
+\pagenumbering{Roman}
+\pagestyle{headings}
+\begin{document}
+
+% Create the title page.
+\thispagestyle{empty}
+\vspace*{-1cm}\noindent
+\includegraphics[width=8cm]{tty_tut_logo}
+
+% Then lay out the author, title and type to the center of page.
+\vspace{6.8cm}
+\maketitle
+\vspace{7cm} % modify if thesis title needs many lines
+
+% Last some additional info to the bottom-right corner
+\begin{flushright}  
+  \begin{minipage}[c]{6.8cm}
+    \begin{spacing}{1.0}
+      \textsf{Tarkastaja: \@examiner}\\
+    \end{spacing}
+  \end{minipage}
+\end{flushright}
+
+% Leave the backside of title page empty in twoside mode
+\if@twoside
+\clearpage
+\fi
+
+\pagenumbering{roman} 
+\setcounter{page}{0} % Start numbering from zero because command 'chapter*' does page break
+
+\makeatother % Make the @ a special symbol again, as \@author and \@title are not neded after this
+
+% The actual text begins here and page numbering changes to 1,2...
+\newpage             % needed for page numbering
+\pagenumbering{arabic}
+\setcounter{page}{1} % Start numbering from zero because command
+                     % 'chapter*' does page break
+\renewcommand{\chaptername}{} % This disables the prefix 'Chapter' or
+                              % 'Luku' in page headers (in 'twoside'
+                              % mode)
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+% johdanto
+
+Suosittelujärjestelmät ovat jatkuvasti läsnä jokapäiväisessä elämässämme.
+Ne auttavat päätöksenteossa verkko-ostoksissa, suoratoistopalveluissa, sosiaalisessa mediassa tai yksinkertaisesti uutisten lukemisessa.
+Yksinkertaisin ja luonnollisin suosittelu tapahtuu ihmiseltä ihmiselle.
+Ihmiset voivat kuitenkin tehokkaasti suositella vain niitä asioita, jotka ovat itse henkilökohtaisesti kokeneet.
+Tällöin suosittelijajärjestelmistä tulee hyödyllisiä, sillä ne voivat mahdollisesti tarjota suosituksia tuhansista tai jopa miljoonista erilaisista tuotteista.
+
+% tavoitteet
+
+Koska työ tehtiin vain omaksi iloksi, tavoitteena oli uuden ohjelmointikielen opettelu, pilvipalveluun tutustuminen sekä Spark ohjelmistokehykseen tutustuminen.
+Akateeminen osuus hoidettiin etsimällä paperi jonka tutkimukseen perustin oman mallin opetukseni.
+
+% suosittelu
+
+Suosittelijajärjestelmät eroavat toisistaan kohdistetun toimialan, käytetyn tiedon ja erityisesti siinä kuinka suositukset tehdään, jolla tarkoitetaan suosittelualgoritmia.
+Tässä työssä keskitytään vain yhteen suosittelutekniikoiden luokkkaan, yhteisösuodatukseen, sillä tätä menetelmää käytetään Apache Sparkin MLlib -kirjastossa.
+
+Yhteisösuodatusta käyttävät suosittelijajärjestelmät perustuvat käyttäjien yhteistyöhön.
+Niiden tavoitteena on tunnistaa malleja käyttäjän mielenkiinnoista voidakseen tehdä suunnattuja suosituksia.
+Yhteisösuodatus voidaan jakaa kahteen kategoriaan: \textit{tuotepohjaiseen- ja käyttäjäpohjaiseen yhteisösuodatukseen}.
+Tuotepohjaisessa suosittelussa tarkoituksena on etsiä samankaltaisia tuotteita, sillä käyttäjän ajatellaan olevan mahdollisesti kiinnostunut samankaltaisista tuotteista myös tulevaisuudessa.
+Käyttäjäpohjaisessa suosittelussa käyttäjän ajatellaan olevan kiinnostunut tuotteista, joita samankaltaiset käyttäjät ovat ostaneet, joten siinä on tarkoituksena etsiä samankaltaisia käyttäjiä, jotta voidaan suositella näiden ostamia tuotteita.
+
+% päämäärä
+
+Työn päämääränä on tutustua Apache Spark-sovelluskehykseen sekä Scala-ohjelmointikieleen ja toteuttaa suosittelujärjestelmä näiden teknologioiden avulla siten, että suosittelua voidaan ajaa pilvipalvelussa.
+Pilvipalvelun ajateltiin tarjoavan helpommin laskentaresursseja käyttöön ja näin tapahtuikin.
+Alustaksi valikoitui ilman suurempia vertailuja Amazonin tarjoama Amazon Web Services (AWS).
+Tästä alustasta oli hieman aiempaa kokemusta, sillä sitä on käytetty töissä ja sen osaamisesta on varmasti hyötyä jatkossakin.
+
+% aws
+
+AWS  on Amazonin tarjoama kokoelma pilvilaskentaan (cloud computing) tarkoitettuja tai sitä avustavia palveluita.
+Kriteerinä oli Spark sovelluksen ajaminen pilvessä ja Amazonin palveluista tässä auttoivat EMR (Elastic Map Reduce) sekä S3 (Simple Storage Service).
+EMR on hallittu klusterialusta, joka yksinkertaistaa big data -sovelluskehysten, kuten Apache Sparkin, käyttämistä AWS:n palveluissa.
+S3 on tietovarasto, joka on suunniteltu helpottamaan pilvilaskentaa ja se tarjoaa yksinkertaisen rajapinnan tietovaraston hallintaan.
+
+Työssä käytetty EMR-liukuhihna pystytettiin löytyneiden ohjeiden mukaisesti.
+Pystytettävän palvelun nimi on On-Demand Pipeline, mutta tosiasiassa varatut EC2-instanssit pysyvät ajossa kellon ympäri.
+Tämän olisi voinut välttää laittamalla valintaruutuun valinnan, joka olisi sulkenut liukuhihnan ohjelman suorituksen jälkeen, mutta tässä työssä tavoitteena oli päästä ajelemaan silloin kun oli tehty uusi versio.
+Tätä ei varsinaisesti kommunikoitu missään vaiheessa, vaan asiaan havahtui vasta laskun saavuttua.
+Kuukauden mittaisesta EC2 (m3.xlarge) -instanssien ajamisesta olisi tullut maksettavaa reilut 1000 dollaria.
+
+% spark
+
+Apache Spark on sovelluskehys, joka mahdollistaa hajautettujen ohjelmien rakentamisen.
+Hajautetussa ohjelmassa suoritus voidaan jakaa useiden käsittelysolmujen kesken.
+Jotkin suositteluongelmat voidaan mallintaa hajautettuna ohjelmana, jossa kaksi matriisia, käyttäjät ja tuotteet, prosessoidaan iteratiivisella algoritmilla, joka mahdollistaa ohjelman suorittamisen rinnakkain.
+Spark-ohjelmia voidaan kirjoittaa Java-, Scala-, Python- sekä R-ohjelmointikielillä.
+Jokainen Spark-sovellus koostuu driver-ohjelmasta sekä yhdestä tai useammasta executor-ohjelmasta.
+Driver on ohjelma, joka ajaa käyttäjän pääohjelmaa ja hajauttaa laskennan klusteriin.
+Executor on yksi kone klusterissa.
+
+Spark voidaan esitellä kuvailemalla sen edeltäjää, MapReduce:a, ja sen tarjoamia etuja.
+MapReduce tarjosi yksinkertaisen mallin ohjelmien kirjoittamiseen ja pystyi suorittamaan kirjoitettua ohjelmaa rinnakkain sadoilla tietokoneilla.
+MapReduce skaalautuu lähes lineaarisesti datan koon kasvaessa.
+Suoritusaikaa hallitaan lisäämällä lisää tietokoneita suorittamaan tehtävää.
+
+Apache Spark säilyttää MapReduce:n lineaarisen skaalautuvuuden ja vikasietokyvyn mutta laajentaa sitä muutamalla merkittävällä tavalla.
+MapReducessa map- ja reduce-tehtävien väliset tulokset täytyy kirjoittaa levylle kun taas Spark kykenee välittämään tulokset suoraan liukuhihnan (pipeline) seuraavalle vaiheelle.
+Lisäksi Spark esittelee muistissa tapahtuvan prosessoinnin tarjoamalla abstraktion nimeltä \textit{Resilient Distributed Dataset (RDD)}. RDD tarjoaa kehittäjälle mahdollisuuden materialisoida minkä tahansa askeleen liukuhihnassa ja tallentaa sen muistiin.
+Tämä tarkoittaa sitä, että tulevien askelien ei tarvitse laskea aiempia tuloksia uudelleen ja tällöin on mahdollista jatkaa juuri käyttäjän haluamasta askeleesta.
+Aiemmin tämänkaltaista ominaisuutta ei ole ollut saatavilla hajautetun laskennan järjestelmissä.
+
+% scala
+
+Apache Spark on rakennettu Scala-ohjelmointikielellä.
+Scala on monikäyttöinen, moniparadigmainen ohjelmointikieli, joka tarjoaa tuen funktionaaliselle ohjelmoinnille sekä vahvan tyypityksen.
+Funktionaalista ohjelmointia varten Scalasta löytyy tuki funktionaalisen ohjelmoinnin käsitteille, kuten muuttumattomat (immutable) tietorakenteet ja funktiot ensimmäisen luokan kansalaisina.
+Olio-ohjelmointia varten Scalasta löytyy tuki käsitteille kuten luokat, oliot ja piirre (trait).
+Scala tukee myös kapselointia, perintää, moniperintää ja muita tärkeitä olio-ohjelmoinnin konsepteja.
+Scala on staattisesti tyypitetty kieli ja sillä kirjoitetut ohjelmat käännetään Scala-kääntäjää käyttäen.
+Scala on JVM-perustainen (Java Virtual Machine, Java-virtuaalikone) kieli, joten Scala kääntäjä kääntää sovelluksen Java-tavukoodiksi, joka voidaan ajaa missä tahansa Java-virtuaalikoneessa.
+Tavukooditasolla Scala ohjelmaa ei voida erottaa Java sovelluksesta.
+Scalan ollessa JVM-perustainen, Scala on täysin yhteensopiva Javan kanssa ja näin ollen Java-kirjastoja voidaan käyttää suoraan Scala-koodissa.
+Tästä syystä Scala-sovellukset hyötyvät suuresta Java-koodin määrästä.
+Vaikka Scala tukee sekä olio- että funktionaalista ohjelmointia, funktionaalista ohjelmointia suositaan.
+
+% tulokset
+
+Saadut tulokset eivät ole palveluiden kuten Netflix tasolla, mutta ei sitä varmaan kannattanut odottaakaan.
+Mielenkiintoista oli se, kuinka "huonoja" saadut suositukset olivat.
+Yllättäviä ja uusia kylläkin, mutta mikään elokuvista ei kuulosta mielekkäältä.
+Tässä tosin voikin piillä juuri hyvän suosittelun raja, sillä luultavasti ihmisen muodostama mielipide pelkän nimen perusteella saattaa johtaa elokuvan hylkäämiseen.
+Ihminen ei välttämättä ole täysin objektiivinen valitsemaan sitä, onko jokin suositeltu elokuva katsomisen arvoinen.
+Elokuvan julkaisuvuosi, ohjaajan tunnettuus, näyttelijät ja jopa kansikuva herättävät mielipiteitä, jotka saattavat johtaa elokuvan hylkäämiseen.
+
+\end{document}
+
