@@ -91,33 +91,29 @@ Yksinkertaisin ja luonnollisin suosittelu tapahtuu ihmiseltä ihmiselle.
 Ihmiset voivat kuitenkin tehokkaasti suositella vain niitä asioita, jotka ovat itse henkilökohtaisesti kokeneet.
 Tällöin suosittelijajärjestelmistä tulee hyödyllisiä, sillä ne voivat mahdollisesti tarjota suosituksia tuhansista tai jopa miljoonista erilaisista tuotteista.
 
-% tavoitteet
-
-Koska työ tehtiin vain omaksi iloksi, tavoitteena oli uuden ohjelmointikielen opettelu, pilvipalveluun tutustuminen sekä Spark ohjelmistokehykseen tutustuminen.
-Akateeminen osuus hoidettiin etsimällä paperi jonka tutkimukseen perustin oman mallin opetukseni.
-
 % suosittelu
 
-Suosittelijajärjestelmät eroavat toisistaan kohdistetun toimialan, käytetyn tiedon ja erityisesti siinä kuinka suositukset tehdään, jolla tarkoitetaan suosittelualgoritmia.
-Tässä työssä keskitytään vain yhteen suosittelutekniikoiden luokkkaan, yhteisösuodatukseen, sillä tätä menetelmää käytetään Apache Sparkin MLlib -kirjastossa.
+Suosittelijajärjestelmät eroavat toisistaan kohdistetun toimialan, käytetyn tiedon ja erityisesti suosittelualgoritmin perusteella, eli keinon, jolla suositukset tuotetaan.
+Tässä tekstissä keskitytään vain yhteen suosittelutekniikoiden luokkkaan: \textit{yhteisösuodatukseen}.
+Tätä menetelmää käytetään \textit{Apache Spark} -sovelluskehyksessä, joka on yksi tekstin tärkeimmistä osa-alueista.
 
 Yhteisösuodatusta käyttävät suosittelijajärjestelmät perustuvat käyttäjien yhteistyöhön.
 Niiden tavoitteena on tunnistaa malleja käyttäjän mielenkiinnoista voidakseen tehdä suunnattuja suosituksia.
 Yhteisösuodatus voidaan jakaa kahteen kategoriaan: \textit{tuotepohjaiseen- ja käyttäjäpohjaiseen yhteisösuodatukseen}.
-Tuotepohjaisessa suosittelussa tarkoituksena on etsiä samankaltaisia tuotteita, sillä käyttäjän ajatellaan olevan mahdollisesti kiinnostunut samankaltaisista tuotteista myös tulevaisuudessa.
-Käyttäjäpohjaisessa suosittelussa käyttäjän ajatellaan olevan kiinnostunut tuotteista, joita samankaltaiset käyttäjät ovat ostaneet, joten siinä on tarkoituksena etsiä samankaltaisia käyttäjiä, jotta voidaan suositella näiden ostamia tuotteita.
+Tuotepohjaisessa suosittelussa on tarkoituksena etsiä samankaltaisia tuotteita, sillä käyttäjän ajatellaan olevan mahdollisesti kiinnostunut samankaltaisista tuotteista myös tulevaisuudessa.
+Käyttäjäpohjaisessa suosittelussa käyttäjän ajatellaan olevan kiinnostunut tuotteista, joita samankaltaiset käyttäjät ovat ostaneet.
+Tarkoituksena on siis tunnistaa samankaltaiset käyttäjät, jotta voidaan suositella näiden ostamia tuotteita.
 
 % päämäärä
 
-Työn päämääränä on tutustua Apache Spark-sovelluskehykseen sekä Scala-ohjelmointikieleen ja toteuttaa suosittelujärjestelmä näiden teknologioiden avulla siten, että suosittelua voidaan ajaa pilvipalvelussa.
-Pilvipalvelun ajateltiin tarjoavan helpommin laskentaresursseja käyttöön ja näin tapahtuikin.
-Alustaksi valikoitui ilman suurempia vertailuja Amazonin tarjoama Amazon Web Services (AWS).
-Tästä alustasta oli hieman aiempaa kokemusta, sillä sitä on käytetty töissä ja sen osaamisesta on varmasti hyötyä jatkossakin.
+Tekstiin liittyvän työn päämääränä on tutustua Apache Spark-sovelluskehykseen sekä \textit{Scala}-ohjelmointikieleen ja toteuttaa näiden teknologioiden avulla suosittelujärjestelmä siten, että toteutettava järjestelmä toimisi jossain pilvipalvelussa.
+Pilvipalvelun ajateltiin tarjoavan laskentaresursseja käyttöön helposti ja edullisemmin, kuten tapahtuikin.
+Alustaksi valikoitui Amazonin tarjoama \textit{Amazon Web Services (AWS)}, sillä siitä oli hieman aiempaa kokemusta ja sen osaamisesta on varmasti hyötyä tulevaisuudessakin.
 
 % aws
 
 AWS  on Amazonin tarjoama kokoelma pilvilaskentaan (cloud computing) tarkoitettuja tai sitä avustavia palveluita.
-Kriteerinä oli Spark sovelluksen ajaminen pilvessä ja Amazonin palveluista tässä auttoivat EMR (Elastic Map Reduce) sekä S3 (Simple Storage Service).
+Työn kriteeriksi valikoitui Spark-sovelluksen ajaminen pilvipalvelussa ja Amazonin palveluista tässä auttoivat \textit{EMR (Elastic Map Reduce)} sekä \textit{S3 (Simple Storage Service)}.
 EMR on hallittu klusterialusta, joka yksinkertaistaa big data -sovelluskehysten, kuten Apache Sparkin, käyttämistä AWS:n palveluissa.
 S3 on tietovarasto, joka on suunniteltu helpottamaan pilvilaskentaa ja se tarjoaa yksinkertaisen rajapinnan tietovaraston hallintaan.
 
