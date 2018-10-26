@@ -2,6 +2,7 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -14,10 +15,19 @@
    viewBox="0 0 744.09448819 1052.3622047"
    id="svg2"
    version="1.1"
-   inkscape:version="0.91 r13725"
+   inkscape:version="0.92.2 2405546, 2018-03-11"
    sodipodi:docname="dataframe.svg">
   <defs
-     id="defs4" />
+     id="defs4">
+    <linearGradient
+       id="linearGradient11905"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#113737;stop-opacity:1;"
+         offset="0"
+         id="stop11903" />
+    </linearGradient>
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -26,15 +36,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.35"
-     inkscape:cx="-112.14286"
+     inkscape:cx="222.14285"
      inkscape:cy="520"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1301"
-     inkscape:window-height="744"
-     inkscape:window-x="65"
-     inkscape:window-y="24"
+     inkscape:window-width="1366"
+     inkscape:window-height="708"
+     inkscape:window-x="0"
+     inkscape:window-y="31"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata7">
@@ -44,7 +54,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -53,73 +63,73 @@
      inkscape:groupmode="layer"
      id="layer1">
     <rect
-       style="fill:#00ff00;fill-opacity:1;stroke:#c83737"
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:3.54330707;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect3336"
        width="165.71428"
        height="65.714287"
-       x="117.57144"
-       y="135.93362"
+       x="117.37421"
+       y="167.79077"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <rect
-       style="fill:#ffff00;fill-opacity:1;stroke:#c83737"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3.54330707;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect3336-3"
        width="165.71428"
        height="65.714287"
-       x="450.53738"
-       y="135.93362"
+       x="450.34015"
+       y="167.79077"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <rect
-       style="fill:#00ffff;fill-opacity:1;stroke:#c83737"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3.54330707;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect3336-6"
        width="165.71428"
        height="65.714287"
-       x="283.71429"
-       y="135.93362"
+       x="283.51706"
+       y="167.79077"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="140.50671"
-       y="183.08765"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="140.30948"
+       y="214.94479"
        id="text3359"
-       sodipodi:linespacing="125%"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
          id="tspan3361"
-         x="140.50671"
-         y="183.08765">Name</tspan></text>
+         x="140.30948"
+         y="214.94479"
+         style="font-size:40px;line-height:1.25">Name</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="328.80777"
-       y="179.21069"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="328.61053"
+       y="211.06784"
        id="text4163"
-       sodipodi:linespacing="125%"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
          id="tspan4165"
-         x="328.80777"
-         y="179.21069">Age</tspan></text>
+         x="328.61053"
+         y="211.06784"
+         style="font-size:40px;line-height:1.25">Age</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="463.53125"
-       y="179.82593"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="463.33401"
+       y="211.68307"
        id="text4167"
-       sodipodi:linespacing="125%"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
          id="tspan4169"
-         x="463.53125"
-         y="179.82593">Weight</tspan></text>
+         x="463.33401"
+         y="211.68307"
+         style="font-size:40px;line-height:1.25">Weight</tspan></text>
     <rect
-       style="fill:#c8b7b7;fill-opacity:1;stroke:#c83737"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3.5433071;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect3336-7"
        width="165.71428"
        height="65.714287"
@@ -128,7 +138,7 @@
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <rect
-       style="fill:#ffaaaa;fill-opacity:1;stroke:#c83737"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3.5433071;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect3336-3-5"
        width="165.71428"
        height="65.714287"
@@ -137,7 +147,7 @@
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <rect
-       style="fill:#deaa87;fill-opacity:1;stroke:#c83737"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3.5433071;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect3336-6-3"
        width="165.71428"
        height="65.714287"
@@ -147,45 +157,45 @@
        inkscape:export-ydpi="90" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="139.88086"
        y="280.65906"
        id="text3359-5"
-       sodipodi:linespacing="125%"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
          id="tspan3361-6"
          x="139.88086"
-         y="280.65906">String</tspan></text>
+         y="280.65906"
+         style="font-size:40px;line-height:1.25">String</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="328.18195"
        y="276.7821"
        id="text4163-2"
-       sodipodi:linespacing="125%"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
          id="tspan4165-9"
          x="328.18195"
-         y="276.7821">Int</tspan></text>
+         y="276.7821"
+         style="font-size:40px;line-height:1.25">Int</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="457.91519"
        y="281.27429"
        id="text4167-1"
-       sodipodi:linespacing="125%"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
          id="tspan4169-2"
          x="457.91519"
-         y="281.27429">Double</tspan></text>
+         y="281.27429"
+         style="font-size:40px;line-height:1.25">Double</tspan></text>
     <rect
-       style="fill:#c8b7b7;fill-opacity:1;stroke:#c83737"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3.5433071;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect3336-7-9"
        width="165.71428"
        height="65.714287"
@@ -194,7 +204,7 @@
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <rect
-       style="fill:#ffaaaa;fill-opacity:1;stroke:#c83737"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3.5433071;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect3336-3-5-2"
        width="165.71428"
        height="65.714287"
@@ -203,7 +213,7 @@
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <rect
-       style="fill:#deaa87;fill-opacity:1;stroke:#c83737"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3.5433071;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect3336-6-3-0"
        width="165.71428"
        height="65.714287"
@@ -213,45 +223,45 @@
        inkscape:export-ydpi="90" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="139.88086"
        y="346.65906"
        id="text3359-5-2"
-       sodipodi:linespacing="125%"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
          id="tspan3361-6-3"
          x="139.88086"
-         y="346.65906">String</tspan></text>
+         y="346.65906"
+         style="font-size:40px;line-height:1.25">String</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="328.18195"
        y="342.7821"
        id="text4163-2-7"
-       sodipodi:linespacing="125%"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
          id="tspan4165-9-5"
          x="328.18195"
-         y="342.7821">Int</tspan></text>
+         y="342.7821"
+         style="font-size:40px;line-height:1.25">Int</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="457.91522"
        y="347.27429"
        id="text4167-1-9"
-       sodipodi:linespacing="125%"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
          id="tspan4169-2-2"
          x="457.91522"
-         y="347.27429">Double</tspan></text>
+         y="347.27429"
+         style="font-size:40px;line-height:1.25">Double</tspan></text>
     <rect
-       style="fill:#c8b7b7;fill-opacity:1;stroke:#c83737"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3.5433071;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect3336-7-2"
        width="165.71428"
        height="65.714287"
@@ -260,7 +270,7 @@
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <rect
-       style="fill:#ffaaaa;fill-opacity:1;stroke:#c83737"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3.5433071;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect3336-3-5-8"
        width="165.71428"
        height="65.714287"
@@ -269,7 +279,7 @@
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <rect
-       style="fill:#deaa87;fill-opacity:1;stroke:#c83737"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3.5433071;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect3336-6-3-9"
        width="165.71428"
        height="65.714287"
@@ -279,42 +289,42 @@
        inkscape:export-ydpi="90" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="140.16658"
        y="415.23047"
        id="text3359-5-7"
-       sodipodi:linespacing="125%"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
          id="tspan3361-6-36"
          x="140.16658"
-         y="415.23047">String</tspan></text>
+         y="415.23047"
+         style="font-size:40px;line-height:1.25">String</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="328.46765"
        y="411.35352"
        id="text4163-2-1"
-       sodipodi:linespacing="125%"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
          id="tspan4165-9-2"
          x="328.46765"
-         y="411.35352">Int</tspan></text>
+         y="411.35352"
+         style="font-size:40px;line-height:1.25">Int</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="458.20093"
        y="415.8457"
        id="text4167-1-93"
-       sodipodi:linespacing="125%"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
          id="tspan4169-2-1"
          x="458.20093"
-         y="415.8457">Double</tspan></text>
+         y="415.8457"
+         style="font-size:40px;line-height:1.25">Double</tspan></text>
   </g>
 </svg>

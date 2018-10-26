@@ -85,17 +85,16 @@
 
 % johdanto
 
-Suosittelujärjestelmät ovat jatkuvasti läsnä jokapäiväisessä elämässämme.
-Ne auttavat päätöksenteossa verkko-ostoksissa, suoratoistopalveluissa, sosiaalisessa mediassa tai yksinkertaisesti uutisten lukemisessa.
-Yksinkertaisin ja luonnollisin suosittelu tapahtuu ihmiseltä ihmiselle.
-Ihmiset voivat kuitenkin tehokkaasti suositella vain niitä asioita, jotka ovat itse henkilökohtaisesti kokeneet.
+Suosittelijajärjestelmä on ohjelmisto, joka ehdottaa käyttäjälle sisältöä perustuen tämän aiempaan toimintaan.
+Ne ovat jatkuvasti läsnä jokapäiväisessä elämässämme ja auttavat päätöksenteossa asioissa kuten verkko-ostoksissa, suoratoistopalveluissa, sosiaalisessa mediassa tai yksinkertaisesti uutisten lukemisessa.
+Yksinkertaisin ja luonnollisin suosittelu tapahtuu ihmiseltä ihmiselle, mutta ihmiset voivat kuitenkin tehokkaasti suositella vain niitä asioita, jotka ovat itse henkilökohtaisesti kokeneet.
 Tällöin suosittelijajärjestelmistä tulee hyödyllisiä, sillä ne voivat mahdollisesti tarjota suosituksia tuhansista tai jopa miljoonista erilaisista tuotteista.
 
 % suosittelu
 
 Suosittelijajärjestelmät eroavat toisistaan kohdistetun toimialan, käytetyn tiedon ja erityisesti suosittelualgoritmin perusteella, eli keinon, jolla suositukset tuotetaan.
-Tässä tekstissä keskitytään vain yhteen suosittelutekniikoiden luokkkaan: \textit{yhteisösuodatukseen}.
-Tätä menetelmää käytetään \textit{Apache Spark} -sovelluskehyksessä, joka on yksi tekstin tärkeimmistä osa-alueista.
+Tässä työssä keskitytään vain yhteen suosittelutekniikoiden luokkkaan: \textit{yhteisösuodatukseen}.
+Tätä menetelmää käytetään \textit{Apache Spark} -sovelluskehyksessä, joka on myös yksi työn tärkeimmistä osa-alueista.
 
 Yhteisösuodatusta käyttävät suosittelijajärjestelmät perustuvat käyttäjien yhteistyöhön.
 Niiden tavoitteena on tunnistaa malleja käyttäjän mielenkiinnoista voidakseen tehdä suunnattuja suosituksia.
@@ -106,41 +105,39 @@ Tarkoituksena on siis tunnistaa samankaltaiset käyttäjät, jotta voidaan suositel
 
 % päämäärä
 
-Tekstiin liittyvän työn päämääränä on tutustua Apache Spark-sovelluskehykseen sekä \textit{Scala}-ohjelmointikieleen ja toteuttaa näiden teknologioiden avulla suosittelujärjestelmä siten, että toteutettava järjestelmä toimisi jossain pilvipalvelussa.
-Pilvipalvelun ajateltiin tarjoavan laskentaresursseja käyttöön helposti ja edullisemmin, kuten tapahtuikin.
-Alustaksi valikoitui Amazonin tarjoama \textit{Amazon Web Services (AWS)}, sillä siitä oli hieman aiempaa kokemusta ja sen osaamisesta on varmasti hyötyä tulevaisuudessakin.
+Työn päämääränä on tutustua Apache Spark-sovelluskehykseen, \textit{Scala}-ohjelmointi-kieleen sekä Amazonin tarjoamaan \textit{Amazon Web Services (AWS)} -pilvipalveluun ja toteuttaa näiden teknologioiden avulla suosittelujärjestelmä.
+Järjestelmän tarkoituksena on siis suositella elokuvia ja ohjelmiston keskiössä oleva koneoppimismalli opetetaan MovieLens sivuston tarjoamien elokuvien ja käyttäjien arvosteluiden avulla.
 
 % aws
 
-AWS  on Amazonin tarjoama kokoelma pilvilaskentaan (cloud computing) tarkoitettuja tai sitä avustavia palveluita.
-Työn kriteeriksi valikoitui Spark-sovelluksen ajaminen pilvipalvelussa ja Amazonin palveluista tässä auttoivat \textit{EMR (Elastic Map Reduce)} sekä \textit{S3 (Simple Storage Service)}.
+AWS  on Amazonin tarjoama kokoelma pilvilaskentaan (cloud computing) tarkoitettuja tai siinä avustavia palveluita.
+Koska yksi työn kriteereistä oli Spark-sovelluksen ajaminen pilvipalvelussa, Amazonin palveluista tässä auttoivat \textit{EMR (Elastic Map Reduce)} sekä \textit{S3 (Simple Storage Service)}.
 EMR on hallittu klusterialusta, joka yksinkertaistaa big data -sovelluskehysten, kuten Apache Sparkin, käyttämistä AWS:n palveluissa.
 S3 on tietovarasto, joka on suunniteltu helpottamaan pilvilaskentaa ja se tarjoaa yksinkertaisen rajapinnan tietovaraston hallintaan.
 
-Työssä käytetty EMR-liukuhihna pystytettiin löytyneiden ohjeiden mukaisesti.
-Pystytettävän palvelun nimi on On-Demand Pipeline, mutta tosiasiassa varatut EC2-instanssit pysyvät ajossa kellon ympäri.
-Tämän olisi voinut välttää laittamalla valintaruutuun valinnan, joka olisi sulkenut liukuhihnan ohjelman suorituksen jälkeen, mutta tässä työssä tavoitteena oli päästä ajelemaan silloin kun oli tehty uusi versio.
+Työssä käytetty EMR-liukuhihna pystytettiin eräästä opetusvideosta löytyneiden ohjeiden mukaisesti, sillä Amazonin oma ohjeistus koettiin liian monimutkaiseksi ja epäselväksi.
+Pystytettävän palvelun nimi on \textit{On-Demand Pipeline}, mutta tosiasiassa varatut resurssit pysyvät käynnissä kellon ympäri.
 Tätä ei varsinaisesti kommunikoitu missään vaiheessa, vaan asiaan havahtui vasta laskun saavuttua.
-Kuukauden mittaisesta EC2 (m3.xlarge) -instanssien ajamisesta olisi tullut maksettavaa reilut 1000 dollaria.
+Kuukauden mittaisesta \textit{EC2} (m3.xlarge) -instanssien ajamisesta olisi tullut maksettavaa reilut 1000 dollaria.
+Tämä olisi ollut mahdollista välttää ottamalla käyttöön asetuksen, joka olisi sulkenut liukuhihnan ohjelman suorituksen jälkeen.
 
 % spark
 
 Apache Spark on sovelluskehys, joka mahdollistaa hajautettujen ohjelmien rakentamisen.
 Hajautetussa ohjelmassa suoritus voidaan jakaa useiden käsittelysolmujen kesken.
-Jotkin suositteluongelmat voidaan mallintaa hajautettuna ohjelmana, jossa kaksi matriisia, käyttäjät ja tuotteet, prosessoidaan iteratiivisella algoritmilla, joka mahdollistaa ohjelman suorittamisen rinnakkain.
-Spark-ohjelmia voidaan kirjoittaa Java-, Scala-, Python- sekä R-ohjelmointikielillä.
+Jotkin suositteluongelmat on mahdollista mallintaa hajautettuna ohjelmana, jossa kaksi matriisia, käyttäjät ja tuotteet, prosessoidaan iteratiivisella algoritmilla, joka mahdollistaa ohjelman suorittamisen rinnakkain.
 Jokainen Spark-sovellus koostuu driver-ohjelmasta sekä yhdestä tai useammasta executor-ohjelmasta.
 Driver on ohjelma, joka ajaa käyttäjän pääohjelmaa ja hajauttaa laskennan klusteriin.
 Executor on yksi kone klusterissa.
 
-Spark voidaan esitellä kuvailemalla sen edeltäjää, MapReduce:a, ja sen tarjoamia etuja.
-MapReduce tarjosi yksinkertaisen mallin ohjelmien kirjoittamiseen ja pystyi suorittamaan kirjoitettua ohjelmaa rinnakkain sadoilla tietokoneilla.
+Spark voidaan esitellä kuvailemalla sen edeltäjää, \textit{MapReduce}:a, ja sen tarjoamia etuja.
+MapReduce tarjoaa yksinkertaisen mallin ohjelmien kirjoittamiseen ja pystyy suorittamaan kirjoitettua ohjelmaa rinnakkain sadoilla tietokoneilla.
 MapReduce skaalautuu lähes lineaarisesti datan koon kasvaessa.
 Suoritusaikaa hallitaan lisäämällä lisää tietokoneita suorittamaan tehtävää.
-
-Apache Spark säilyttää MapReduce:n lineaarisen skaalautuvuuden ja vikasietokyvyn mutta laajentaa sitä muutamalla merkittävällä tavalla.
+Spark säilyttää MapReduce:n lineaarisen skaalautuvuuden ja vikasietokyvyn mutta laajentaa sitä muutamalla merkittävällä tavalla.
 MapReducessa map- ja reduce-tehtävien väliset tulokset täytyy kirjoittaa levylle kun taas Spark kykenee välittämään tulokset suoraan liukuhihnan (pipeline) seuraavalle vaiheelle.
-Lisäksi Spark esittelee muistissa tapahtuvan prosessoinnin tarjoamalla abstraktion nimeltä \textit{Resilient Distributed Dataset (RDD)}. RDD tarjoaa kehittäjälle mahdollisuuden materialisoida minkä tahansa askeleen liukuhihnassa ja tallentaa sen muistiin.
+Lisäksi Spark esittelee muistissa tapahtuvan prosessoinnin tarjoamalla abstraktion nimeltä \textit{Resilient Distributed Dataset (RDD)}.
+RDD tarjoaa kehittäjälle mahdollisuuden materialisoida minkä tahansa askeleen liukuhihnassa ja tallentaa sen muistiin.
 Tämä tarkoittaa sitä, että tulevien askelien ei tarvitse laskea aiempia tuloksia uudelleen ja tällöin on mahdollista jatkaa juuri käyttäjän haluamasta askeleesta.
 Aiemmin tämänkaltaista ominaisuutta ei ole ollut saatavilla hajautetun laskennan järjestelmissä.
 
@@ -149,18 +146,18 @@ Aiemmin tämänkaltaista ominaisuutta ei ole ollut saatavilla hajautetun laskennan
 Apache Spark on rakennettu Scala-ohjelmointikielellä.
 Scala on monikäyttöinen, moniparadigmainen ohjelmointikieli, joka tarjoaa tuen funktionaaliselle ohjelmoinnille sekä vahvan tyypityksen.
 Funktionaalista ohjelmointia varten Scalasta löytyy tuki funktionaalisen ohjelmoinnin käsitteille, kuten muuttumattomat (immutable) tietorakenteet ja funktiot ensimmäisen luokan kansalaisina.
-Olio-ohjelmointia varten Scalasta löytyy tuki käsitteille kuten luokat, oliot ja piirre (trait).
-Scala tukee myös kapselointia, perintää, moniperintää ja muita tärkeitä olio-ohjelmoinnin konsepteja.
+Olio-ohjelmointia varten Scalasta löytyy tuki käsitteille kuten luokat ja oliot.
+Scala tukee myös esimerkiksi kapselointia, perintää, moniperintää ja muita tärkeitä olio-ohjelmoinnin konsepteja.
 Scala on staattisesti tyypitetty kieli ja sillä kirjoitetut ohjelmat käännetään Scala-kääntäjää käyttäen.
-Scala on JVM-perustainen (Java Virtual Machine, Java-virtuaalikone) kieli, joten Scala kääntäjä kääntää sovelluksen Java-tavukoodiksi, joka voidaan ajaa missä tahansa Java-virtuaalikoneessa.
-Tavukooditasolla Scala ohjelmaa ei voida erottaa Java sovelluksesta.
+Scala on JVM-perustainen (Java Virtual Machine, Java-virtuaalikone) kieli, joten Scala kääntäjä kääntää sovelluksen Java-tavukoodiksi, jota voidaan suorittaa missä tahansa Java-virtuaalikoneessa.
+Tavukooditasolla Scala-ohjelmaa ei voida erottaa Java-sovelluksesta.
 Scalan ollessa JVM-perustainen, Scala on täysin yhteensopiva Javan kanssa ja näin ollen Java-kirjastoja voidaan käyttää suoraan Scala-koodissa.
 Tästä syystä Scala-sovellukset hyötyvät suuresta Java-koodin määrästä.
 Vaikka Scala tukee sekä olio- että funktionaalista ohjelmointia, funktionaalista ohjelmointia suositaan.
 
 % tulokset
 
-Saadut tulokset eivät ole palveluiden kuten Netflix tasolla, mutta ei sitä varmaan kannattanut odottaakaan.
+Saadut tulokset eivät ole palveluiden, kuten Netflix, tasolla, mutta ei sitä varmaan kannattanut odottaakaan.
 Mielenkiintoista oli se, kuinka "huonoja" saadut suositukset olivat.
 Yllättäviä ja uusia kylläkin, mutta mikään elokuvista ei kuulosta mielekkäältä.
 Tässä tosin voikin piillä juuri hyvän suosittelun raja, sillä luultavasti ihmisen muodostama mielipide pelkän nimen perusteella saattaa johtaa elokuvan hylkäämiseen.
