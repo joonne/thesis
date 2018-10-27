@@ -81,7 +81,7 @@ Tästä syystä jotkin työt voivat valmistua nopeammin kuin ne valmistuisivat MapRe
 Yksinkertaisimmat työt voivat valmistua vain yhden tason jälkeen ja monimutkaisemmat tehtävät valmistuvat yhden monitasoisen ajon jälkeen, ilman että niitä täytyy pilkkoa useampiin töihin. \cite{mapRSpark}
 
 \begin{figure}[h]
-	\caption{Directed Acyclic Graph \cite{dag-image}}
+	\caption{Directed Acyclic Graph (muokattu lähteestä \cite{dag-image})}
 	\centering
 	\includegraphics[scale=0.2]{directed_acyclic_graph2}
 \end{figure}
@@ -203,21 +203,22 @@ peopleWithDoubleSalary.explain(true)
 
 \textit{DataFrame} on nimettyihin sarakkeisiin järjestetty Dataset.
 Se on käsitteellisesti yhtenevä relaatiotietokannan taulun tai R/Python kielten tietokehyksen (data frame) kanssa.
-DataFrame voidaan rakentaa useammalla tavalla, kuten esimerkiksi jäsennellyistä tiedostoista, ulkoisista tietokannoista tai olemassaolevista RDD-olioista.
+DataFrame voidaan rakentaa useammalla tavalla, kuten esimerkiksi jäsennellyistä tiedostoista, hakemalla ja viittaamalla ulkoisista tietokannoista tai olemassaolevista RDD-olioista.
 DataFrame-rajapinta on saatavilla Scala-, Java-, Python- ja R-ohjelmointikielille.
 Scala-toteutuksessa DataFrame on riveistä rakentuva Dataset ($Dataset[Row]$). \cite{spark-programming-guide}
-
-\begin{lstlisting}[caption=DataFramen luominen käyttäen read-funktiota]
-val people = spark.read.json("./people.json")
-\end{lstlisting}
-
-DataFrame-oliota luotaessa Spark arvaa luodun objektin sisäisen mallin.
 
 \begin{figure}[h]
 	\caption{DataFrame}
 	\centering
 	\includegraphics[scale=1.0]{dataframe}
 \end{figure}
+
+\begin{lstlisting}[caption=DataFrame luominen käyttäen read-funktiota]
+val people = spark.read.json("./people.json")
+\end{lstlisting}
+
+Yllä olevassa ohjelmassa luodaan uusi DataFrame tietorakenne käyttäen \textit{spark.read} -funktiota.
+DataFrame-oliota luotaessa Spark arvaa luodun objektin sisäisen mallin.
 
 \section{Mllib}
 
@@ -235,6 +236,6 @@ MLlib tarjoaa muun muassa seuraavanlaisia palveluita:
 
 \cite{mllib}
 
-Tässä työssä tutustutaan MLlib-kirjaston tarjoamaan ALS-kirjastoon, jolla malli opetetaan.
+Tässä työssä tutustutaan MLlib-kirjaston tarjoamaan ALS-kirjastoon, jolla malli opetetaan.	
 
 \end{document}
