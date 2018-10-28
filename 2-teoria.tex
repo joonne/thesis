@@ -34,7 +34,7 @@ Koska $A$:ssa on monta riviä ja saraketta, $X$ ja $Y$ sisältävät paljon rivejä m
 Nämä $k$ saraketta vastaavat latentteja tekijöitä, joita käytetään kuvailemaan datassa sijaitsevia vuorovaikutuksia.
 Hajotelma (factorization) on ainoastaan arvio, sillä $k$ on pieni. \cite{ryza15}
 
-Tavanomainen lähestymistapa matriisin tekijöihinjakoon perustuvassa yhteisöllisessä suodatuksessa on kohdella käyttäjä-tuote matriisin alkioita käyttäjien antamina eksplisiittisinä arvosteluina.
+Tavanomainen lähestymistapa matriisin tekijöihinjakoon perustuvassa yhteisösuodatuksessa on kohdella käyttäjä-tuote matriisin alkioita käyttäjien antamina eksplisiittisinä arvosteluina.
 Eksplisiittistä tietoa on esimerkiksi käyttäjän antama arvio tuotteelle.
 Spark ALS kykenee käsittelemään sekä implisiittistä että eksplisiittistä tietoa.
 Implisiittistä tietoa on esimerkiksi sivujen katselukerrat tai tieto siitä, onko käyttäjä kuunnellut tiettyä artistia.
@@ -52,7 +52,7 @@ Vaikka tulosmatriisi sisältää arvon kaikille alkioille, se on kuitenkin vain lik
 
 \subsection{Alternating Least Squares (ALS)}
 
-Yhteisöllistä suodatusta käytetään usein suosittelijajärjestelmissä.
+Yhteisösuodatusta käytetään usein suosittelijajärjestelmissä.
 Nämä tekniikat pyrkivät täyttämään käyttäjä-tuote-assosiaatiomatriisin puuttuvat kohdat.
 Spark MLlib tukee mallipohjaista yhteisösuodatusta, jossa käyttäjiä ja tuotteita kuvaillaan pienellä määrällä latentteja tekijöitä, joita voidaan käyttää puuttuvien kohtien ennustamiseen.
 Spark MLlib käyttää \textit{vuorottelevien pienimpien neliöiden} (Alternating Least Squares, ALS) -algoritmia näiden latenttien tekijöiden oppimiseen. \cite{spark14}
@@ -234,7 +234,7 @@ val y: Int = 10
 
 \subsection{Funktiot}
 
-Funktio on lohko suoritettavaa koodia joka palauttaa arvon.
+Funktio on lohko suoritettavaa koodia, joka palauttaa arvon.
 Se on konseptuaalisesti samankaltainen kuin matematiikassa: funktio ottaa sisääntulon ja palauttaa ulostulon. \cite{guller15}
 
 Scalan funktiot ovat ensimmäisen luokan kansalaisia, jolla tarkoitetaan, että funktiota voidaan:
