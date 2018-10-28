@@ -141,7 +141,7 @@ Dataset voidaan luoda myös tekemällä muutoksia olemassaoleville Dataset olioille
 
 \begin{lstlisting}[caption=Uuden Dataset-olion luominen transformaatiolla]
 
-val people: Dataset<Person> = Dataset(Person())
+val people: Dataset[Person] = Dataset(Person())
 val names = people.map(_.name)
 
 \end{lstlisting}
@@ -173,7 +173,7 @@ val spark = SparkSession
 	.getOrCreate()
 \end{lstlisting}
 
-\textit{SparkSession} on Spark-ohjelmoinnin lähtökohta, kun halutaan käyttää Dataset ja DataFrame -rajapintoja.
+\textit{SparkSession} on Spark-ohjelmoinnin lähtökohta, kun halutaan käyttää Dataset- ja DataFrame-rajapintoja.
 Ylläolevassa koodinpätkässä luodaan SparkSession ketjuttamalla rakentajan kutsuja. \cite{spark-dataset}
 
 Dataset-oliot ovat samankaltaisia kuin RDD:t, sillä nekin tarjoavat vahvan tyypityksen ja mahdollisuuden käyttää voimakkaita lambda-funktioita \cite{spark-sql-programming-guide}.
@@ -186,7 +186,7 @@ Enkooderit käyttävät sellaista muotoa, että Spark kykenee suorittamaan monenlais
 
 Seuraavassa koodilistauksessa luodaan uusi Dataset lukemalla $json$-tiedosto tiedostojärjestelmästä.
 Seuraavaksi luodaan uusi Dataset muunnoksen kautta.
-Olion kloonaamiseksi käytetään case-luokan $copy$ metodia, koska $people$-Dataset oli määritelty vakioksi.
+Olion kloonaamiseksi käytetään case class :n $copy$ metodia, koska case class instanssit ovat muuttumattomia ja näin ollen copy-metodi on ainoa tapa kloonata (luoda uusi muuttumaton, immutable instanssi) siitä.
 Lopuksi looginen- ja fyysinen suunnitelma tulostetaan konsoliin kutsumalla $explain$-funktiota uudelle Dataset-oliolle.
 
 \begin{lstlisting}[caption=Dataset-esimerkki]
@@ -236,6 +236,6 @@ MLlib tarjoaa muun muassa seuraavanlaisia palveluita:
 
 \cite{mllib}
 
-Tässä työssä tutustutaan MLlib-kirjaston tarjoamaan ALS-kirjastoon, jolla malli opetetaan.	
+Tässä työssä tutustutaan MLlib-kirjaston tarjoamaan ALS-kirjastoon, jolla suositukset tarjoava koneoppimismalli opetetaan.
 
 \end{document}
