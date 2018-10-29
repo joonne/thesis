@@ -51,7 +51,7 @@ Kuten oikea tietokone, se omaa k‰skykannan ja muokkaa useita muistialueita ajon 
 JVM ei tied‰ mit‰‰n ohjelmointikielist‰, kuten Scala tai Java, vaan se operoi ainoastaan \textit{class}-tiedostoilla, jotka ovat bin‰‰ritiedostoja.
 Class-tiedosto sis‰lt‰‰ JVM-k‰skyt sek‰ symbolitaulun. \cite{JVM}
 
-\section{Resilient Distributed Dataset (RDD)}
+\section{Resilient Distributed Dataset API (RDD API)}
 
 Resilient Distributed Dataset (RDD) on Sparkin tarjoama p‰‰abstraktio.
 RDD on muuttumaton, partitioitu elementtikokoelma, joka voidaan hajauttaa klusterin useiden koneiden v‰lill‰. \cite{spark-rdd}
@@ -137,7 +137,7 @@ Yleisin tapa on k‰ytt‰‰ $SparkSession$:in tarjoamaa $read$ funktiota ja osoittaa
 	breaklines=true,
 }
 
-Dataset voidaan luoda myˆs tekem‰ll‰ muutoksia olemassaoleville Dataset olioille:
+Dataset voidaan luoda myˆs tekem‰ll‰ transformaatio olemassaoleville Dataset-olioille:
 
 \begin{lstlisting}[caption=Uuden Dataset-olion luominen transformaatiolla]
 
@@ -202,10 +202,7 @@ peopleWithDoubleSalary.explain(true)
 \section{DataFrame API}
 
 \textit{DataFrame} on nimettyihin sarakkeisiin j‰rjestetty Dataset.
-Se on k‰sitteellisesti yhtenev‰ relaatiotietokannan taulun tai R/Python kielten tietokehyksen (data frame) kanssa.
-DataFrame voidaan rakentaa useammalla tavalla, kuten esimerkiksi j‰sennellyist‰ tiedostoista, hakemalla ja viittaamalla ulkoisista tietokannoista tai olemassaolevista RDD-olioista.
-DataFrame-rajapinta on saatavilla Scala-, Java-, Python- ja R-ohjelmointikielille.
-Scala-toteutuksessa DataFrame on riveist‰ rakentuva Dataset ($Dataset[Row]$). \cite{spark-programming-guide}
+Se on k‰sitteellisesti yhtenev‰ relaatiotietokannan taulun tai R/Python kielten tietokehyksen (data frame) kanssa. \cite{spark-sql-programming-guide}
 
 \begin{figure}[h]
 	\caption{DataFrame}
@@ -213,12 +210,25 @@ Scala-toteutuksessa DataFrame on riveist‰ rakentuva Dataset ($Dataset[Row]$). \c
 	\includegraphics[scale=1.0]{dataframe}
 \end{figure}
 
+DataFrame voidaan rakentaa useammalla tavalla, kuten esimerkiksi j‰sennellyist‰ tiedostoista, hakemalla ja viittaamalla ulkoisista tietokannoista tai olemassaolevista RDD-olioista.
+Se mahdollistaa datan prosessoinnin kilobittien suuruusluokasta aina petabitteihin asti ja klusterin yksitt‰isen solmun klustereista suuriin klustereihin.
+DataFrame-rajapinta on saatavilla Scala-, Java-, Python- ja R-ohjelmointikielille.
+Kooditasolla Scala-toteutuksessa DataFrame on riveist‰ rakentuva Dataset ($Dataset[Row]$). \cite{spark-programming-guide} \cite{spark_sql_dataframes}
+
+Alla olevassa ohjelmassa luodaan uusi DataFrame tietorakenne kohdistamalla \textit{spark.read} -funktio JSON-tiedostoon.
+T‰m‰n seurauksena Spark pyrkii p‰‰ttelem‰‰n uuden DataFrame:n sis‰isen mallin.
+
 \begin{lstlisting}[caption=DataFrame luominen k‰ytt‰en read-funktiota]
 val people = spark.read.json("./people.json")
 \end{lstlisting}
 
-Yll‰ olevassa ohjelmassa luodaan uusi DataFrame tietorakenne k‰ytt‰en \textit{spark.read} -funktiota.
-DataFrame-oliota luotaessa Spark arvaa luodun objektin sis‰isen mallin.
+DataFrame API tarjoaa domain-spesifisen kielen (DSL, domain-specific language) j‰sennellyn datan, kuten JSON:in manipulointiin:
+
+\begin{lstlisting}[caption=Sarakkeen valitseminen ja tulostaminen DataFrame DSL:n avulla]
+people.select("name").show()
+\end{lstlisting}
+
+Yll‰ olevassa esimerkiss‰ valitaan luodusta DataFrame:sta vain $name$ -sarake ja tulostetaan se konsoliin. \cite{spark-sql-programming-guide}
 
 \section{Mllib}
 

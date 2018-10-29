@@ -171,7 +171,8 @@ Se antaa kehittäjille pääsyn samaan hyvin skaalautuvaan, luotettavaan, nopeaan j
 
 Tässä työssä S3:a käytetään varastoimaan opetusdataa.
 Tarvittaessa Apache Sparkin laskennan välivaiheita voidaan tallentaa muistiin jolloin niiden tulokset voitaisiin lukea suoraan ilman että niitä tarvitsee laskea uudelleen.
-Myös koko opetettu malli voitaisiin tallentaa S3:een ja esimerkiksi ladata vaikka omalle koneelle, jolloin AWS:ää tulisi myös käytettyä optimaalisesti, sillä EC2 instanssien varaaminen aiheuttaa maksuja koko ajan.
+Myös koko opetettu malli voitaisiin tallentaa S3:een ja esimerkiksi ladata vaikka omalle koneelle, jolloin AWS:ää tulisi myös käytettyä optimaalisesti, sillä EC2-instanssien varaaminen aiheuttaa maksuja koko ajan.
+Simple Storage Service:n tarjoama abstraktio on nimeltään \textit{bucket}, joka on käsitteellisesti kansio, johon tietoa varastoidaan.
 
 \section{Scala}
 

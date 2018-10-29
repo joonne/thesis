@@ -17,6 +17,8 @@ EMR-klusteri on mahdollista pystyttää myös suoraan Spark-sovelluksesta.
 
 \subsection{WEB-käyttöliittymän avulla}
 
+TODO
+
 \subsection{Komentorivin avulla}
 
 \lstset{
@@ -52,7 +54,7 @@ Rivinvaihtomerkit \textit{\mybs} on lisätty selkeyden takia, joten ne eivät ole 
 
 Yllä olevassa ohjelmassa esitetään askeleet, jolla sovellus saadaan paketoitua, lähetettyä AWS:n virtuaalikoneelle ja ajettua EMR-klusterissa.
 Ensin ohjelma paketoidaan $jar$-tiedostoksi.
-Seuraavaksi $jar$-tiedosto läheteään S3-palveluun, jossa sijaitsee \textit{movielens} niminen bucket.
+Seuraavaksi $jar$-tiedosto lähetetään S3-palveluun, jossa sijaitsee \textit{movielens} niminen bucket.
 Tämän jälkeen otetaan ssh-yhteys virtuaalikoneelle ja ladataan $jar$-tiedosto samaisesta bucketista.
 Lopuksi käytetään \textit{spark-submit} -työkalua sovelluksen ajamiseen EMR-klusterissa.
 
