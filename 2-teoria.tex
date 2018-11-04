@@ -16,23 +16,23 @@ Voidaan esimerkiksi yrittää selittää miksi ihminen ostaisi tietyn albumin lukema
 Latenttia tekijää ei ole mahdollista tarkastella sellaisenaan.
 Esimerkiksi ihmisen terveys on latentti tekijä, sillä sitä ei ole mahdollista mitata kuten esimerkiksi verenpainetta.
 
-\begin{figure}[h]
-	\label{matrix-factorization}
-	\caption{Matrisin tekijöihinjako (muokattu lähteestä \cite{ryza15})}
-	\centering
-	\includegraphics[scale=0.25]{matrix_factorization2}
-\end{figure}
-
 Matriisin tekijöihinjako-algoritmit käsittelevät käyttäjä- ja tuotetietoja suurena matriisina $A$.
-Jokainen rivissä $i$ sekä sarakkeessa $j$ sijaitseva alkio esittää arvostelua, jonka käyttäjä on antanut tietylle tuotteelle. \cite{ryza15}
+Jokainen rivissä $i$ sekä sarakkeessa $j$ sijaitseva alkio esittää arvostelua, jonka käyttäjä on antanut tietylle tuotteelle. \cite{ryza15} \ref{matrix-factorization}
 
 Yleensä $A$ on harva (sparse), jolla tarkoitetaan että useimmat $A$:n alkiot sisältävät arvon nolla.
-Tämä johtuu siitä, että kaikista mahdollisuuksista usein vain muutama käyttäjä-tuote-kombinaatio on olemassa. \cite{ryza15}
+Tämä johtuu siitä, että kaikista mahdollisuuksista usein vain muutama käyttäjä-tuote-kombinaatio on olemassa. \cite{ryza15} \ref{matrix-factorization}
 
 Matriisin tekijöihinjako mallintaa $A$:n kahden pienemmän matriisin $X$ ja $Y$ tulona, jotka ovat varsin pieniä.
 Koska $A$:ssa on monta riviä ja saraketta, $X$ ja $Y$ sisältävät paljon rivejä mutta vain muutaman $(k)$ sarakkeen.
 Nämä $k$ saraketta vastaavat latentteja tekijöitä, joita käytetään kuvailemaan datassa sijaitsevia vuorovaikutuksia.
-Hajotelma (factorization) on ainoastaan arvio, sillä $k$ on pieni. \cite{ryza15}
+Hajotelma (factorization) on ainoastaan arvio, sillä $k$ on pieni. \cite{ryza15} \ref{matrix-factorization}
+
+\begin{figure}[h]
+	\caption{Matrisin tekijöihinjako (muokattu lähteestä \cite{ryza15})}
+	\label{matrix-factorization}
+	\centering
+	\includegraphics[scale=0.25]{matrix_factorization2}
+\end{figure}
 
 Tavanomainen lähestymistapa matriisin tekijöihinjakoon perustuvassa yhteisösuodatuksessa on kohdella käyttäjä-tuote matriisin alkioita käyttäjien antamina eksplisiittisinä arvosteluina.
 Eksplisiittistä tietoa on esimerkiksi käyttäjän antama arvio tuotteelle.
@@ -161,7 +161,7 @@ Task on Slave-solmu, jossa sijaitsee sovelluskomponentteja, jotka ajavat vain te
 	\includegraphics[scale=0.4]{emr2}
 \end{figure}
 
-Yllä oleva kuva esittää klusterin, jossa on master-solmu sekä neljä slave-solmua.
+Yllä oleva kuva esittää EMR-klusterin, jossa on master-solmu sekä neljä slave-solmua.
 
 \subsection{Simple Storage Service (S3)}
 
