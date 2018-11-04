@@ -8,77 +8,92 @@ Tässä kappaleessa esitetään yhteenveto.
 \section{Johtopäätökset}
 
 Suosittelujärjestelmän rakentamiseen on olemassa monia mahdollisia toteutusvaihtoehtoja.
-Apache Spark vaikutti mielenkiintoiselta opiskelukohteelta ja tulevaisuuden kannalta hyödylliseltä.
-Scala-ohjelmoinnin oppiminen vaikutti myöskin teknologian valintaan.
-AWS-palveluiden tuntemus on varsin hyödyllinen taito ja tässä työssä tuli pieni palanen opittua sieltäkin maailmasta lisää.
-Suuremman aineiston käyttäminen sekä isomman arvostelumäärän tarjoaminen järjestelmälle voisi ajatella parantavan tuloksia.
+Apache Spark vaikutti sekä mielenkiintoiselta opiskelukohteelta että hyödylliseltä tulevaisuuden kannalta.
+Lisäksi Sparkin mukana luonnollisesti tuleva Scala-ohjelmointi vaikutti teknologian valintaan.
+AWS-palveluiden tuntemus on myös varsin hyödyllinen taito nykyajan ohjelmistokehityksessä ja tämä valinta oli sitä kautta helposti perustelu.
 
 Aluksi EMR-liukuhihnan pystyttämistä yritettiin vain Amazonin käyttöliittymän konsolin kautta, mutta ilman lisäohjeistusta kaikkien valintojen tutkiminen ja ymmärtäminen vaikutti turhan työläältä.
-Etsinnän jälkeen sopivat ohjeistukset löytyivät ja EMR saatiin konfiguroitua.
+Etsinnän jälkeen sopivat ohjeistukset löytyivät opetusvideon muodossa ja EMR saatiin konfiguroitua.
 Aiemman EMR opiskelun ansiosta videolla mainitut asiat olivat helposti omaksuttavissa, kuten esimerkiksi salaisuuksien (credentials) lisääminen ja EMR:n virtuaalikoneisiin yhdistäminen.
 Lisäksi aiemmat tiedot Amazon S3:sta sekä yleiset komentorivitaidot olivat hyödyksi.
-Jälkeen päin mietittynä sopivan ohjeistuksen etsimiseen käytetyn ajan olisi voinut tietysti myös käyttää EMR:n opiskeluun Amazonin omien ohjeistusten mukaan.
+Jälkeenpäin mietittynä sopivan ohjeistuksen etsimiseen käytetyn ajan olisi voinut tietysti myös käyttää EMR:n opiskeluun Amazonin omien ohjeistusten mukaan.
 
-Jälkeen päin opiskeltuani lisää siitä, että miten olisin voinut välttää laskun, selvisi että on olemassa erilliset AWS:n palvelut laskujen monitorointiin ja tulevan laskun ennustamiseen.
+Työssä käytetty EMR-liukuhihna pystytettiin löytyneen video-ohjeen \cite{levelup} mukaisesti.
+Pystytettävän palvelun nimi on On-Demand Pipeline, jonka voisi ajatella viittaavan siihen että maksujakin kerrytettäisiin vain palvelua käytettäessä, mutta tosiasiassa varatut EC2-instanssit pysyvät ajossa kellon ympäri.
+Jatkuvasta maksujen syntymisestä ei varsinaisesti kommunikoitu missään vaiheessa, vaan asiaan havahtui vasta laskun saavuttua.
+Tämän olisi voinut välttää laittamalla luvussa 5 mainittuun valintaruutuun valinnan, joka olisi sulkenut liukuhihnan ohjelman suorituksen jälkeen.
+Varsinaisen koodin testailu ja integrointi EMR:n kanssa oli kuitenkin inkrementaalista, joten sulkeutunut liukuhihna olisi ollut melkoinen hidaste.
+
+Kolmen EC2 (m3.xlarge) -instanssin kuukauden mittaisesta ajamisesta olisi tullut maksettavaa reilut 1000 dollaria.
+Laskutus toimii niin, että virtuaalikoneiden ajaminen maksaa 0.266 dollaria/tunti ja tämän lisäksi siihen lisätään 0.07 dollaria/tunti EMR-lisämaksua.
+Onneksi asia saatiin selvitettyä asiakaspalvelun kanssa ja AWS-asiakaspalvelun insinöörit tarkistivat lokeista että olin tosiasiassa käyttänyt EMR-liukuhihnaa vain muutaman kerran, kuten kerroinkin.
+AWS:n asiakaspalvelu ansaitsee kiitosta siitä, kuinka mutkattomasti asia hoitui lopulta: he mitätöivät edellisen kuukauden (kesäkuu 2018) laskun kokonaan ja lisäsivät kuluvalle kuulle (heinäkuu 2018) krediittejä sen verran että lasku tulisi kuitattua.
+Jälkeenpäin opiskeltuani lisää siitä, että miten olisin voinut välttää laskun, selvisi että on olemassa erilliset AWS:n palvelut laskujen monitorointiin ja tulevan laskun ennustamiseen.
 Amazon Cost Explorer mahdollistaa laskujen tutkimisen, Amazon Budget puolestaan valvoo tulevan laskun määrää ja ilmoittaa mikäli ollaan menossa asetetuista rajoista yli.
-
-Oletusarvoisesti EMR kirjottaa logit S3:een ja tämä saattaisi helposti johtaa Free Tier pyyntöjen rajan ylittämiseen.
-AWS lähetti asiasta onneksi viestin ja näin ollen päästiin ratkomaan kyseistä konfiguraatiovirhettä.
-EMR-klusteria ei ole mahdollista muokata jälkeenpäin, joten se täytyy poistaa (terminate), jotta lokien kirjoittaminen saattin poistettua käytöstä.
-Amazon Free Tier sisältää S3:n osalta 2000 kutsua (luku/kirjoitus yhteensä) kuukaudessa ja koska kaikki Spark-sovelluksen tuottamat lokit kirjoitetaan, niin tämä raja tuli vastaan nopeasti.
-
-Työssä käytetty EMR-liukuhihna pystytettiin ohjeiden \cite{levelup} mukaisesti.
-Pystytettävän palvelun nimi on On-Demand Pipeline, mutta tosiasiassa varatut EC2-instanssit pysyvät ajossa kellon ympäri.
-Tämän olisi voinut välttää laittamalla luvussa 5 mainittuun valintaruutuun valinnan, joka olisi sulkenut liukuhihnan ohjelman suorituksen jälkeen, mutta tässä työssä tavoitteena oli päästä ajelemaan silloin kun oli tehty uusi versio.
-Tätä ei varsinaisesti kommunikoitu missään vaiheessa, vaan asiaan havahtui vasta laskun saavuttua.
-Kuukauden mittaisesta EC2 (m3.xlarge) -instanssien ajamisesta olisi tullut maksettavaa reilu 1000 dollarin verran.
+Alla olevassa kuvassa on AWS-lasku työhön liittyvien koodien ajelusta kesäkuulta 2018.
 
 \begin{figure}[h]
-	\caption{AWS lasku}
+	\caption{AWS-lasku}
 	\centering
 	\includegraphics[scale=0.3]{aws_bill}
 \end{figure}
 
-Laskutus toimii niin, että virtuaalikoneiden ajamisesta täytyy maksaa 0.266 dollaria/h ja tämän lisäksi 0.07 dollaria/h EMR-lisämaksua.
-Onneksi asian sai selvitettyä asiakaspalvelun kanssa ja AWS-asiakaspalvelun insinöörit tarkistivat pyynnöstäni lokeista että olin tosiasiassa käyttänyt EMR-liukuhihnaa vain muutaman kerran, kuten kerroinkin.
-AWS:n asiakaspalvelu ansaitsee kiitosta siitä kuinka mutkattomasti asia hoitui lopulta: pyyhkivät kuukauden laskun kokonaan ja lisäsivät kuluvalle kuulle (heinäkuu 2018) krediittejä sen verran että lasku tulisi kuitattua.
-
-Oikea keino olisi ollut pystyttää liukuhihna, ajaa tarvittavat eräajot ja tuloksien saannin jälkeen pysäyttää liukuhihna, jolloin varatut resurssit olisi vapautettu.
+Oikeampi tai ainakin edullisempi keino työn toteuttamiseen olisi ollut pystyttää liukuhihna, ajaa tarvittavat eräajot ja tuloksien kirjaamisen jälkeen pysäyttää liukuhihna, jolloin varatut resurssit olisi vapautettu.
 Huonoa tässä on se, että samaa liukuhihnaa ei ilmeisesti saa uudestaan käyntiin, jolloin ainakin virtuaalikoneella olevat asiat ovat lopullisesti menetettyjä kun se sulkeutuu.
 Terminoitu, eli pysäytetty liukuhihna jää kummittelemaan palveluun joksikin aikaa.
 Aiemmin konfiguroitu liukuhihna on kuitenkin mahdollista kopioida uuden liukuhihnan pohjaksi, joten kerran konfiguroidusta liukuhihnasta on tässä mielessä hyötyä seuraavallakin kerralla.
 
-Parempaa asiakaskokemusta olisi tiedottaa paremmin että tämä palvelu tosiaan varaa X määrän resursseja koko ajan.
-EMR-liukuhihna olisi myös voinut mennnä "nukkumaan" kuten jotkut muut pilvipalvelut toimivat.
-EMR-liukuhihna olisi voinut terminoitua kokonaan X ajan käyttämättömyyden takia, tämä ei kuitenkaan olisi käytännöllistä, sillä tulokset katoaisivat virtuaalikoneelta.
+Parempaa asiakaskokemusta olisi tiedottaa selkästi, että tämä palvelu tosiaan varaa X määrän resursseja jatkuvasti, kunnes se terminoidaan.
+Muita vaihtoehtoja EMR-liukuhihnan asiakasystävällisempään toimintaan olisivat esimerkiksi:
+
+\begin{itemize}
+	\item EMR-liukuhihna voisi mahdollisesti mennnä ``nukkumaan'', kuten jotkut muut pilvipalvelut toimivat. Tähän ominaisuuteen tarvittaisiin jonkinlaista logiikkaa tunnistamaan, ettei koneella ole ajossa mitään tähdellistä.
+	\item EMR-liukuhihna voisi mahdollisesti terminoitua kokonaan X ajan käyttämättömyyden takia, tämä ei kuitenkaan olisi käytännöllistä, sillä tulokset katoaisivat virtuaalikoneelta.
+\end{itemize}
+
+Oletusarvoisesti EMR haluaa kirjoittaa lokit S3-buckettiin ja tämä saattaa helposti johtaa Free Tier -tilauksen pyyntöjen rajan ylittämiseen.
+AWS lähetti pyyntöjen hupenemisesta onneksi viestin ja näin ollen päästiin ratkomaan kyseistä konfiguraatiovirhettä.
+EMR-klusteria ei ole mahdollista muokata jälkeenpäin, joten se täytyy poistaa (terminate), jotta lokien kirjoittaminen saatiin poistettua käytöstä.
+Amazon Free Tier sisältää S3:n osalta 2000 kutsua (luku/kirjoitus yhteensä) kuukaudessa ja koska kaikki Spark-sovelluksen tuottamat lokit kirjoitetaan niin tämä raja tuli vastaan nopeasti.
 
 Saadut tulokset eivät ole palveluiden, kuten Netflix tasolla, mutta ei sitä varmaan kannattanut odottaakaan.
-Mielenkiintoista oli se, kuinka "huonoja" saadut suositukset olivat.
-Yllättäviä ja uusia kylläkin, mutta mikään elokuvista ei kuulostanut soveliaalta tai mielekkäältä.
+Mielenkiintoista oli se, kuinka ``huonoja'' saadut suositukset olivat.
+Yllättäviä ja uusia kylläkin, mutta mikään elokuvista ei kuulosta soveliaalta tai mielekkäältä.
 Tässä tosin voikin piillä juuri hyvän suosittelun raja, sillä luultavasti ihmisen muodostama mielipide vaikkapa pelkän nimen perusteella saattaa johtaa elokuvan hylkäämiseen.
 Ihminen ei välttämättä ole täysin objektiivinen valitsemaan sitä, onko jokin suositeltu elokuva katsomisen arvoinen.
-Elokuvan julkaisuvuosi, ohjaajan tunnettuus, näyttelijät ja jopa kansikuva herättävät mielipiteitä, jotka saattavat johtaa elokuvan hylkäämiseen tai ainakin siirtämiseen sille kuuluisalle "katson joskus" listalle.
+Elokuvan julkaisuvuosi, ohjaajan tunnettuus, näyttelijät ja jopa kansikuva herättävät mielipiteitä, jotka saattavat johtaa elokuvan hylkäämiseen tai ainakin siirtämiseen sille kuuluisalle ``katson joskus'' -listalle.
+
+Suuremman aineiston käyttäminen sekä isomman arvostelumäärän tarjoaminen järjestelmälle voisi ajatella parantavan tuloksia.
+Voisi olettaa että tarjotut 20 elokuvan arvostelua eivät vielä riittäneet siihen, että järjestelmä muodostaisi kovin holistista kuvaa allekirjoittaneen elokuvamausta.
 
 \section{Tulevaa työtä}
 
-MLlib-kirjastoa voitaisiin tutkia uudestaan, sillä Dataset-rajapintaa voidaan nyt käyttää yhteisösuodatuksen ongelmien ratkomiseen.
+Uudempaa ML-kirjastoa olisi mielenkiintoista tutkia, sillä Dataset-rajapintaa voidaan nyt käyttää yhteisösuodatuksen ongelmien ratkomiseen.
 Toteutusta yritettiin alunperin myös Dataset-rajapintaa hyväksikäyttäen, mutta kaikki ominaisuudet eivät olleet tuolloin vielä käytössä.
 Työtä aloittaessa Spark oli versiossa 1.5/1.6 ja työtä lopettaessa versiossa 2.3.
-Ohjelmointimalli on vaihtunut RDD-perusteisesta rajapinnasta Dataset-perusteiseen rajapintaan.
-MLlib-kirjasto on vaihtunut ML nimiseen kirjastoon.
+MLlib-kirjasto on vaihtunut ML nimiseen kirjastoon ja tässä yhteydessä myös ohjelmointimalli on vaihtunut RDD-perusteisesta rajapinnasta Dataset-perusteiseen rajapintaan.
 
 Yhteisösuodatusta voidaan tietenkin käyttää muuhunkin tarkoitukseen kuin elokuvien suositteluun, kuten esimerkiksi kirjojen.
 Olisikin mielenkiintoista tutkia myös jotain muuta ongelmaa ja soveltaa siihen ALS-algoritmia.
 
 Verratun tutkimuksen \cite{miryala17} mukaista mallia olisi mahdollista tutkia lisää, jos selviäisi keino, jolla RMSE:tä arvioitiin.
 Pitäisi siis esimerkiksi selvittää, oliko kyseisen tutkimuksen 60-40 suhteessa jaetun aineiston testidatasta osa käytetty validointiin kuten omassa toteutuksessa tehtiin, jossa aineisto jaettiin 60-20-20 suhteessa.
-Mikäli AWS-resursseja olisi runsaammin käytössä, niin olisi myös melko suoraviivaista tutkia useampaakin kombinaatiota mallin parametreille.
+Mikäli AWS-resursseja olisi rajattomasti käytössä, niin olisi myös melko suoraviivaista tutkia useampaakin kombinaatiota mallin parametreille.
 
 Työssä mainituista teknologioista esimerkiksi \textit{spark-submit} -työkalua voitaisiin tutkia lisää.
 Olisi mielenkiintoista ymmärtää, kuinka klusterinhallinta toimii ja miten Spark-tehtäviä (Spark Job) jaetaan eri solmuille.
 Nykyisessä toteutuksessa on oletettu, että \textit{spark-submit} etsii tarvittavat parametrit automaattisesti EMR-klusterista, sillä niitä ei annettu eksplisiittisesti.
-Etsintä voitaisiin toteuttaa esimerkiksi ympäristömuuttujien avulla.
+Tämä etsintä voitaisiin toteuttaa esimerkiksi ympäristömuuttujien avulla, joten aivan kaukaahaettu teoria se ei olisi.
 Kuten aliluvussa \ref{emr} mainittiin, EMR-klusteri on Hadoop-klusteri ja \textit{spark-submit} työkalun avainominaisuutena pidetään klusterinhallinnan helpottumista.
 Sparkin hajautetun ohjelmointimallin kannalta olisi myös mielenkiintoista tutkia sulkeumia (closure) ja erityisesti sitä, kuinka ne toimivat oikeassa klusterissa.
+Sulkeuma on funktionaalisissa ohjelmointikielissä käytetty ominaisuus, joka tarkoittaa funktion kykyä viitata leksikaalisen näkyvyysalueensa parametreihin.
+
+Eräs mahdollinen lähestymistapa mallin hyödyntämiseen olisi toteuttaa vain mallin kouluttaminen AWS:ssä ja tämän jälkeen ladata koulutettu malli johonkin paikalliseen järjestelmään.
+Kuten aiemmin todettiin, on mahdollista ladata ennakkoon koulutettu malli Spark-sovellukseen.
+Tulosten kysyminen valmiiksi koulutetulta mallilta onnistuu varmasti resursseiltaan pienemmällä laitteella kuin varsinainen mallin kouluttaminen.
+Mallia voitaisiin ehkä käyttää hyväksi myös jopa matkapuhelimissa tai jopa joissain (tehokkaimmissa ja käyttöjärjestelmältään sekä kirjastoiltaan soveliaissa) sulautetuissa laitteissa.
+
+Olisi mielenkiintoista tutkia vielä, että millä omien suositusten määrällä suositukset alkaisivat osua enemmän kohdalleen.
+Lähestymistapa tässä voisi olla esimerkiksi sellainen, että jätettäisiin joitain suosikkielokuvia tarkoituksella arvostelematta ja tarkkailtaisiin, että missä kohdassa järjestelmä rupeaisi ehdottamaan juuri näitä elokuvia.
 
 \end{document}
