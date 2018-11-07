@@ -77,7 +77,7 @@ Ryhmittämistä seuraa kommunikaation vähentäminen lähettämällä jokaiseen tuoteloh
 Vain ne käyttäjä-vektorit lähetetään, joita tarvitaan tuotelohkoissa.
 Vähennetty kommunikaatio saavutetaan laskemalla valmiiksi joitain tietoja suositusmatriisista, jotta voidaan päätellä jokaisen käyttäjän ulostulot ja jokaisen tuotteen sisääntulot.
 Ulostulolla tarkoitetaan niitä tuotelohkoja, joihin käyttäjä tulee myötävaikuttamaan.
-Sisääntulolla tarkoitetaan niitä ominaisuusvektoreita jotka jokainen tuote ottaa vastaan niiltä käyttäjälohkoilta joista ne ovat riippuvaisia.
+Sisääntulolla tarkoitetaan niitä ominaisuusvektoreita, jotka jokainen tuote ottaa vastaan niiltä käyttäjälohkoilta, joista ne ovat riippuvaisia.
 Tämä mahdollistaa sen, että voidaan lähettää vain taulukollinen ominaisuusvektoreita jokaisen käyttäjä- ja tuotelohkon välillä.
 Vastaavasti tuotelohko löytää käyttäjän arviot ja päivittää tuotteita näiden viestien perusteella. \cite{als14}
 
@@ -90,7 +90,8 @@ A_iY(Y^T Y)^{-1} = X_i
 
 ALS operoi kiinnittämällä yhden tuntemattomista $u_i$ ja $v_j$ ja vaihtelemalla tätä kiinnittämistä.
 Kun toinen on kiinnitetty, toinen voidaan laskea ratkaisemalla pienimpien neliöiden ongelma.
-Tämä lähestymistapa on hyödyllinen, koska se muuttaa aiemman, ei-konveksin, ongelman neliömäiseksi, jolloin se voidaan ratkaista optimaalisesti. \cite{aberger14} Ei-konveksilla tarkoitetaan sellaista ongelmaa, jolla saattaa olla olemassa useita paikallisia ratkaisuja ja saattaa kestää kauan tunnistaa, onko ongelmalla ratkaisua lainkaan, tai että löydetty ratkaisu on myös globaali ratkaisu. \cite{non_convex}
+Tämä lähestymistapa on hyödyllinen, koska se muuttaa aiemman, ei-konveksin, ongelman neliömäiseksi, jolloin se voidaan ratkaista optimaalisesti. \cite{aberger14}
+Ei-konveksilla tarkoitetaan sellaista ongelmaa, jolla saattaa olla olemassa useita paikallisia ratkaisuja ja saattaa kestää kauan tunnistaa, onko ongelmalla ratkaisua lainkaan, tai että löydetty ratkaisu on myös globaali ratkaisu \cite{non_convex}.
 Alla on \cite{aberger14} mukainen yleinen kuvaus ALS-algoritmista.
 Esimerkissä mainittu RMSE-funktio esitellään tarkemmin aliluvussa \ref{rmse}.
 
