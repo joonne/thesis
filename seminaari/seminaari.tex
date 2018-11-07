@@ -109,159 +109,211 @@ Tampereen Teknillinen Yliopisto \\ % Your institution for the title page
 %	PRESENTATION SLIDES
 %----------------------------------------------------------------------------------------
 
-%------------------------------------------------
-\section{Tavoitteet} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
-%------------------------------------------------
+\section{Tavoitteet}
 
 \begin{frame}
 \frametitle{Tavoitteet}
 
+Elokuvien suosittelua Apache Sparkin avulla.
 Koska työ tehtiin vain omaksi iloksi, ajatuksena oli hyödyn maksimointi ja tavoitteeksi kirjattiin seuraavaa: uuden ohjelmointikielen opettelu, pilvipalveluun tutustuminen sekä Spark-ohjelmistokehykseen tutustuminen.
-Akateeminen osuus hoidettiin etsimällä tutkimuspaperi, johon perustin oman mallin opetukseni.
+Akateeminen osuus hoidettiin etsimällä tutkimuspaperi, johon perustin oman mallini opetuksen.
 
-\end{frame}
-
-\subsection{Subsection Example} % A subsection can be created just before a set of slides with a common theme to further break down your presentation into chunks
-
-\begin{frame}
-\frametitle{Paragraphs of Text}
-Sed iaculis dapibus gravida. Morbi sed tortor erat, nec interdum arcu. Sed id lorem lectus. Quisque viverra augue id sem ornare non aliquam nibh tristique. Aenean in ligula nisl. Nulla sed tellus ipsum. Donec vestibulum ligula non lorem vulputate fermentum accumsan neque mollis.\\~\\
-
-Sed diam enim, sagittis nec condimentum sit amet, ullamcorper sit amet libero. Aliquam vel dui orci, a porta odio. Nullam id suscipit ipsum. Aenean lobortis commodo sem, ut commodo leo gravida vitae. Pellentesque vehicula ante iaculis arcu pretium rutrum eget sit amet purus. Integer ornare nulla quis neque ultrices lobortis. Vestibulum ultrices tincidunt libero, quis commodo erat ullamcorper id.
 \end{frame}
 
 %------------------------------------------------
 
+%------------------------------------------------
+\section{Teoria}
+%------------------------------------------------
+
 \begin{frame}
-\frametitle{Bullet Points}
+\frametitle{Alternating Least Squares (ALS)}
+
 \begin{itemize}
-\item Lorem ipsum dolor sit amet, consectetur adipiscing elit
-\item Aliquam blandit faucibus nisi, sit amet dapibus enim tempus eu
-\item Nulla commodo, erat quis gravida posuere, elit lacus lobortis est, quis porttitor odio mauris at libero
-\item Nam cursus est eget velit posuere pellentesque
-\item Vestibulum faucibus velit a augue condimentum quis convallis nulla gravida
+	\item Spark ALS yrittää arvata arvostelumatriisin $A$ kahden alemman dimension matriisin, $X$ ja $Y$, tulona.
+	\item Tyypillisesti näihin arvioihin viitataan tekijämatriiseina.
+	\item Perinteinen lähestymistapa on iteratiivinen.
+	\item Jokaisen iteraation aikana, toista tekijämatriisia pidetään vakiona ja toinen ratkaistaan käyttäen MSE-algoritmia.
+	\item Juuri ratkaistua tekijämatriisia pidetään vuorostaan vakiona kun ratkaistaan toista tekijämatriisia.
+	\item ALS on siis kaksivaiheinen iteratiivinen optimointiprosessi
+	\item Löydetty ratkaisu takaa minimaalisen MSE:n, jokaisella askeleella ratkaisu voi joko pienentyä tai pysyä samana, mutta ei kasvaa.
+	\item Algoritmi vaihtelee (\textbf{alternates}) näiden kahden askeleen välillä konvergenssiin asti.
 \end{itemize}
+
 \end{frame}
 
 %------------------------------------------------
 
 \begin{frame}
-\frametitle{Blocks of Highlighted Text}
-\begin{block}{Block 1}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lectus nisl, ultricies in feugiat rutrum, porttitor sit amet augue. Aliquam ut tortor mauris. Sed volutpat ante purus, quis accumsan dolor.
-\end{block}
+\frametitle{Root Mean Square Error (RMSE)}
 
-\begin{block}{Block 2}
-Pellentesque sed tellus purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vestibulum quis magna at risus dictum tempor eu vitae velit.
-\end{block}
+Työn mallin opetusvirheen arviointiin käytettiin RMSE -metriikkaa.
 
-\begin{block}{Block 3}
-Suspendisse tincidunt sagittis gravida. Curabitur condimentum, enim sed venenatis rutrum, ipsum neque consectetur orci, sed blandit justo nisi ac lacus.
-\end{block}
+\begin{itemize}
+	\item kenties suosituin ennustettujen arvosteluiden tarkkuuden evaluointiin käytetty metriikka.
+	\item RMSE:n tuntemiseksi tulee tuntea ensin MSE (Mean Square Error).
+	\item MSE on virheiden neliöiden keskiarvo ja se voidaan laskea neliöimällä jokaisen havainnon virhe ja laskemalla virheiden neliöiden keskiarvo.
+	\item RMSE voidaan puolestaan laskea ottamalla neliöjuuri MSE:stä.
+\end{itemize}
+
+\end{frame}
+
+%------------------------------------------------
+
+%------------------------------------------------
+\section{Teknologiat}
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Scala}
+
+\begin{itemize}
+	\item Scala on moniparadigmainen ohjelmointikieli, joka tukee sekä olio- että funktionaalista ohjelmointia.
+	\item Muuttumattomat tietorakenteet ja funktiot ensimmäisen luokan kansalaisina.
+	\item Luokat ja oliot, kapselointi, perintä, moniperintä.
+	\item Scala on staattisesti tyypitetty kieli ja sillä kirjoitetut ohjelmat käännetään Scala-kääntäjää käyttäen.
+	\item Scala on JVM-kieli, joten Scala kääntäjä kääntää sovelluksen Java-tavukoodiksi, jota voidaan ajaa missä tahansa Java-virtuaalikoneessa.
+\end{itemize}
+
 \end{frame}
 
 %------------------------------------------------
 
 \begin{frame}
-\frametitle{Multiple Columns}
-\begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
+\frametitle{Apache Spark}
 
-\column{.45\textwidth} % Left column and width
-\textbf{Heading}
-\begin{enumerate}
-\item Statement
-\item Explanation
-\item Example
-\end{enumerate}
+\begin{itemize}
+	\item Yleispätevä analytiikkasovelluskehys.
+	\item RDD, Dataset, Spark SQL, DataFrame
+	\item Nopeus + käyttäjäystävällisyys
+	\item muistissa tapahtuva prosessointi
+	\item Parhaimmillaan hurjasti nopeampi kuin Hadoop: Ei rajoitettu kahteen steppiin $=>$ Spark voi suoriutua yhdellä monitasoisella ajolla kun taas Hadoop tekee aina kaksi ennalta määrättyä toimea (map ja reduce).
+	\item Kirjoitettu Scala ohjelmointikielellä ja Sparkia voi kirjoittaa Scalalla, mutta lisäksi esimerkiksi Pythonilla ja R:llä
+\end{itemize}
 
-\column{.5\textwidth} % Right column and width
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lectus nisl, ultricies in feugiat rutrum, porttitor sit amet augue. Aliquam ut tortor mauris. Sed volutpat ante purus, quis accumsan dolor.
-
-\end{columns}
 \end{frame}
 
 %------------------------------------------------
-\section{Second Section}
+
+\begin{frame}
+\frametitle{Amazon Web Services (AWS)}
+
+Amazonin tarjoama kokoelma pilvilaskentaan (cloud computing) tarkoitettuja tai sitä avustavia palveluita.
+Työssä käytettiin varsinaisesti kahta AWS:n palvelua: Elastic Map Reducea (EMR) ja Simple Storage Serviceä (S3).
+
+~
+
+\begin{itemize}
+	\item [EMR] Hallittu klusterialusta esimerkiksi Apache Sparkin ajamiseen
+	\item [S3] Tietovarasto
+\end{itemize}
+
+\end{frame}
+
+%-----------------------------------------------------------
+
+%-----------------------------------------------------------
+\section{Toteutus}
+%-----------------------------------------------------------
+
+\begin{frame}
+\frametitle{Toteutus}
+
+\begin{itemize}
+	\item EMR
+	\item Opetusdata
+	\item Projektin rakenne
+	\item Opetusdatan lataaminen
+	\item Mallin opettaminen
+	\item Ennustaminen
+	\item Opetusvirheen evaluointi
+\end{itemize}
+
+\end{frame}
+
+%------------------------------------------------
+
+%------------------------------------------------
+\section{Tulokset}
 %------------------------------------------------
 
 \begin{frame}
-\frametitle{Table}
-\begin{table}
-\begin{tabular}{l l l}
-\toprule
-\textbf{Treatments} & \textbf{Response 1} & \textbf{Response 2}\\
-\midrule
-Treatment 1 & 0.0003262 & 0.562 \\
-Treatment 2 & 0.0015681 & 0.910 \\
-Treatment 3 & 0.0009271 & 0.296 \\
-\bottomrule
+\frametitle{Sisääntulot}
+
+\begin{tabular}{lll}
+	Tunniste & Nimi & Arvostelu \\ \hline
+	112897 & The Expendables 3 (2014) & 4.0 \\
+	116887 & Exodus: Gods and Kings (2014) & 4.0 \\
+	117529 & Jurassic World (2015) & 4.0 \\
+	128520 & The Wedding Ringer (2015) & 4.5 \\
+	122882 & Mad Max: Fury Road (2015) & 4.0 \\
+	131013 & Get Hard (2015) & 4.0 \\
+	132796 & San Andreas (2015) & 3.0 \\
+	136305 & Sharknado 3: Oh Hell No! (2015) & 1.0 \\
+	136598 & Vacation (2015) & 4.0 \\
+	137595 & Magic Mike XXL (2015) & 1.0 \\
+	138208 & The Walk (2015) & 2.0 \\
+	140523 & The Visit (2015) & 3.5 \\
+	146656 & Creed (2015) & 4.0 \\
+	148626 & The Big Short (2015) & 4.5 \\
+	149532 & Marco Polo: One Hundred Eyes (2015) & 4.5 \\
 \end{tabular}
-\caption{Table caption}
-\end{table}
+
 \end{frame}
 
 %------------------------------------------------
 
 \begin{frame}
-\frametitle{Theorem}
-\begin{theorem}[Mass--energy equivalence]
-$E = mc^2$
-\end{theorem}
+\frametitle{Tulokset}
+
+\begin{itemize}
+	\item \textbf{The War at Home (1979)} Drama
+	\item \textbf{Pearl Jam: Immagine in Cornice (2007)} Documentary, Music
+	\item \textbf{Octopus (2000)} Adventure, Horror
+	\item \textbf{My Brother Tom (2001)} Drama
+	\item \textbf{Return to the 36th Chamber (1980)} Action, Comedy
+	\item \textbf{Bob Funk (2009)} Comedy
+	\item \textbf{Hamoun (1990)} Drama
+	\item \textbf{Notebook (2006)} Drama, Musical, Romance
+	\item \textbf{Patton Oswalt: My Weakness Is Strong (2009)} Documentary, Comedy
+	\item \textbf{Deathstalker II (1987)} Adventure, Comedy, Fantasy
+\end{itemize}
+
 \end{frame}
 
 %------------------------------------------------
 
-\begin{frame}[fragile] % Need to use the fragile option when verbatim is used in the slide
-\frametitle{Verbatim}
-\begin{example}[Theorem Slide Code]
-\begin{verbatim}
+%------------------------------------------------
+\section{Johtopäätökset}
+%------------------------------------------------
+
 \begin{frame}
-\frametitle{Theorem}
-\begin{theorem}[Mass--energy equivalence]
-$E = mc^2$
-\end{theorem}
-\end{frame}\end{verbatim}
-\end{example}
-\end{frame}
+\frametitle{Johtopäätökset}
 
-%------------------------------------------------
+Tulokset eivät olleet kovin lupaavia, enemmän omia arvosteluja ja isoimmalla MovieLens-datasetillä kouluttaminen voisi auttaa.
 
-\begin{frame}
-\frametitle{Figure}
-Uncomment the code on this slide to include your own image from the same directory as the template .TeX file.
-%\begin{figure}
-%\includegraphics[width=0.8\linewidth]{test}
-%\end{figure}
-\end{frame}
-
-%------------------------------------------------
-
-\begin{frame}[fragile] % Need to use the fragile option when verbatim is used in the slide
-\frametitle{Citation}
-An example of the \verb|\cite| command to cite within the presentation:\\~
-
-This statement requires citation \cite{p1}.
 \end{frame}
 
 %------------------------------------------------
 
 \begin{frame}
-\frametitle{References}
-\footnotesize{
-\begin{thebibliography}{99} % Beamer does not support BibTeX so references must be inserted manually as below
-\bibitem[Smith, 2012]{p1} John Smith (2012)
-\newblock Title of the publication
-\newblock \emph{Journal Name} 12(3), 45 -- 678.
-\end{thebibliography}
-}
+\frametitle{Loppukevennys}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.2]{../images/aws_bill}
+\end{figure}
+
 \end{frame}
 
 %------------------------------------------------
 
 \begin{frame}
-\Huge{\centerline{The End}}
+
+Kiitos! 1Kysymyksiä?
+
 \end{frame}
 
-%----------------------------------------------------------------------------------------
+%------------------------------------------------
 
 \end{document} 
