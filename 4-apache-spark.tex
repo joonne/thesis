@@ -28,7 +28,8 @@ Suoritusaikaa hallitaan lis‰‰m‰ll‰ lis‰‰ tietokoneita suorittamaan teht‰v‰‰. \ci
 Apache Spark s‰ilytt‰‰ MapReduce:n lineaarisen skaalautuvuuden ja vikasietokyvyn mutta laajentaa sit‰ kolmella merkitt‰v‰ll‰ tavalla.
 Ensiksi, MapReducessa map- ja reduce-teht‰vien v‰liset tulokset t‰ytyy kirjoittaa levylle kun taas Spark kykenee v‰litt‰m‰‰n tulokset suoraan liukuhihnan (pipeline) seuraavalle vaiheelle.
 Toiseksi, Apache Sparkin voidaan ajatella kohtelevan kehitt‰ji‰ paremmin tarjoamalla monipuolisen joukon transformataatioita, joiden avulla voidaan muutamalla koodirivill‰ ilmaista monimutkaisia liukuhihnoja (pipelines, ohjelmistoja).
-Kolmanneksi, Spark esittelee muistissa tapahtuvan prosessoinnin tarjoamalla abstraktion nimelt‰ \textit{Resilient Distributed Dataset (RDD)}. RDD tarjoaa kehitt‰j‰lle mahdollisuuden materialisoida mink‰ tahansa askeleen liukuhihnassa ja tallentaa sen muistiin.
+Kolmanneksi, Spark esittelee muistissa tapahtuvan prosessoinnin tarjoamalla abstraktion nimelt‰ \textit{Resilient Distributed Dataset (RDD)}.
+RDD tarjoaa kehitt‰j‰lle mahdollisuuden materialisoida mink‰ tahansa askeleen liukuhihnassa ja tallentaa sen muistiin.
 T‰m‰ tarkoittaa sit‰, ett‰ tulevien askelien ei tarvitse laskea aiempia tuloksia uudelleen ja t‰llˆin on mahdollista jatkaa juuri k‰ytt‰j‰n haluamasta askeleesta.
 Aiemmin t‰m‰nkaltaista ominaisuutta ei ole ollut saatavilla hajautetun laskennan j‰rjestelmiss‰. \cite{ryza15}
 

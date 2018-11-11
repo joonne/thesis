@@ -139,7 +139,7 @@ spark-submit movielens-recommendations_2.11-1.0.jar
 
 ~
 
-Alla olevassa esimerkissä ladataan työssä käytetyt suositukset RDD rajapintaa käyttäen.
+Alla olevassa esimerkissä ladataan työssä käytetyt suositukset RDD-rajapintaa käyttäen.
 
 \lstset{
 	columns=flexible,
@@ -152,35 +152,16 @@ Alla olevassa esimerkissä ladataan työssä käytetyt suositukset RDD rajapintaa kä
 	numbersep=15pt,
 }
 
-\begin{lstlisting}[caption=Suositusten lataaminen RDD rajapintaa käyttäen]
+\begin{lstlisting}[caption=Suositusten lataaminen RDD-rajapintaa käyttäen]
 val ratings = sc.textFile("ml-latest-small/ratings.csv")
-  .mapPartitionsWithIndex((i, it) => if (i == 0) it.drop(1) else it)
-  .map { line =>
-    val fields = line.split(",")
-    val timestamp = fields(3).toLong % 10
-    val userId = fields(0).toInt
-    val movieId = fields(1).toInt
-    val rating = fields(2).toDouble 
-
-    (timestamp, Rating(userId, movieId, rating))
-  }
 \end{lstlisting}
 
 ~
 
 Alla olevassa esimerkissä ladataan työssä käytetyt suositukset Dataset-rajapintaa käyttäen.
 
-\begin{lstlisting}[caption=Suositusten lataaminen Dataset rajapintaa käyttäen]
+\begin{lstlisting}[caption=Suositusten lataaminen Dataset-rajapintaa käyttäen]
 val ratings = spark.read.csv("ml-latest-small/ratings.csv")
-	.mapPartitionsWithIndex((i, it) => if (i == 0) it.drop(1) else it)
-	.map { fields =>
-		val userId = fields(0).asInstanceOf[String].toInt
-		val movieId = fields(1).asInstanceOf[String].toInt
-		val rating = fields(2).asInstanceOf[String].toFloat
-		val timestamp = fields(3).asInstanceOf[String].toDouble % 10
-
-		Rating(userId, movieId, rating, timestamp)
-  }
 \end{lstlisting}
 
 \section{Opetusdatan lataaminen Spark sovellukseen}
@@ -233,7 +214,7 @@ Opetus tapahtuu niin, että opetetaan muutama versio mallista ja valitaan malleis
 Koodin tasolla opetus tapahtuu käyttäen MLlib / ALS kirjaston funktiota $train$, joka ottaa sisääntulonaan $ratings$, $rank$, $iterations$ sekä $lambda$ parametrit:
 
 \begin{itemize}
-	\item $ratings$ on RDD Rating olioita, jotka sisältävät käyttäjän tunnisteen, elokuvan tunnisteen ja suosituksen
+	\item $ratings$ on RDD Rating -olioita, jotka sisältävät käyttäjän tunnisteen, elokuvan tunnisteen ja suosituksen
 	\item $rank$ on piilevien ominaisuuksien sisällytettävä määrä
 	\item $iterations$ on ALS algoritmin iteraatioiden määrä
 	\item $lambda$ on regularisaatio-parametri, jolla yritetään ehkäistä mallin ylioppimista
@@ -241,8 +222,8 @@ Koodin tasolla opetus tapahtuu käyttäen MLlib / ALS kirjaston funktiota $train$,
 
 Tutkimuksessa \cite{miryala17} on tutkittu parhaita parametreja ALS-algoritmille ja päädytty lambda-arvoon 0.1 sekä iteraatioiden määrään 20.
 Parhautta on tutkittu RMSE-metriikan kautta ja kyseisillä parametreilla RMSE saadaan pienimmilleen eli mallin voidaan sanoa sovittuvan parhaiten opetusdataan.
-Tutkimuksessa oltiin päädytty arvoon 0.819942, kun taas paras itse opetettu malli päätyi RMSE arvoon 0.807167.
-Omassa opetuksessa eroavaisuuksina olivat tämän hetken lähin vastaava datasetti, joka ei ollut aivan niin suuri kuin tutkimuksessa käytetty, myös opetus datojen suhde oli hieman eri, sillä oman toteutuksen RMSE-validointi tarvitsi myös oman osansa datasta.
+Tutkimuksessa oltiin päädytty arvoon 0.819942, kun taas paras itse opetettu malli päätyi RMSE-arvoon 0.807167.
+Omassa opetuksessa eroavaisuuksina olivat tämän hetken lähin vastaava datasetti, joka ei ollut aivan niin suuri kuin tutkimuksessa käytetty, myös opetusaineistojen suhde oli hieman eri, sillä oman toteutuksen RMSE-validointi tarvitsi myös oman osansa datasta.
 Validointiin olisi tietysti voitu käyttää samaa opetusdataa, kuten oletettavasti tutkimuksessakin oli tehty tai sitten RMSE oli arvioitu eri menetelmää käyttäen.
 Tutkimuksessa paras arvo saatiin käyttäen datasettiä 80-20 suhteessa ja omassa opetuksessa käytössä oli datasetti, joka oli jaettu  60-20-20 suhteessa.
 

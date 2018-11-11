@@ -3,13 +3,14 @@
 
 \chapter{Teoria}
 
-Seuraava kappale kuvailee matriisin tekijöihinjakoa yleisellä tasolla sekä vuorottelevien pienimpien neliöiden (Alternating Least Squares, ALS) -algoritmia.
+Seuraava kappale kuvailee yleisellä tasolla matriisin tekijöihinjakoa, vuorottelevien pienimpien neliöiden (Alternating Least Squares, ALS) -algoritmia sekä Scala -ohjelmointikieltä.
 Työssä tarkasteltava Spark-sovelluskehys sisältää toteutuksen ALS-algoritmille, joka on matriisin tekijöihinjako-algoritmi. \cite{ryza15}
+Spark on kirjoitettu Scala-ohjelmointikielellä ja tästä syystä se on myös suositeltu kieli Spark-ohjelmien kirjoittamiseen.
+Tämän työn koodiesimerkit on kirjoitettu käyttäen Scala:n syntaksia, joten lukijalle tarjotaan lyhyt johdanto Scalaan.
 
 \section{Matriisin tekijöihinjako}
 
 Matriisin tekijöihinjaossa matriisi hajoitetaan pienempien matriisien tuloksi.
-Tekijöihinjako voidaan toteuttaa usealla eri tavalla.
 Matriisin tekijöihinjako kuuluu suureen algoritmien luokkaan nimeltä latenttien tekijöiden mallit (Latent-factor models).
 Latenttien tekijöiden mallit yrittävät selittää usean käyttäjän ja tuotteen välillä havaittuja vuorovaikutuksia käyttämällä suhteellisen pientä määrää piileviä, latentteja tekijöitä.
 Voidaan esimerkiksi yrittää selittää miksi ihminen ostaisi tietyn albumin lukemattomien mahdolisuuksien joukosta kuvailemalla käyttäjiä ja tuotteita mieltymysten perusteella, joista ei ole mahdollista saada tietoa. \cite{ryza15}
@@ -18,13 +19,12 @@ Esimerkiksi ihmisen terveys on latentti tekijä, sillä sitä ei ole mahdollista mi
 
 Matriisin tekijöihinjako-algoritmit käsittelevät käyttäjä- ja tuotetietoja suurena matriisina $A$.
 Jokainen rivissä $i$ sekä sarakkeessa $j$ sijaitseva alkio esittää arvostelua, jonka käyttäjä on antanut tietylle tuotteelle. \cite{ryza15} \ref{matrix-factorization}
-
 Yleensä $A$ on harva (sparse), jolla tarkoitetaan että useimmat $A$:n alkiot sisältävät arvon nolla.
 Tämä johtuu siitä, että kaikista mahdollisuuksista usein vain muutama käyttäjä-tuote-kombinaatio on olemassa. \cite{ryza15} \ref{matrix-factorization}
 
 Matriisin tekijöihinjako mallintaa $A$:n kahden pienemmän matriisin $X$ ja $Y$ tulona, jotka ovat varsin pieniä.
-Koska $A$:ssa on monta riviä ja saraketta, $X$ ja $Y$ sisältävät paljon rivejä mutta vain muutaman $(k)$ sarakkeen.
-Nämä $k$ saraketta vastaavat latentteja tekijöitä, joita käytetään kuvailemaan datassa sijaitsevia vuorovaikutuksia.
+Koska $A$:ssa on monta riviä ja saraketta, $X$ ja $Y$ sisältävät paljon rivejä, mutta vain muutaman $(k)$ sarakkeen.
+Nämä $k$-saraketta vastaavat latentteja tekijöitä, joita käytetään kuvailemaan datassa sijaitsevia vuorovaikutuksia.
 Hajotelma (factorization) on ainoastaan arvio, sillä $k$ on pieni. \cite{ryza15} \ref{matrix-factorization}
 
 \begin{figure}[h]
@@ -34,7 +34,7 @@ Hajotelma (factorization) on ainoastaan arvio, sillä $k$ on pieni. \cite{ryza15}
 	\includegraphics[scale=0.25]{matrix_factorization2}
 \end{figure}
 
-Tavanomainen lähestymistapa matriisin tekijöihinjakoon perustuvassa yhteisösuodatuksessa on kohdella käyttäjä-tuote matriisin alkioita käyttäjien antamina eksplisiittisinä arvosteluina.
+Tavanomainen lähestymistapa matriisin tekijöihinjakoon perustuvassa yhteisösuodatuksessa on kohdella käyttäjä-tuote -matriisin alkioita käyttäjien antamina eksplisiittisinä arvosteluina.
 Eksplisiittistä tietoa on esimerkiksi käyttäjän antama arvio tuotteelle.
 Spark ALS kykenee käsittelemään sekä implisiittistä että eksplisiittistä tietoa.
 Implisiittistä tietoa on esimerkiksi sivujen katselukerrat tai tieto siitä, onko käyttäjä kuunnellut tiettyä artistia.
@@ -65,10 +65,10 @@ A = XY^T
 
 Tyypillisesti näihin arvioihin viitataan tekijämatriiseina.
 Perinteinen lähestymistapa on iteratiivinen.
-Jokaisen iteraation aikana, toista tekijämatriisia pidetään vakiona ja toinen ratkaistaan käyttäen \textit{pienimpien summien} -algoritmia.
+Jokaisen iteraation aikana, toista tekijämatriisia pidetään vakiona ja toinen ratkaistaan käyttäen \textit{pienimpien summien} (Mean Square Error, MSE) -algoritmia.
 Pienimpien summien algoritmeja käsitellään aliluvussa \ref{rmse}.
 Juuri ratkaistua tekijämatriisia pidetään vuorostaan vakiona kun ratkaistaan toista tekijämatriisia. \cite{als14}
-Spark ALS mahdollistaa massiivisen rinnakkaistamisen, sillä algoritmia voidaan suorittaa rinnakkain, toisistaan erillään.
+Spark ALS mahdollistaa massiivisen rinnakkaistamisen, sillä algoritmia voidaan suorittaa toisistaan erillään.
 Tämä on erinomainen ominaisuus suuren mittakaavan (large-scale) laskenta-algoritmille. \cite{ryza15}
 
 Spark ALS on lohkotettu versio ALS tekijöihinjako-algoritmista.
@@ -129,11 +129,15 @@ Ennustettujen ja todellisten arvioiden välinen RMSE saadaan laskettua seuraavast
 RMSE=\sqrt{\frac{1}{|\tau|} \sum_{(u,i)\in\tau}(\hat{r}_{ui}-r_{ui})^2}
 \end{equation}
 
+TODO?
+
+\newpage
+
 \section{Amazon Web Services (AWS)}
 
 \textit{AWS (Amazon Web Services)} on Amazonin tarjoama kokoelma pilvilaskentaan (cloud computing) tarkoitettuja tai sitä avustavia palveluita.
 Tässä työssä käytetään pääasiassa hyödyksi kahta AWS:n palvelua, EMR:ää (Elastic Map Reduce) sekä S3:a (Simple Storage Service).
-EMR:n avulla on mahdollista käyttää Big Data sovelluskehyksiä, kuten Apache Sparkia.
+EMR:n avulla on mahdollista käyttää Big Data -sovelluskehyksiä, kuten Apache Sparkia.
 S3 on skaalautuva tietovarasto internetin tarpeisiin, jonka tarkoitus on helpottaa ohjelmistokehittäjien elämää.
 \cite{aws} \cite{emr} \cite{s3}
 
@@ -171,7 +175,7 @@ Se on suunniteltu tekemään web-mittakaavan (web-scale) laskennasta yksinkertaise
 Se antaa kehittäjille pääsyn samaan hyvin skaalautuvaan, luotettavaan, nopeaan ja edulliseen tietovarasto-infrastruktuuriin, jota Amazon käyttää itse globaalin verkkosivustokatraansa ajamiseen. \cite{s3}
 
 Tässä työssä S3:a käytetään varastoimaan opetusdataa.
-Tarvittaessa Apache Sparkin laskennan välivaiheita voidaan tallentaa muistiin jolloin niiden tulokset voitaisiin lukea suoraan ilman että niitä tarvitsee laskea uudelleen.
+Tarvittaessa Apache Sparkin laskennan välivaiheita voidaan tallentaa muistiin, jolloin niiden tulokset voitaisiin lukea suoraan ilman että niitä tarvitsee laskea uudelleen.
 Myös koko opetettu malli voitaisiin tallentaa S3:een ja esimerkiksi ladata vaikka omalle koneelle, jolloin AWS:ää tulisi myös käytettyä optimaalisesti, sillä EC2-instanssien varaaminen aiheuttaa maksuja koko ajan.
 Simple Storage Service:n tarjoama abstraktio on nimeltään \textit{bucket}, joka on käsitteellisesti kansio, johon tietoa varastoidaan.
 
@@ -193,8 +197,8 @@ Funktionaalista ohjelmointia varten Scalasta löytyy tuki funktionaalisen ohjelmo
 Olio-ohjelmointia varten Scalasta löytyy tuki käsitteille kuten luokat, oliot ja piirre (trait).
 Scala tukee myös kapselointia, perintää, moniperintää ja muita tärkeitä olio-ohjelmoinnin konsepteja.
 Scala on staattisesti tyypitetty kieli ja sillä kirjoitetut ohjelmat käännetään Scala-kääntäjää käyttäen.
-Scala on JVM-perustainen (Java Virtual Machine, Java-virtuaalikone) kieli, joten Scala kääntäjä kääntää sovelluksen Java-tavukoodiksi, joka voidaan ajaa missä tahansa Java-virtuaalikoneessa.
-Tavukooditasolla Scala ohjelmaa ei voida erottaa Java sovelluksesta.
+Scala on JVM-perustainen (Java Virtual Machine, Java-virtuaalikone) kieli, joten Scala kääntäjä kääntää sovelluksen Java-tavukoodiksi, jota voidaan ajaa missä tahansa Java-virtuaalikoneessa.
+Tavukooditasolla Scala-ohjelmaa ei voida erottaa Java-sovelluksesta.
 Scalan ollessa JVM-perustainen, Scala on täysin yhteensopiva Javan kanssa ja näin ollen Java-kirjastoja voidaan käyttää suoraan Scala-koodissa.
 Tästä syystä Scala-sovellukset hyötyvät suuresta Java-koodin määrästä.
 Vaikka Scala tukee sekä olio- että funktionaalista ohjelmointia, funktionaalista ohjelmointia suositaan. \cite{guller15}
@@ -208,7 +212,7 @@ String on jono Char:eja.
 Boolean esittää totuusarvoa tosi (true) tai epätosi (false). \cite{guller15}
 
 Javasta poiketen Scalassa ei ole ollenkaan primitiivisiä tyyppejä vaan jokainen tyyppi on toteutettu luokkana.
-Käännöksen aikana kääntäjä tarvittaessa automaattisesti muuntaa Scala tyypit Javan primitiivisiksi tyypeiksi. \cite{guller15}
+Käännöksen aikana kääntäjä tarvittaessa automaattisesti muuntaa Scala-tyypit Javan primitiivisiksi tyypeiksi. \cite{guller15}
 
 \subsection{Muuttujat}
 
@@ -227,7 +231,7 @@ val y = 10
 \end{lstlisting}
 
 Mikäli vakiota yritettään uudelleenmäärittää myöhemmin ohjelmassa, kääntäjä antaa virheen.
-Huomionarvoista ylläolevassa syntaksissa on se, että Scala kääntäjä ei pakota määrittelemään muuttujan tyyppiä sillon kuin kääntäjä pystyy päättelemään (type deduction) sen.
+Huomionarvoista ylläolevassa syntaksissa on se, että Scala kääntäjä ei pakota määrittelemään muuttujan tyyppiä sillon kuin kääntäjä pystyy päättelemään (type inference) sen.
 
 \begin{lstlisting}[caption=Muuttujan luominen tyyppimäärittelyn avulla]
 var x: Int = 10
@@ -258,29 +262,28 @@ Parametrien jälkeen funktiomäärittelyyn tulee kaksoispiste, funktion ulostulon t
 
 \lstset{language=Scala,tabsize=2}
 
-\begin{lstlisting}[caption=Funktio]
+\begin{lstlisting}[caption=add-Funktio]
 def add(first: Int, second: Int): Int = {
 	val sum = first + second
-	return sum
+	sum
 }
 \end{lstlisting}
 
 Ylläolevassa esimerkissä funktion nimi on $add$ ja se ottaa kaksi $Int$ tyyppistä sisääntuloa.
-Funktio palauttaa $Int$ tyyppisen arvon jonka se muodostaa lisäämällä annetut sisääntulot yhteen ja palauttamalla tuloksen.
+Funktio palauttaa $Int$-tyyppisen arvon, jonka se muodostaa lisäämällä annetut sisääntulot yhteen ja palauttamalla tuloksen.
+Scalassa kaikki lausekkeet ovat arvon palauttavia lausekkeita, joten funktion rungon viimeisen lausekkeen arvosta tulee funktion paluuarvo \cite{guller15}.
 
-Scala sallii myös lyhyemmän version samasta funktiosta:
+Scala mahdollistaa myös lyhyemmän version samasta funktiosta:
 
 \lstset{language=Scala,tabsize=2}
 
-\begin{lstlisting}[caption=Funktio]
+\begin{lstlisting}[caption=add-Funktio]
 def add(first: Int, second: Int) = first + second
 \end{lstlisting}
 
 Toinen versio tekee täsmälleen saman asian kuin ensimmäinenkin, mutta se on vain kirjoitettu lyhyemmin.
 Paluuarvon tyyppi on jätetty antamatta, sillä kääntäjä pystyy päättelemään sen koodista.
 Paluuarvon tyyppi suositellaan kuitenkin annettavan aina.
-Aaltosulkeet on myöskin jätetty pois, sillä ne ovat pakolliset vain kun funktion runko sisältää useamman kuin yhden lausekkeen.
-Lisäksi, $return$ avainsana on ohitettu, sillä se on vapaaehtoinen.
-Scalassa kaikki lausekkeet ovat arvon palauttavia lausekkeita, joten funktion rungon viimeisen lausekkeen arvosta tulee funktion paluuarvo. \cite{guller15}
+Aaltosulkeet on myöskin jätetty pois, sillä ne ovat pakolliset vain kun funktion runko sisältää useamman kuin yhden lausekkeen.  \cite{guller15}
 
 \end{document}
