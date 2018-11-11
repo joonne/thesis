@@ -130,14 +130,13 @@ Akateeminen osuus hoidettiin etsimällä tutkimuspaperi, johon perustin oman mal
 \frametitle{Alternating Least Squares (ALS)}
 
 \begin{itemize}
-	\item Spark ALS yrittää arvata arvostelumatriisin $A$ kahden alemman dimension matriisin, $X$ ja $Y$, tulona.
-	\item Tyypillisesti näihin arvioihin viitataan tekijämatriiseina.
+	\item Spark ALS yrittää arvata arvostelumatriisin $A$ kahden tekijämatriisin, $X$ ja $Y$, tulona.
 	\item Perinteinen lähestymistapa on iteratiivinen.
-	\item Jokaisen iteraation aikana, toista tekijämatriisia pidetään vakiona ja toinen ratkaistaan käyttäen MSE-algoritmia.
+	\item Jokaisen iteraation aikana toista tekijämatriisia pidetään vakiona ja toinen ratkaistaan käyttäen MSE-algoritmia.
 	\item Juuri ratkaistua tekijämatriisia pidetään vuorostaan vakiona kun ratkaistaan toista tekijämatriisia.
-	\item ALS on siis kaksivaiheinen iteratiivinen optimointiprosessi
 	\item Löydetty ratkaisu takaa minimaalisen MSE:n, jokaisella askeleella ratkaisu voi joko pienentyä tai pysyä samana, mutta ei kasvaa.
 	\item Algoritmi vaihtelee (\textbf{alternates}) näiden kahden askeleen välillä konvergenssiin asti.
+	\item ALS on siis kaksivaiheinen iteratiivinen optimointiprosessi.
 \end{itemize}
 
 \end{frame}
@@ -156,6 +155,8 @@ Työn mallin opetusvirheen arviointiin käytettiin RMSE -metriikkaa.
 	\item RMSE voidaan puolestaan laskea ottamalla neliöjuuri MSE:stä.
 \end{itemize}
 
+Pienimmän RMSE:n omaavan mallin voidaan sanoa sovittuvan parhaiten opetusdataan.
+
 \end{frame}
 
 %------------------------------------------------
@@ -172,7 +173,7 @@ Työn mallin opetusvirheen arviointiin käytettiin RMSE -metriikkaa.
 	\item Muuttumattomat tietorakenteet ja funktiot ensimmäisen luokan kansalaisina.
 	\item Luokat ja oliot, kapselointi, perintä, moniperintä.
 	\item Scala on staattisesti tyypitetty kieli ja sillä kirjoitetut ohjelmat käännetään Scala-kääntäjää käyttäen.
-	\item Scala on JVM-kieli, joten Scala kääntäjä kääntää sovelluksen Java-tavukoodiksi, jota voidaan ajaa missä tahansa Java-virtuaalikoneessa.
+	\item Scala on JVM-kieli, joten Scala käännetään Java-tavukoodiksi, jota voidaan ajaa missä tahansa Java-virtuaalikoneessa.
 \end{itemize}
 
 \end{frame}
@@ -183,12 +184,12 @@ Työn mallin opetusvirheen arviointiin käytettiin RMSE -metriikkaa.
 \frametitle{Apache Spark}
 
 \begin{itemize}
-	\item Yleispätevä analytiikkasovelluskehys.
-	\item RDD, Dataset, Spark SQL, DataFrame
+	\item Yleispätevä analytiikkasovelluskehys
+	\item (RDD), Dataset, DataFrame, MLlib
 	\item Nopeus + käyttäjäystävällisyys
 	\item muistissa tapahtuva prosessointi
-	\item Parhaimmillaan hurjasti nopeampi kuin Hadoop: Ei rajoitettu kahteen steppiin $=>$ Spark voi suoriutua yhdellä monitasoisella ajolla kun taas Hadoop tekee aina kaksi ennalta määrättyä toimea (map ja reduce).
-	\item Kirjoitettu Scala ohjelmointikielellä ja Sparkia voi kirjoittaa Scalalla, mutta lisäksi esimerkiksi Pythonilla ja R:llä
+	\item Parhaimmillaan hurjasti nopeampi kuin Hadoop: Ei rajoitettu kahteen steppiin $=>$ Spark voi suoriutua yhdellä monitasoisella ajolla kun taas MapReduce tekee aina kaksi ennalta määrättyä toimea (map ja reduce)
+	\item Kirjoitettu Scala-ohjelmointikielellä ja Sparkia voi kirjoittaa Scalalla, mutta lisäksi esimerkiksi Pythonilla ja R:llä
 \end{itemize}
 
 \end{frame}
@@ -220,13 +221,13 @@ Työssä käytettiin varsinaisesti kahta AWS:n palvelua: Elastic Map Reducea (EM
 \frametitle{Toteutus}
 
 \begin{itemize}
-	\item EMR
+	\item EMR-konfigurointi
 	\item Opetusdata
 	\item Projektin rakenne
 	\item Opetusdatan lataaminen
 	\item Mallin opettaminen
-	\item Ennustaminen
 	\item Opetusvirheen evaluointi
+	\item Ennustaminen
 \end{itemize}
 
 \end{frame}
@@ -290,7 +291,7 @@ Työssä käytettiin varsinaisesti kahta AWS:n palvelua: Elastic Map Reducea (EM
 \begin{frame}
 \frametitle{Johtopäätökset}
 
-Tulokset eivät olleet kovin lupaavia, enemmän omia arvosteluja ja isoimmalla MovieLens-datasetillä kouluttaminen voisi auttaa.
+Tulokset eivät olleet kovin lupaavia, enemmän omia arvosteluja ja vieläkin isommalla MovieLens-datasetillä kouluttaminen voisi auttaa.
 
 \end{frame}
 
@@ -310,7 +311,7 @@ Tulokset eivät olleet kovin lupaavia, enemmän omia arvosteluja ja isoimmalla M
 
 \begin{frame}
 
-Kiitos! 1Kysymyksiä?
+Kiitos! Kysymyksiä?
 
 \end{frame}
 
