@@ -72,6 +72,12 @@ RDD voidaan luoda kahdella tavalla, rinnakkaistamalla (parallelize) tai viittaam
 Rinnakkaistamisessa olemassaoleva Scala-kokoelma saadaan muunnettua RDD:ksi.
 Ulkoiseen ainestoon viittaamisella tarkoitetaan viittaamista aineistoon ulkoisessa varastointijärjestelmässä kuten \textit{HDFS}:sä tai \textit{HBase}:ssa. \cite{spark-programming-guide}
 
+\begin{figure}[h]
+	\caption{Directed Acyclic Graph (muokattu lähteestä \cite{dag-image})}
+	\centering
+	\includegraphics[scale=0.17]{directed_acyclic_graph2}
+\end{figure}
+
 RDD:t voidaan tallentaa muistiin, jolloin ohjelmistokehittäjä voi uudelleenkäyttää niitä tehokkaasti rinnakkaisissa operaatioissa.
 RDD:t voivat palautua solmuvirheistä automaattisesti käyttäen Directed Acyclic Graph (DAG) -moottoria.
 DAG tukee asyklistä datavirtaa, jolla tarkoitetaan sitä, että jokainen graafin kaari kulkee topologisessa järjestyksessä aiemmasta myöhempään.
@@ -79,14 +85,6 @@ Jokaista Spark-työtä kohti luodaan DAG klusterissa suoritettavan tehtävän tasois
 Verrattuna MapReduceen, joka luo DAGin kahdesta ennaltamäärätystä tilasta (Map ja Reduce), Sparkin luomat DAGit voivat sisältää minkä tahansa määrän tasoja.
 Tästä syystä jotkin työt voivat valmistua nopeammin kuin ne valmistuisivat MapReducessa.
 Yksinkertaisimmat työt voivat valmistua vain yhden tason jälkeen ja monimutkaisemmat tehtävät valmistuvat yhden monitasoisen ajon jälkeen, ilman että niitä täytyy pilkkoa useampiin töihin. \cite{mapRSpark}
-
-\begin{figure}[h]
-	\caption{Directed Acyclic Graph (muokattu lähteestä \cite{dag-image})}
-	\centering
-	\includegraphics[scale=0.2]{directed_acyclic_graph2}
-\end{figure}
-
-\newpage
 
 \section{Dataset API}
 
@@ -111,6 +109,8 @@ Datan binääriesitys voidaan tarkistaa käyttämällä DS:n tarjoamaa $schema$ funkti
 
 Dataset voidaan luoda tyypillisesti kahdella eri tavalla.
 Yleisin tapa on käyttää $SparkSession$:in tarjoamaa $read$ funktiota ja osoittaa Spark joihinkin tiedostoihin tiedostojärjestelmässä, kuten seuraavaan $json$ tiedostoon:
+
+\newpage
 
 \lstset{
 	string=[s]{"}{"},

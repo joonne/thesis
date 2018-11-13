@@ -86,6 +86,8 @@ Aineistot on kerätty useiden aikajaksojen aikana, riippuen aineiston koosta.
 MovieLens 20M aineisto sisältää 20 000 000 (kaksikymmentä miljoonaa) arviota, jotka ovat antaneet 138 000 käyttäjää 27 000 elokuvalle.
 MovieLens 20M aineisto koostuu $movies.csv$ and $ratings.csv$ tiedostoista. \cite{movieLens17}
 
+\newpage
+
 \captionof{table}{Näyte \textit{movies.csv} tiedostosta}
 \begin{tabular}{lll}
 	movieId & title & genres \\ \hline
@@ -163,6 +165,8 @@ Alla olevassa esimerkissä ladataan työssä käytetyt suositukset Dataset-rajapinta
 \begin{lstlisting}[caption=Suositusten lataaminen Dataset-rajapintaa käyttäen]
 val ratings = spark.read.csv("ml-latest-small/ratings.csv")
 \end{lstlisting}
+
+\newpage
 
 \section{Opetusdatan lataaminen Spark sovellukseen}
 

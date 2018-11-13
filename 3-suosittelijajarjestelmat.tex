@@ -115,7 +115,7 @@ Tuotepohjaisessa yhteisösuodatuksessa (Item-based collaborative filtering, IBCF)
 Seuraavaksi mallinnetaan käyttäjän mieltymykset tuotteelle perustuen saman käyttäjän tekemiin arvosteluihin \cite{ricci11}.
 Alla oleva ohjelma esittelee tuotepohjaisen yhteisösuodatuksen idean jokaiselle uudelle käyttäjälle.
 
-\begin{lstlisting}[caption=Tuotepohjaisen yhteisösuodatuksen algoritmi \cite{gorakala15}]
+\begin{lstlisting}[caption=Tuotepohjaisen yhteisösuodatuksen algoritmi 1/2 \cite{gorakala15}]
 // Jokaiselle kahdelle tuotteelle,
 // mittaa kuinka samankaltaisia ne ovat saatujen arvioiden suhteen.
 // Samankaltaisuutta voidaan arvioida esimerkiksi kosinimitan avulla.
@@ -126,20 +126,26 @@ case class Similarity(item1: Item, item2: Item, similarity: Double)
 
 val similarItems: Seq[Similarity] = items.map { item1 =>
 	items.map { item2 =>
-	  Similarity (item1, item2, calculateSimilarity(item1, item2))
+		Similarity (item1, item2, calculateSimilarity(item1, item2))
 	}
 }
 
-// Tunnista k samankaltaisinta tuotetta jokaiselle tuotteelle
+// Tunnista k-samankaltaisinta tuotetta jokaiselle tuotteelle
 
 case class Similarities(item: Item, kMostSimilarItems: Seq[Similarity])
 val similarities = findKMostSimilarItems(similarItems)
+\end{lstlisting}
 
+\newpage
+
+\begin{lstlisting}[caption=Tuotepohjaisen yhteisösuodatuksen algoritmi 2/2 \cite{gorakala15}]
 // Jokaiselle käyttäjälle, tunnista tuotteet,
 // jotka ovat eniten samankaltaisia käyttäjän ostoshistorian kanssa.
 
 val similars = users.map { user =>
-	user.purchases.map { purchase => findSimilarItem(purchase, similarities) }
+	user.purchases.map { purchase =>
+		findSimilarItem(purchase, similarities)
+	}
 }
 
 \end{lstlisting}
@@ -157,7 +163,9 @@ Samankaltaisuus saadaan laskettua vertaamalla käyttäjien ostoshistorioiden saman
 
 Askeleet jokaiselle uudelle käyttäjälle käyttäjäpohjaisessa yhteisösuodatuksessa ovat:
 
-\begin{lstlisting}[caption=Käyttäjäpohjainen yhteisösuodatus algoritmi osa 1/2 \cite{gorakala15}]
+\newpage
+
+\begin{lstlisting}[caption=Käyttäjäpohjainen yhteisösuodatus algoritmi osa \cite{gorakala15}]
 // Mittaa jokaisen käyttäjän samankaltaisuus uuteen käyttäjään
 //  Kuten IBCF:ssä, suosittuja samankaltaisuusarvioita ovat korrelaatio
 // sekä kosinimitta.
@@ -176,9 +184,6 @@ val similarities = users.map { user =>
 
 val mostSimilarUsers = similarities.filter(_.score > 0.8)
 
-\end{lstlisting}
-
-\begin{lstlisting}[caption=Käyttäjäpohjainen yhteisösuodatus algoritmi osa 2/2 \cite{gorakala15}]
 // Arvostele samankaltaisimpien käyttäjien ostamat tuotteet.
 // Arvostelu saadaan joko keskiarvona kaikista tai painotettuna keskiarvona,
 // käyttäen samankaltaisuuksia painoina.
@@ -201,7 +206,7 @@ val topRatedItems = ratedItems.take(10)
 \subsection{Mallipohjainen yhteisösuodatus}
 
 Muistipohjaisen yhteisösuodatuksen käyttäessä tallennettuja suosituksia suoraan ennustamisen apuna, mallipohjaisissa lähestymistavoissa näitä arvosteluita käytetään ennustavan mallin oppimiseen.
-Perusajatus on mallintaa käyttäjä-tuote-vuorovaikutuksia tekijöillä jotka edustavat käyttäjien ja tuotteiden piileviä ominaisuuksia (latent factors) järjestelmässä.
+Perusajatus on mallintaa käyttäjä-tuote vuorovaikutuksia tekijöillä jotka edustavat käyttäjien ja tuotteiden piileviä ominaisuuksia (latent factors) järjestelmässä.
 Piileviä ominaisuuksia ovat esimerkiksi käyttäjän mieltymykset ja tuotteiden kategoriat.
 Tämä malli opetetaan käyttämällä saatavilla olevaa dataa ja myöhemmin käytetään ennustamaan käyttäjien arvioita uusille tuotteille. \cite{ricci11}
 ALS-algoritmi on esimerkki mallipohjaisesta yhteisösuodatusalgoritmista.

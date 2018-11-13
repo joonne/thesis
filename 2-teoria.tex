@@ -46,7 +46,7 @@ MLlib ei siis yritä mallintaa arviomatriisia suoraan.
 Ekplisiittisten arvioiden sijaan, nämä numerot liittyvät havaittujen käyttäjämieltymysten varmuuteen.
 Tämän tiedon perusteella malli koettaa etsiä latentteja tekijöitä, joiden avulla voidaan ennustaa käyttäjän arvio tuotteelle. \cite{spark14}
 
-Näihin algoritmeihin viitataan joskus matriisin täyttö (matrix completion) -algoritmeina.
+Näihin algoritmeihin viitataan joskus matriisin täyttö (matrix completion) algoritmeina.
 Tämä johtuu siitä, että alkuperäinen matriisi $A$ saattaa olla harva vaikka matriisitulo $XY^T$ on tiheä.
 Vaikka tulosmatriisi sisältää arvon kaikille alkioille, se on kuitenkin vain likiarvo $A$:sta. \cite{ryza15}
 
@@ -129,15 +129,11 @@ Ennustettujen ja todellisten arvioiden välinen RMSE saadaan laskettua seuraavast
 RMSE=\sqrt{\frac{1}{|\tau|} \sum_{(u,i)\in\tau}(\hat{r}_{ui}-r_{ui})^2}
 \end{equation}
 
-TODO?
-
-\newpage
-
 \section{Amazon Web Services (AWS)}
 
 \textit{AWS (Amazon Web Services)} on Amazonin tarjoama kokoelma pilvilaskentaan (cloud computing) tarkoitettuja tai sitä avustavia palveluita.
 Tässä työssä käytetään pääasiassa hyödyksi kahta AWS:n palvelua, EMR:ää (Elastic Map Reduce) sekä S3:a (Simple Storage Service).
-EMR:n avulla on mahdollista käyttää Big Data -sovelluskehyksiä, kuten Apache Sparkia.
+EMR:n avulla on mahdollista käyttää Big Data - sovelluskehyksiä, kuten Apache Sparkia.
 S3 on skaalautuva tietovarasto internetin tarpeisiin, jonka tarkoitus on helpottaa ohjelmistokehittäjien elämää.
 \cite{aws} \cite{emr} \cite{s3}
 
@@ -163,7 +159,7 @@ Task on Slave-solmu, jossa sijaitsee sovelluskomponentteja, jotka ajavat vain te
 \begin{figure}[h]
 	\caption{EMR-klusteri (muokattu lähteestä \cite{emr})}
 	\centering
-	\includegraphics[scale=0.4]{emr2}
+	\includegraphics[scale=0.20]{emr2}
 \end{figure}
 
 Yllä oleva kuva esittää EMR-klusterin, jossa on master-solmu sekä neljä slave-solmua.
@@ -272,6 +268,8 @@ def add(first: Int, second: Int): Int = {
 Ylläolevassa esimerkissä funktion nimi on $add$ ja se ottaa kaksi $Int$ tyyppistä sisääntuloa.
 Funktio palauttaa $Int$-tyyppisen arvon, jonka se muodostaa lisäämällä annetut sisääntulot yhteen ja palauttamalla tuloksen.
 Scalassa kaikki lausekkeet ovat arvon palauttavia lausekkeita, joten funktion rungon viimeisen lausekkeen arvosta tulee funktion paluuarvo \cite{guller15}.
+
+\newpage
 
 Scala mahdollistaa myös lyhyemmän version samasta funktiosta:
 
