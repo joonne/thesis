@@ -20,9 +20,9 @@ Jälkeenpäin mietittynä sopivan ohjeistuksen etsimiseen käytetyn ajan olisi voinu
 
 Työssä käytetty EMR-liukuhihna pystytettiin löytyneen video-ohjeen \cite{levelup} mukaisesti.
 Pystytettävän palvelun nimi on On-Demand Pipeline, jonka voisi ajatella viittaavan siihen että maksujakin kerrytettäisiin vain palvelua käytettäessä, mutta tosiasiassa varatut EC2-instanssit pysyvät ajossa kellon ympäri.
-Jatkuvasta maksujen syntymisestä ei varsinaisesti kommunikoitu missään vaiheessa, vaan asiaan havahtui vasta laskun saavuttua.
+Jatkuvasta maksujen syntymisestä ei varsinaisesti ilmoitettu missään vaiheessa, vaan asiaan havahtui vasta laskun saavuttua.
 Tämän olisi voinut välttää laittamalla luvussa 5 mainittuun valintaruutuun valinnan, joka olisi sulkenut liukuhihnan ohjelman suorituksen jälkeen.
-Varsinaisen koodin testailu ja integrointi EMR:n kanssa oli kuitenkin inkrementaalista, joten sulkeutunut liukuhihna olisi ollut melkoinen hidaste.
+Varsinainen koodin testailu ja integrointi EMR:n kanssa oli kuitenkin inkrementaalista, joten sulkeutunut liukuhihna olisi ollut melkoinen hidaste.
 
 Kolmen EC2 (m3.xlarge) -instanssin kuukauden mittaisesta ajamisesta olisi tullut maksettavaa reilut 1000 dollaria.
 Laskutus toimii niin, että virtuaalikoneiden ajaminen maksaa 0.266 dollaria/tunti ja tämän lisäksi siihen lisätään 0.07 dollaria/tunti EMR-lisämaksua.
@@ -38,7 +38,7 @@ Alla olevassa kuvassa on AWS-lasku työhön liittyvien koodien ajelusta kesäkuulta
 	\includegraphics[scale=0.3]{aws_bill}
 \end{figure}
 
-Oikeampi tai ainakin edullisempi keino työn toteuttamiseen olisi ollut pystyttää liukuhihna, ajaa tarvittavat eräajot ja tuloksien kirjaamisen jälkeen pysäyttää liukuhihna, jolloin varatut resurssit olisi vapautettu.
+Parempi tai ainakin edullisempi keino työn toteuttamiseen olisi ollut pystyttää liukuhihna, ajaa tarvittavat eräajot ja tuloksien kirjaamisen jälkeen pysäyttää liukuhihna, jolloin varatut resurssit olisi vapautettu.
 Huonoa tässä on se, että samaa liukuhihnaa ei ilmeisesti saa uudestaan käyntiin, jolloin ainakin virtuaalikoneella olevat asiat ovat lopullisesti menetettyjä kun se sulkeutuu.
 Terminoitu, eli pysäytetty liukuhihna jää kummittelemaan palveluun joksikin aikaa.
 Aiemmin konfiguroitu liukuhihna on kuitenkin mahdollista kopioida uuden liukuhihnan pohjaksi, joten kerran konfiguroidusta liukuhihnasta on tässä mielessä hyötyä seuraavallakin kerralla.
@@ -47,14 +47,14 @@ Parempaa asiakaskokemusta olisi tiedottaa selkästi, että tämä palvelu tosiaan va
 Muita vaihtoehtoja EMR-liukuhihnan asiakasystävällisempään toimintaan olisivat esimerkiksi:
 
 \begin{itemize}
-	\item EMR-liukuhihna voisi mahdollisesti mennnä ``nukkumaan'', kuten jotkut muut pilvipalvelut toimivat. Tähän ominaisuuteen tarvittaisiin jonkinlaista logiikkaa tunnistamaan, ettei koneella ole ajossa mitään tähdellistä.
+	\item EMR-liukuhihna voisi mahdollisesti mennä ``nukkumaan'', kuten joissakin muissa pilvipalveluissa. Tähän ominaisuuteen tarvittaisiin jonkinlaista logiikkaa tunnistamaan, ettei koneella ole ajossa mitään tähdellistä.
 	\item EMR-liukuhihna voisi mahdollisesti terminoitua kokonaan X ajan käyttämättömyyden takia, tämä ei kuitenkaan olisi käytännöllistä, sillä tulokset katoaisivat virtuaalikoneelta.
 \end{itemize}
 
-Oletusarvoisesti EMR haluaa kirjoittaa lokit S3-buckettiin ja tämä saattaa helposti johtaa Free Tier -tilauksen pyyntöjen rajan ylittämiseen.
+Oletusarvoisesti EMR kirjoittaa lokit S3-buckettiin ja tämä saattaa helposti johtaa Free Tier -tilauksen pyyntöjen rajan ylittämiseen.
 AWS lähetti pyyntöjen hupenemisesta onneksi viestin ja näin ollen päästiin ratkomaan kyseistä konfiguraatiovirhettä.
 EMR-klusteria ei ole mahdollista muokata jälkeenpäin, joten se täytyy poistaa (terminate), jotta lokien kirjoittaminen saatiin poistettua käytöstä.
-Amazon Free Tier sisältää S3:n osalta 2000 kutsua (luku/kirjoitus yhteensä) kuukaudessa ja koska kaikki Spark-sovelluksen tuottamat lokit kirjoitetaan niin tämä raja tuli vastaan nopeasti.
+Amazon Free Tier sisältää S3:n osalta 2000 luku/kirjoitus -kutsua kuukaudessa ja koska kaikki Spark-sovelluksen tuottamat lokit kirjoitetaan niin tämä raja tuli vastaan nopeasti.
 
 Saadut tulokset eivät ole palveluiden, kuten Netflix tasolla, mutta ei sitä varmaan kannattanut odottaakaan.
 Mielenkiintoista oli se, kuinka ``huonoja'' saadut suositukset olivat.
@@ -83,17 +83,17 @@ Mikäli AWS-resursseja olisi rajattomasti käytössä, niin olisi myös melko suoravi
 Työssä mainituista teknologioista esimerkiksi \textit{spark-submit} -työkalua voitaisiin tutkia lisää.
 Olisi mielenkiintoista ymmärtää, kuinka klusterinhallinta toimii ja miten Spark-tehtäviä (Spark Job) jaetaan eri solmuille.
 Nykyisessä toteutuksessa on oletettu, että \textit{spark-submit} etsii tarvittavat parametrit automaattisesti EMR-klusterista, sillä niitä ei annettu eksplisiittisesti.
-Tämä etsintä voitaisiin toteuttaa esimerkiksi ympäristömuuttujien avulla, joten aivan kaukaahaettu teoria se ei olisi.
+Tämä etsintä voitaisiin toteuttaa esimerkiksi ympäristömuuttujien avulla.
 Kuten aliluvussa \ref{emr} mainittiin, EMR-klusteri on Hadoop-klusteri ja \textit{spark-submit} työkalun avainominaisuutena pidetään klusterinhallinnan helpottumista.
 Sparkin hajautetun ohjelmointimallin kannalta olisi myös mielenkiintoista tutkia sulkeumia (closure) ja erityisesti sitä, kuinka ne toimivat oikeassa klusterissa.
-Sulkeuma on funktionaalisissa ohjelmointikielissä käytetty ominaisuus, joka tarkoittaa funktion kykyä viitata leksikaalisen näkyvyysalueensa parametreihin.
+Sulkeuma on funktionaalisissa ohjelmointikielissä käytetty ominaisuus, mikä tarkoittaa funktion kykyä viitata leksikaalisen näkyvyysalueensa parametreihin.
 
 Eräs mahdollinen lähestymistapa mallin hyödyntämiseen olisi toteuttaa vain mallin kouluttaminen AWS:ssä ja tämän jälkeen ladata koulutettu malli johonkin paikalliseen järjestelmään.
-Kuten aiemmin todettiin, on mahdollista ladata ennakkoon koulutettu malli Spark-sovellukseen.
+Kuten aiemmin todettiin, Spark-sovellukseen on mahdollista ladata ennakkoon koulutettu malli.
 Tulosten kysyminen valmiiksi koulutetulta mallilta onnistuu varmasti resursseiltaan pienemmällä laitteella kuin varsinainen mallin kouluttaminen.
-Mallia voitaisiin ehkä käyttää hyväksi myös jopa matkapuhelimissa tai jopa joissain (tehokkaimmissa ja käyttöjärjestelmältään sekä kirjastoiltaan soveliaissa) sulautetuissa laitteissa.
+Mallia voitaisiin ehkä käyttää hyväksi myös jopa matkapuhelimissa tai jopa joissain tehokkaimmissa ja käyttöjärjestelmältään sekä kirjastoiltaan soveliaissa sulautetuissa laitteissa.
 
-Olisi mielenkiintoista tutkia vielä, että millä omien suositusten määrällä suositukset alkaisivat osua enemmän kohdalleen.
-Lähestymistapa tässä voisi olla esimerkiksi sellainen, että jätettäisiin joitain suosikkielokuvia tarkoituksella arvostelematta ja tarkkailtaisiin, että missä kohdassa järjestelmä rupeaisi ehdottamaan juuri näitä elokuvia.
+Olisi myös mielenkiintoista tutkia kuinka suurella omien arvosteluiden määrällä suositukset alkaisivat olla parempia.
+Lähestymistapa tässä voisi olla esimerkiksi sellainen, että jätettäisiin joitakin omia suosikkielokuvia tarkoituksella arvostelematta ja tarkkailtaisiin missä kohdassa järjestelmä rupeaisi ehdottamaan juuri näitä elokuvia.
 
 \end{document}
