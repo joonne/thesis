@@ -25,13 +25,14 @@ T‰m‰ johtuu siit‰, ett‰ kaikista mahdollisuuksista usein vain muutama k‰ytt‰j‰-t
 Matriisin tekijˆihinjako mallintaa $A$:n kahden pienemm‰n matriisin $X$ ja $Y$ tulona, jotka ovat varsin pieni‰.
 Koska $A$:ssa on monta rivi‰ ja saraketta, $X$ ja $Y$ sis‰lt‰v‰t paljon rivej‰, mutta vain muutaman $(k)$ sarakkeen.
 N‰m‰ $k$-saraketta vastaavat latentteja tekijˆit‰, joita k‰ytet‰‰n kuvailemaan datassa sijaitsevia vuorovaikutuksia.
-Hajotelma (factorization) on ainoastaan arvio, sill‰ $k$ on pieni. \cite{ryza15} \ref{matrix-factorization}
+Hajotelma (factorization) on ainoastaan arvio, sill‰ $k$ on pieni. \cite{ryza15}
+Alla olevassa kuvassa \ref{matrix-factorization} on esitetty hahmotelma matriisin tekijˆihinjaosta.
 
 \begin{figure}[h]
-	\caption{Matrisin tekijˆihinjako (muokattu l‰hteest‰ \cite{ryza15})}
-	\label{matrix-factorization}
+	\caption{Matriisin tekijˆihinjako (muokattu l‰hteest‰ \cite{ryza15})}
 	\centering
 	\includegraphics[scale=0.25]{matrix_factorization2}
+	\label{matrix-factorization}
 \end{figure}
 
 Tavanomainen l‰hestymistapa matriisin tekijˆihinjakoon perustuvassa yhteisˆsuodatuksessa on kohdella k‰ytt‰j‰-tuote -matriisin alkioita k‰ytt‰jien antamina eksplisiittisin‰ arvosteluina.
@@ -43,7 +44,7 @@ Implisiittist‰ tietoa on esimerkiksi sivujen katselukerrat tai tieto siit‰, onko
 Usein monissa tosiel‰m‰n k‰yttˆtapauksissa on k‰ytett‰viss‰ ainoastaan implisiittist‰ tietoa, kuten katselukerrat, klikkaukset, ostokset, tykk‰ykset tai jakamiset.
 Spark MLlib kohtelee tietoa lukuina, jotka esitt‰v‰t havaintojen vahvuutta, kuten klikkausten m‰‰r‰ tai kumulatiivinen aika, joka k‰ytet‰‰n elokuvan katseluun.
 MLlib ei siis yrit‰ mallintaa arviomatriisia suoraan.
-Ekplisiittisten arvioiden sijaan, n‰m‰ numerot liittyv‰t havaittujen k‰ytt‰j‰mieltymysten varmuuteen.
+Ekplisiittisten arvioiden sijaan, n‰m‰ luvut liittyv‰t havaittujen k‰ytt‰j‰mieltymysten varmuuteen.
 T‰m‰n tiedon perusteella malli koettaa etsi‰ latentteja tekijˆit‰, joiden avulla voidaan ennustaa k‰ytt‰j‰n arvio tuotteelle. \cite{spark14}
 
 N‰ihin algoritmeihin viitataan joskus matriisin t‰yttˆ (matrix completion) algoritmeina.
@@ -159,10 +160,11 @@ Task on Slave-solmu, jossa sijaitsee sovelluskomponentteja, jotka ajavat vain te
 \begin{figure}[h]
 	\caption{EMR-klusteri (muokattu l‰hteest‰ \cite{emr})}
 	\centering
-	\includegraphics[scale=0.20]{emr2}
+	\includegraphics[scale=0.40]{emr2}
+	\label{emr_cluster}
 \end{figure}
 
-Yll‰ oleva kuva esitt‰‰ EMR-klusterin, jossa on master-solmu sek‰ nelj‰ slave-solmua.
+Yll‰ oleva kuva \ref{emr_cluster} esitt‰‰ EMR-klusterin, jossa on master-solmu sek‰ nelj‰ slave-solmua.
 
 \subsection{Simple Storage Service (S3)}
 
@@ -185,7 +187,7 @@ Simple Storage Service:n tarjoama abstraktio on nimelt‰‰n \textit{bucket}, joka 
 	commentstyle=\color{scalacomment},
 	keywordstyle=\color{blue},
 	numbers=left,
-	numbersep=15pt,
+	numbersep=-5pt,
 }
 
 Scala on moniparadigmainen ohjelmointikieli, joka tukee sek‰ olio- ett‰ funktionaalista ohjelmointia.
@@ -218,21 +220,23 @@ Muuttuvaa muuttujaa ei voida asettaa uudelleen luomisen j‰lkeen.
 Var:ien k‰yttˆ‰ ei suositella, mutta joskus niiden k‰ytt‰misell‰ saadaan aikaan yksinkertaisempaa ohjelmakoodia ja t‰st‰ syyst‰ Scala tukee myˆs muuttuvia muuttujia.
 Vakiota, $val$, ei sen sijaan voida antaa uudelleen luomisen j‰lkeen. \cite{guller15}
 
-Syntaksi $val$:in ja $var$:in luomiseksi on
+Syntaksi $val$:in ja $var$:in luomiseksi on esitetty alla olevassa ohjelmassa \ref{val_var_without_types}
 
-\begin{lstlisting}[caption=Muuttujien luominen ja uudelleen asettaminen]
-var x = 10
-x = 20
-val y = 10
+\begin{lstlisting}[caption=Muuttujien luominen ja uudelleen asettaminen, label={val_var_without_types}]
+		var x = 10
+		x = 20
+		val y = 10
 \end{lstlisting}
 
-Mik‰li vakiota yritett‰‰n uudelleenm‰‰ritt‰‰ myˆhemmin ohjelmassa, k‰‰nt‰j‰ antaa virheen.
+Mik‰li vakiota yritet‰‰n uudelleenm‰‰ritt‰‰ myˆhemmin ohjelmassa, k‰‰nt‰j‰ antaa virheen.
 Huomionarvoista yll‰olevassa syntaksissa on se, ett‰ Scala k‰‰nt‰j‰ ei pakota m‰‰rittelem‰‰n muuttujan tyyppi‰ sillon kuin k‰‰nt‰j‰ pystyy p‰‰ttelem‰‰n (type inference) sen.
 
-\begin{lstlisting}[caption=Muuttujan luominen tyyppim‰‰rittelyn avulla]
-var x: Int = 10
-val y: Int = 10
+\begin{lstlisting}[caption=Muuttujan luominen tyyppim‰‰rittelyn avulla, label={val_var_with_types}]
+		var x: Int = 10
+		val y: Int = 10
 \end{lstlisting}
+
+Yll‰ olevassa ohjelmassa \ref{val_var_with_types} on m‰‰ritetty muuttuja sek‰ vakio tyyppien kanssa.
 
 \subsection{Funktiot}
 
@@ -258,28 +262,26 @@ Parametrien j‰lkeen funktiom‰‰rittelyyn tulee kaksoispiste, funktion ulostulon t
 
 \lstset{language=Scala,tabsize=2}
 
-\begin{lstlisting}[caption=add-Funktio]
-def add(first: Int, second: Int): Int = {
-	val sum = first + second
-	sum
-}
+\begin{lstlisting}[caption=add-Funktio, label={add_fn}]
+		def add(first: Int, second: Int): Int = {
+			val sum = first + second
+			sum
+		}
 \end{lstlisting}
 
-Yll‰olevassa esimerkiss‰ funktion nimi on $add$ ja se ottaa kaksi $Int$ tyyppist‰ sis‰‰ntuloa.
+Yll‰olevassa ohjelmassa \ref{add_fn} funktion nimi on $add$ ja se ottaa kaksi $Int$ tyyppist‰ sis‰‰ntuloa.
 Funktio palauttaa $Int$-tyyppisen arvon, jonka se muodostaa lis‰‰m‰ll‰ annetut sis‰‰ntulot yhteen ja palauttamalla tuloksen.
 Scalassa kaikki lausekkeet ovat arvon palauttavia lausekkeita, joten funktion rungon viimeisen lausekkeen arvosta tulee funktion paluuarvo \cite{guller15}.
-
-\newpage
 
 Scala mahdollistaa myˆs lyhyemm‰n version samasta funktiosta:
 
 \lstset{language=Scala,tabsize=2}
 
-\begin{lstlisting}[caption=add-Funktio]
-def add(first: Int, second: Int) = first + second
+\begin{lstlisting}[caption=add-Funktio, label={add_fn_short}]
+		def add(first: Int, second: Int) = first + second
 \end{lstlisting}
 
-Toinen versio tekee t‰sm‰lleen saman asian kuin ensimm‰inenkin, mutta se on vain kirjoitettu lyhyemmin.
+Ohjelma \ref{add_fn_short} tekee t‰sm‰lleen saman asian kuin ohjelma \ref{add_fn}, mutta se on vain kirjoitettu lyhyemmin.
 Paluuarvon tyyppi on j‰tetty antamatta, sill‰ k‰‰nt‰j‰ pystyy p‰‰ttelem‰‰n sen koodista.
 Paluuarvon tyyppi suositellaan kuitenkin annettavan aina.
 Aaltosulkeet on myˆskin j‰tetty pois, sill‰ ne ovat pakolliset vain kun funktion runko sis‰lt‰‰ useamman kuin yhden lausekkeen.  \cite{guller15}

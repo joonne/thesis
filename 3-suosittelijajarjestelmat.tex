@@ -9,7 +9,7 @@
 	commentstyle=\color{scalacomment},
 	keywordstyle=\color{blue},
 	numbers=left,
-	numbersep=15pt,
+	numbersep=-5pt,
 }
 
 \chapter{Suosittelijajärjestelmät}
@@ -107,47 +107,36 @@ Tästä johtuen suhteiden määrä on todella niukka, sillä useat käyttäjät ovat arvo
 Tämä voidaan toteuttaa kahdella tavalla, käyttäjäpohjaisena suositteluna tai tuotepohjaisena suositteluna.
 
 Seuraavat kappaleet kuvaavat käyttäjäpohjaista yhteisösuodatusta ja tuotepohjaista yhteisösuodatusta.
-Ohjelmat 3.1, 3.2 ja 3.3 on luonnosteltu tekstipohjaisten selitysten perusteella käyttäen Scala-syntaksia.
+Ohjelmat \ref{ibcf_alg}, \ref{ubcf_alg1} ja \ref{ubcf_alg2} on luonnosteltu tekstipohjaisten selitysten perusteella käyttäen Scala-syntaksia.
 
 \subsubsection{Tuotepohjainen yhteisösuodatus}
 
 Tuotepohjaisessa yhteisösuodatuksessa (Item-based collaborative filtering, IBCF) algoritmi aloittaa etsimällä samankaltaisia tuotteita käyttäjän ostoshistoriasta \cite{gorakala15}.
 Seuraavaksi mallinnetaan käyttäjän mieltymykset tuotteelle perustuen saman käyttäjän tekemiin arvosteluihin \cite{ricci11}.
-Alla oleva ohjelma esittelee tuotepohjaisen yhteisösuodatuksen idean jokaiselle uudelle käyttäjälle.
+Alla oleva ohjelma \ref{ibcf_alg} esittelee tuotepohjaisen yhteisösuodatuksen idean jokaiselle uudelle käyttäjälle.
 
-\begin{lstlisting}[caption=Tuotepohjaisen yhteisösuodatuksen algoritmi 1/2 \cite{gorakala15}]
-// Jokaiselle kahdelle tuotteelle,
-// mittaa kuinka samankaltaisia ne ovat saatujen arvioiden suhteen.
-// Samankaltaisuutta voidaan arvioida esimerkiksi kosinimitan avulla.
+\begin{lstlisting}[caption=Tuotepohjaisen yhteisösuodatuksen algoritmi \cite{gorakala15}, label={ibcf_alg}]
+		// Jokaiselle kahdelle tuotteelle, mittaa kuinka samankaltaisia ne ovat.
 
-case class Item(id: Int, feature1: String, feature2: String)
-val items: Seq[Item] = Seq(Item(), Item(), Item())
-case class Similarity(item1: Item, item2: Item, similarity: Double)
+		case class Item(id: Int, feature1: String, feature2: String)
+		val items: Seq[Item] = Seq(Item(), Item(), Item())
+		case class Similarity(item1: Item, item2: Item, similarity: Double)
 
-val similarItems: Seq[Similarity] = items.map { item1 =>
-	items.map { item2 =>
-		Similarity (item1, item2, calculateSimilarity(item1, item2))
-	}
-}
+		val similarItems: Seq[Similarity] = items.map { i1 =>
+			items.map { i2 => Similarity (i1, i2, getSimilarity(i1, i2)) }
+		}
+		
+		// Tunnista k-samankaltaisinta tuotetta jokaiselle tuotteelle.
 
-// Tunnista k-samankaltaisinta tuotetta jokaiselle tuotteelle
+		case class Similarities(item: Item, kMostSimilarItems: Seq[Similarity])
+		val similarities = findKMostSimilarItems(similarItems)
 
-case class Similarities(item: Item, kMostSimilarItems: Seq[Similarity])
-val similarities = findKMostSimilarItems(similarItems)
-\end{lstlisting}
+		// Jokaiselle käyttäjälle, tunnista tuotteet,
+		// jotka ovat eniten samankaltaisia käyttäjän ostoshistorian kanssa.
 
-\newpage
-
-\begin{lstlisting}[caption=Tuotepohjaisen yhteisösuodatuksen algoritmi 2/2 \cite{gorakala15}]
-// Jokaiselle käyttäjälle, tunnista tuotteet,
-// jotka ovat eniten samankaltaisia käyttäjän ostoshistorian kanssa.
-
-val similars = users.map { user =>
-	user.purchases.map { purchase =>
-		findSimilarItem(purchase, similarities)
-	}
-}
-
+		val similars = users.map { user =>
+			user.purchases.map { purchase => findSimilarItem(purchase, similarities) }
+		}
 \end{lstlisting}
 
 Amerikan suurimman verkkokaupan, Amazon.com:in, on aiemmin tiedetty käyttäneen tuote-tuotteeseen-yhteisösuodatusta.
@@ -161,46 +150,46 @@ Seuraava askel on arvostella samankaltaisten käyttäjien ostamat tuotteet.
 Lopuksi valitaan parhaan arvosanan saaneet tuotteet.
 Samankaltaisuus saadaan laskettua vertaamalla käyttäjien ostoshistorioiden samankaltaisuutta. \cite{ricci11}
 
-Askeleet jokaiselle uudelle käyttäjälle käyttäjäpohjaisessa yhteisösuodatuksessa ovat:
+Askeleet jokaiselle uudelle käyttäjälle käyttäjäpohjaisessa yhteisösuodatuksessa on esitetty ohjelmissa \ref{ubcf_alg1} ja \ref{ubcf_alg2}.
+
+\begin{lstlisting}[caption=Käyttäjäpohjaisen yhteisösuodatuksen algoritmi osa 1/2 \cite{gorakala15}, label={ubcf_alg1}]
+		// Mittaa jokaisen käyttäjän samankaltaisuus uuteen käyttäjään.
+
+		case class Similarity(userId1: Int, userId2: Int, score: Double)
+
+		val newUser: User = User("Adam", 31, purchases)
+		val similarities = users.map { user =>
+			Similarity(newUser.id, user.id, cosineSimilarity(user, newUser)
+		}
+
+		// Tunnista samankaltaisimmat käyttäjät.
+		// Vaihtoehtoja on kaksi: Voidaan valita joko parhaat k käyttäjää
+		// (k-nearest neighbors) tai voidaan valita käyttäjät,
+		// joiden samankaltaisuus ylittää tietyn kynnysarvon.
+
+		val mostSimilarUsers = similarities.filter(_.score > 0.8)
+		
+\end{lstlisting}
 
 \newpage
 
-\begin{lstlisting}[caption=Käyttäjäpohjainen yhteisösuodatus algoritmi osa \cite{gorakala15}]
-// Mittaa jokaisen käyttäjän samankaltaisuus uuteen käyttäjään
-//  Kuten IBCF:ssä, suosittuja samankaltaisuusarvioita ovat korrelaatio
-// sekä kosinimitta.
+\begin{lstlisting}[caption=Käyttäjäpohjaisen yhteisösuodatuksen algoritmi osa 2/2 \cite{gorakala15}, label={ubcf_alg2}]
+		// Arvostele samankaltaisimpien käyttäjien ostamat tuotteet.
+		// Arvostelu saadaan joko keskiarvona kaikista tai painotettuna keskiarvona,
+		// käyttäen samankaltaisuuksia painoina.
 
-case class Similarity(userId1: Int, userId2: Int, score: Int)
-
-val newUser: User = User("Adam", 31, purchases)
-val similarities = users.map { user =>
-	Similarity(newUser.id, user.id, cosineSimilarity(user, newUser)
-}
-
-// Tunnista samankaltaisimmat käyttäjät.
-// Vaihtoehtoja on kaksi: Voidaan valita joko parhaat k käyttäjää
-// (k-nearest neighbors) tai voidaan valita käyttäjät,
-// joiden samankaltaisuus ylittää tietyn kynnysarvon.
-
-val mostSimilarUsers = similarities.filter(_.score > 0.8)
-
-// Arvostele samankaltaisimpien käyttäjien ostamat tuotteet.
-// Arvostelu saadaan joko keskiarvona kaikista tai painotettuna keskiarvona,
-// käyttäen samankaltaisuuksia painoina.
-
-val ratedItems = mostSimilarUsers.map { user =>
-	user.purchases.map { purchase =>
-		val purchases = mostSimilarUsers.map { usr =>
-			usr.purchases.filter(_.id == purchase.id)
+		val ratedItems = mostSimilarUsers.map { user =>
+			user.purchases.map { purchase =>
+				val purchases = mostSimilarUsers.map { usr =>
+					usr.purchases.filter(_.id == purchase.id)
+				}
+				purchases.sum() / purchases.size
+			}
 		}
-		purchases.sum() / purchases.size
-	}
-}
 
-// Valitse parhaiten arvostellut tuotteet.
+		// Valitse parhaiten arvostellut tuotteet.
 
-val topRatedItems = ratedItems.take(10)
-
+		val topRatedItems = ratedItems.take(10)
 \end{lstlisting}
 
 \subsection{Mallipohjainen yhteisösuodatus}

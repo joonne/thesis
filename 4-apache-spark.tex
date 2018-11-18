@@ -9,7 +9,7 @@
 	commentstyle=\color{scalacomment},
 	keywordstyle=\color{blue},
 	numbers=left,
-	numbersep=15pt,
+	numbersep=-5pt,
 }
 
 \chapter{Apache Spark}
@@ -63,7 +63,7 @@ $map$-operaatio on esimerkki transformaatiosta ja $reduce$-operaatio on esimerkk
 Molemmat operaatiot k‰yv‰t annetun datasetin l‰pi ja kohdistavat annetun funktion jokaiselle elementille, mutta $map$ palauttaa uuden RDD:n ja $reduce$ palauttaa tuloksensa driver-ohjelmalle. \cite{spark-programming-guide}
 
 Kaikki transformaatiot Sparkissa ovat laiskasti evaluoituvia, jolla tarkoitetaan sit‰, ett‰ lausekkeen evaluointia viivytet‰‰n siihen asti kun sen arvoa tarvitaan.
-Kun uusi RDD luodaan, mit‰‰n laskentaa ei oikeasti viel‰ tapahdu, vaan Spark tiet‰‰ miss‰ data sijaitsee tai miten data saadaan laskettua kun tulee aika tehd‰ sille jotain.
+Kun uusi RDD luodaan, mit‰‰n laskentaa ei oikeasti viel‰ tapahdu, vaan Spark tiet‰‰ miss‰ data sijaitsee tai miten data saadaan laskettua, kun tulee aika tehd‰ sille jotain.
 T‰m‰ suunnittelu mahdollistaa Sparkin tehokkaamman toiminnan.
 Esimerkiksi $map$ ja $reduce$ -operaatioista koostuva liukuhihna suoriutuu tehokkaammin, sill‰ $map$-transformaation luoma datasetti voidaan j‰tt‰‰ palauttamatta driver-ohjelmaan, koska $reduce$-toimen vastaus palautuu.
 \cite{spark-sql-programming-guide}
@@ -75,12 +75,14 @@ Ulkoiseen ainestoon viittaamisella tarkoitetaan viittaamista aineistoon ulkoises
 \begin{figure}[h]
 	\caption{Directed Acyclic Graph (muokattu l‰hteest‰ \cite{dag-image})}
 	\centering
-	\includegraphics[scale=0.17]{directed_acyclic_graph2}
+	\includegraphics[scale=0.25]{directed_acyclic_graph2}
+	\label{dag}
 \end{figure}
 
 RDD:t voidaan tallentaa muistiin, jolloin ohjelmistokehitt‰j‰ voi uudelleenk‰ytt‰‰ niit‰ tehokkaasti rinnakkaisissa operaatioissa.
 RDD:t voivat palautua solmuvirheist‰ automaattisesti k‰ytt‰en Directed Acyclic Graph (DAG) -moottoria.
 DAG tukee asyklist‰ datavirtaa, jolla tarkoitetaan sit‰, ett‰ jokainen graafin kaari kulkee topologisessa j‰rjestyksess‰ aiemmasta myˆhemp‰‰n.
+Kuvassa \ref{dag} on havainnollistettu DAG:in asyklist‰ datavirtaa.
 Jokaista Spark-tyˆt‰ kohti luodaan DAG klusterissa suoritettavan teht‰v‰n tasoista.
 Verrattuna MapReduceen, joka luo DAGin kahdesta ennaltam‰‰r‰tyst‰ tilasta (Map ja Reduce), Sparkin luomat DAGit voivat sis‰lt‰‰ mink‰ tahansa m‰‰r‰n tasoja.
 T‰st‰ syyst‰ jotkin tyˆt voivat valmistua nopeammin kuin ne valmistuisivat MapReducessa.
@@ -108,49 +110,42 @@ Generoidulla bin‰‰rirakenteella on usein pienempi muistijalanj‰lki ja se on myˆs
 Datan bin‰‰riesitys voidaan tarkistaa k‰ytt‰m‰ll‰ DS:n tarjoamaa $schema$ funktiota. \cite{spark-dataset}
 
 Dataset voidaan luoda tyypillisesti kahdella eri tavalla.
-Yleisin tapa on k‰ytt‰‰ $SparkSession$:in tarjoamaa $read$ funktiota ja osoittaa Spark joihinkin tiedostoihin tiedostoj‰rjestelm‰ss‰, kuten seuraavaan $json$ tiedostoon:
-
-\newpage
+Yleisin tapa on k‰ytt‰‰ $SparkSession$:in tarjoamaa $read$-funktiota ja osoittaa Spark joihinkin tiedostoihin tiedostoj‰rjestelm‰ss‰, kuten ohjelmassa \ref{json_example} esitettyyn $json$-tiedostoon:
 
 \lstset{
 	string=[s]{"}{"},
 	stringstyle=\color{blue},
 	comment=[l]{:},
 	commentstyle=\color{black},
+	numbers=none,
 }
 
-\begin{lstlisting}[caption=Esimerkki JSON-tiedosto]
+\begin{lstlisting}[caption=Esimerkki JSON-tiedosto, label={json_example}]
 [{
-  "name": "Matt",
-  "salary": 5400
+	"name": "Matt",	
+	"salary": 5400
 }, {
-  "name": "George",
-  "salary": 6000
+	"name": "George",
+	"salary": 6000
 }]
-
 \end{lstlisting}
-
 
 \lstset{
-	frame=0,
-	language=Scala,
+	columns=flexible,
 	breaklines=true,
+	tabsize=2,
+	language=Scala,
+	commentstyle=\color{scalacomment},
+	keywordstyle=\color{blue},
+	numbers=left,
+	numbersep=-5pt,
 }
 
-Dataset voidaan luoda myˆs tekem‰ll‰ transformaatio olemassaoleville Dataset-olioille:
+Ohjelmassa \ref{spark_read_example} on esitetty Datasetin luominen k‰ytt‰en $spark.read$ -funktiota.
 
-\begin{lstlisting}[caption=Uuden Dataset-olion luominen transformaatiolla]
-
-val people: Dataset[Person] = Dataset(Person())
-val names = people.map(_.name)
-
-\end{lstlisting}
-
-\begin{lstlisting}[caption=Uuden Dataset-olion luominen k‰ytt‰en read funktiota]
-
-case class Person(id: BigInt, firstName: String, lastName: String)
-val people = spark.read.json("./people.json").as[Person]
-
+\begin{lstlisting}[caption={Uuden Dataset-olion luominen k‰ytt‰en read-funktiota}, label={spark_read_example}]
+		case class Person(id: BigInt, firstName: String, lastName: String)
+		val people = spark.read.json("./people.json").as[Person]
 \end{lstlisting}
 
 Case-luokat ovat tavallisia Scala-luokkia, jotka ovat:
@@ -163,18 +158,20 @@ Case-luokat ovat tavallisia Scala-luokkia, jotka ovat:
 \end{itemize}
 
 Mik‰li tyyppimuunnos (casting) j‰tett‰isiin tekem‰tt‰, p‰‰dytt‰isiin luomaan DataFrame-olio, jonka sis‰inen mallin (schema) Spark pyrkisi arvaamaan.
-DataFrame rajapintaa k‰sitell‰‰n seuraavassa aliluvussa.
-Tyyppimuunnos tehd‰‰n k‰ytt‰m‰ll‰ $as$ avainsanaa.
+DataFrame-rajapintaa k‰sitell‰‰n seuraavassa aliluvussa.
+Tyyppimuunnos tehd‰‰n k‰ytt‰m‰ll‰ $as$-avainsanaa.
 
-\begin{lstlisting}[caption=SparkSession-kontekstin luominen]
-val spark = SparkSession
-	.builder
-	.appName("MovieLensALS")
-	.getOrCreate()
+\newpage
+
+\begin{lstlisting}[caption={SparkSession-kontekstin luominen}, label={spark_session}]
+		val spark = SparkSession
+			.builder
+			.appName("MovieLensALS")
+			.getOrCreate()
 \end{lstlisting}
 
 \textit{SparkSession} on Spark-ohjelmoinnin l‰htˆkohta, kun halutaan k‰ytt‰‰ Dataset- ja DataFrame-rajapintoja.
-Yll‰olevassa koodinp‰tk‰ss‰ luodaan SparkSession ketjuttamalla rakentajan kutsuja. \cite{spark-dataset}
+Ohjelmassa \ref{spark_session} luodaan SparkSession ketjuttamalla rakentajan kutsuja. \cite{spark-dataset}
 
 Dataset-oliot ovat samankaltaisia kuin RDD:t, sill‰ nekin tarjoavat vahvan tyypityksen ja mahdollisuuden k‰ytt‰‰ voimakkaita lambda-funktioita \cite{spark-sql-programming-guide}.
 Lambda-funktiolla tarkoitetaan yleisesti anonyymi‰ funktiota, jota ei olla sidottu muuttujaan.
@@ -184,51 +181,55 @@ Yleisesti sarjallistamista tarvitaan datan prosessointiin tai verkon yli l‰hett‰
 Molempia, sek‰ enkoodereita ett‰ sarjallistamista k‰ytet‰‰n olioiden muuntamiseen tavuiksi, mutta enkooderit luodaan dynaamisesti koodissa.
 Enkooderit k‰ytt‰v‰t sellaista muotoa, ett‰ Spark kykenee suorittamaan monenlaisia operaatioita, kuten suodattamista, j‰rjest‰mist‰ ja hajautusta (hashing), ilman ett‰ tavuja tarvitsee purkaa takaisin olioksi. \cite{spark-programming-guide}
 
-Seuraavassa koodilistauksessa luodaan uusi Dataset lukemalla $json$-tiedosto tiedostoj‰rjestelm‰st‰.
+Seuraavassa ohjelmassa \ref{dataset_example} luodaan uusi Dataset lukemalla $json$-tiedosto tiedostoj‰rjestelm‰st‰.
 Seuraavaksi luodaan uusi Dataset muunnoksen kautta.
-Olion kloonaamiseksi k‰ytet‰‰n case class :n $copy$ metodia, koska case class instanssit ovat muuttumattomia ja n‰in ollen copy-metodi on ainoa tapa kloonata (luoda uusi muuttumaton, immutable instanssi) siit‰.
+Olion kloonaamiseksi k‰ytet‰‰n case class :n $copy$-metodia, koska case class -instanssit ovat muuttumattomia ja n‰in ollen copy-metodi on ainoa tapa kloonata eli luoda uusi muuttumaton (immutable) instanssi siit‰.
 Lopuksi looginen- ja fyysinen suunnitelma tulostetaan konsoliin kutsumalla $explain$-funktiota uudelle Dataset-oliolle.
 
-\begin{lstlisting}[caption=Dataset-esimerkki]
-val people = spark.read.json("./people.json").as[Person]
+\newpage
 
-val peopleWithDoubleSalary = people.map { person => 
-	person.copy(salary = person.salary * 2)
-}
+\begin{lstlisting}[caption={Dataset-esimerkki}, label={dataset_example}]
+		val people = spark.read.json("./people.json").as[Person]
 
-peopleWithDoubleSalary.explain(true)
+		val peopleWithDoubleSalary = people.map { person => 
+			person.copy(salary = person.salary * 2)
+		}
+
+		peopleWithDoubleSalary.explain(true)
 \end{lstlisting}
 
 \section{DataFrame API}
 
 \textit{DataFrame} on nimettyihin sarakkeisiin j‰rjestetty Dataset.
 Se on k‰sitteellisesti yhtenev‰ relaatiotietokannan taulun tai R/Python kielten tietokehyksen (data frame) kanssa. \cite{spark-sql-programming-guide}
+Alla oleva kuva \ref{dataframe} esitt‰‰ hahmotelman DataFrame:sta.
 
 \begin{figure}[h]
 	\caption{DataFrame}
 	\centering
 	\includegraphics[scale=1.0]{dataframe}
+	\label{dataframe}
 \end{figure}
 
 DataFrame voidaan rakentaa useammalla tavalla, kuten esimerkiksi j‰sennellyist‰ tiedostoista, hakemalla ja viittaamalla ulkoisista tietokannoista tai olemassaolevista RDD-olioista.
 Se mahdollistaa datan prosessoinnin kilobittien suuruusluokasta aina petabitteihin asti ja klusterin yksitt‰isen solmun klustereista suuriin klustereihin.
 DataFrame-rajapinta on saatavilla Scala-, Java-, Python- ja R-ohjelmointikielille.
-Kooditasolla Scala-toteutuksessa DataFrame on riveist‰ rakentuva Dataset ($Dataset[Row]$). \cite{spark-programming-guide} \cite{spark_sql_dataframes}
+Kooditasolla Scala-toteutuksessa DataFrame on riveist‰ rakentuva Dataset. \cite{spark-programming-guide} \cite{spark_sql_dataframes}
 
-Alla olevassa ohjelmassa luodaan uusi DataFrame tietorakenne kohdistamalla \textit{spark.read} -funktio JSON-tiedostoon.
+Alla olevassa ohjelmassa \ref{dataframe_example} luodaan uusi DataFrame tietorakenne kohdistamalla \textit{spark.read} -funktio JSON-tiedostoon.
 T‰m‰n seurauksena Spark pyrkii p‰‰ttelem‰‰n uuden DataFrame:n sis‰isen mallin.
 
-\begin{lstlisting}[caption=DataFrame luominen k‰ytt‰en read-funktiota]
-val people = spark.read.json("./people.json")
+\begin{lstlisting}[caption={DataFrame:n luominen k‰ytt‰en read-funktiota}, label={dataframe_example}]
+		val people = spark.read.json("./people.json")
 \end{lstlisting}
 
-DataFrame API tarjoaa domain-spesifisen kielen (DSL, domain-specific language) j‰sennellyn datan, kuten JSON:in manipulointiin:
+DataFrame-API tarjoaa domain-spesifisen kielen (DSL, Domain-Specific Language) j‰sennellyn datan, kuten JSON:in, manipulointiin:
 
-\begin{lstlisting}[caption=Sarakkeen valitseminen ja tulostaminen DataFrame DSL:n avulla]
-people.select("name").show()
+\begin{lstlisting}[caption={Sarakkeen valitseminen ja tulostaminen DataFrame DSL:n avulla}, label={dataframe_dsl_example}]
+		people.select("name").show()
 \end{lstlisting}
 
-Yll‰ olevassa esimerkiss‰ valitaan luodusta DataFrame:sta vain $name$ -sarake ja tulostetaan se konsoliin. \cite{spark-sql-programming-guide}
+Yll‰ olevassa ohjelmassa \ref{dataframe_dsl_example} valitaan luodusta DataFrame:sta vain $name$ -sarake ja tulostetaan se konsoliin. \cite{spark-sql-programming-guide}
 
 \section{Mllib}
 

@@ -63,9 +63,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.35"
-     inkscape:cx="219.28571"
-     inkscape:cy="520"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="340.50402"
+     inkscape:cy="722.03051"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -124,16 +124,16 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:6.58687544px;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:4.04884672;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       x="128.19255"
+       x="175.0211"
        y="272.41946"
        id="text3359-6"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
          id="tspan3361-3"
-         x="128.19255"
+         x="175.0211"
          y="272.41946"
-         style="font-size:21.95624161px;line-height:1.25;stroke-width:4.04884672;stroke-miterlimit:4;stroke-dasharray:none">Name: String</tspan></text>
+         style="font-size:21.95624161px;line-height:1.25;stroke-width:4.04884672;stroke-miterlimit:4;stroke-dasharray:none">Matt</tspan></text>
     <rect
        style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:3.5433073;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect3336-7"
@@ -146,38 +146,16 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:6.58687544px;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:4.04884672;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       x="127.76395"
+       x="160.16762"
        y="338.13379"
        id="text3359-9"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
          id="tspan3361-7"
-         x="127.76395"
+         x="160.16762"
          y="338.13379"
-         style="font-size:21.95624161px;line-height:1.25;stroke-width:4.04884672;stroke-miterlimit:4;stroke-dasharray:none">Name: String</tspan></text>
-    <rect
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:3.5433073;stroke-miterlimit:4;stroke-dasharray:none"
-       id="rect3336-4"
-       width="165.71428"
-       height="65.714287"
-       x="117.6599"
-       y="366.20148"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:6.58687544px;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:4.04884672;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       x="128.04965"
-       y="406.99091"
-       id="text3359-91"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"><tspan
-         sodipodi:role="line"
-         id="tspan3361-70"
-         x="128.04965"
-         y="406.99091"
-         style="font-size:21.95624161px;line-height:1.25;stroke-width:4.04884672;stroke-miterlimit:4;stroke-dasharray:none">Name: String</tspan></text>
+         style="font-size:21.95624161px;line-height:1.25;stroke-width:4.04884672;stroke-miterlimit:4;stroke-dasharray:none">George</tspan></text>
     <rect
        style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:3.5433073;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect3336-6"
@@ -212,16 +190,16 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:6.58687544px;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:4.04884672;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       x="325.14624"
+       x="353.86197"
        y="272.08179"
        id="text3359-6-3"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
          id="tspan3361-3-9"
-         x="325.14624"
+         x="353.86197"
          y="272.08179"
-         style="font-size:21.95624352px;line-height:1.25;stroke-width:4.04884672;stroke-miterlimit:4;stroke-dasharray:none">Age: Int</tspan></text>
+         style="font-size:21.95624352px;line-height:1.25;stroke-width:4.04884672;stroke-miterlimit:4;stroke-dasharray:none">20</tspan></text>
     <rect
        style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:3.5433073;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect3336-7-4"
@@ -234,38 +212,16 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:6.58687544px;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:4.04884672;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       x="324.71762"
+       x="353.66385"
        y="337.79605"
        id="text3359-9-1"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
          id="tspan3361-7-5"
-         x="324.71762"
+         x="353.66385"
          y="337.79605"
-         style="font-size:21.95624352px;line-height:1.25;stroke-width:4.04884672;stroke-miterlimit:4;stroke-dasharray:none">Age: Int</tspan></text>
-    <rect
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:3.5433073;stroke-miterlimit:4;stroke-dasharray:none"
-       id="rect3336-4-4"
-       width="165.71428"
-       height="65.714287"
-       x="284.91156"
-       y="366.20151"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:6.58687544px;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:4.04884672;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       x="325.00333"
-       y="406.6532"
-       id="text3359-91-1"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"><tspan
-         sodipodi:role="line"
-         id="tspan3361-70-5"
-         x="325.00333"
-         y="406.6532"
-         style="font-size:21.95624352px;line-height:1.25;stroke-width:4.04884672;stroke-miterlimit:4;stroke-dasharray:none">Age: Int</tspan></text>
+         style="font-size:21.95624352px;line-height:1.25;stroke-width:4.04884672;stroke-miterlimit:4;stroke-dasharray:none">25</tspan></text>
     <rect
        style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:3.6801312;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect3336-6-5"
@@ -300,16 +256,16 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:6.58687544px;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:4.04884672;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       x="455.3461"
+       x="525.48712"
        y="272.21426"
        id="text3359-0-4-3"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
          id="tspan3361-8-9-8"
-         x="455.3461"
+         x="525.48712"
          y="272.21426"
-         style="font-size:21.95624542px;line-height:1.25;stroke-width:4.04884672;stroke-miterlimit:4;stroke-dasharray:none">Weight: Double</tspan></text>
+         style="font-size:21.95624542px;line-height:1.25;stroke-width:4.04884672;stroke-miterlimit:4;stroke-dasharray:none">80</tspan></text>
     <rect
        style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:3.68013144;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect3336-6-5-5"
@@ -322,37 +278,15 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:6.58687544px;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:4.04884672;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       x="455.34613"
+       x="525.56213"
        y="337.79172"
        id="text3359-0-4-2"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
          id="tspan3361-8-9-2"
-         x="455.34613"
+         x="525.56213"
          y="337.79172"
-         style="font-size:21.95624542px;line-height:1.25;stroke-width:4.04884672;stroke-miterlimit:4;stroke-dasharray:none">Weight: Double</tspan></text>
-    <rect
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:3.68013167;stroke-miterlimit:4;stroke-dasharray:none"
-       id="rect3336-6-5-5-3"
-       width="179.1324"
-       height="65.577461"
-       x="449.91156"
-       y="366.39816"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:6.58687544px;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:4.04884672;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       x="455.34607"
-       y="407.11917"
-       id="text3359-0-4-2-4"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"><tspan
-         sodipodi:role="line"
-         id="tspan3361-8-9-2-6"
-         x="455.34607"
-         y="407.11917"
-         style="font-size:21.95624733px;line-height:1.25;stroke-width:4.04884672;stroke-miterlimit:4;stroke-dasharray:none">Weight: Double</tspan></text>
+         style="font-size:21.95624542px;line-height:1.25;stroke-width:4.04884672;stroke-miterlimit:4;stroke-dasharray:none">75</tspan></text>
   </g>
 </svg>

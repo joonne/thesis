@@ -27,15 +27,16 @@ Varsinainen koodin testailu ja integrointi EMR:n kanssa oli kuitenkin inkrementa
 Kolmen EC2 (m3.xlarge) -instanssin kuukauden mittaisesta ajamisesta olisi tullut maksettavaa reilut 1000 dollaria.
 Laskutus toimii niin, että virtuaalikoneiden ajaminen maksaa 0.266 dollaria/tunti ja tämän lisäksi siihen lisätään 0.07 dollaria/tunti EMR-lisämaksua.
 Onneksi asia saatiin selvitettyä asiakaspalvelun kanssa ja AWS-asiakaspalvelun insinöörit tarkistivat lokeista että olin tosiasiassa käyttänyt EMR-liukuhihnaa vain muutaman kerran, kuten kerroinkin.
-AWS:n asiakaspalvelu ansaitsee kiitosta siitä, kuinka mutkattomasti asia hoitui lopulta: he mitätöivät edellisen kuukauden (kesäkuu 2018) laskun kokonaan ja lisäsivät kuluvalle kuulle (heinäkuu 2018) krediittejä sen verran että lasku tulisi kuitattua.
+AWS:n asiakaspalvelu ansaitsee kiitosta siitä, kuinka mutkattomasti asia hoitui lopulta: asiakaspalvelijat mitätöivät edellisen kuukauden (kesäkuu 2018) laskun kokonaan ja lisäsivät kuluvalle kuulle (heinäkuu 2018) krediittejä sen verran, että lasku tulisi kuitattua.
 Jälkeenpäin opiskeltuani lisää siitä, että miten olisin voinut välttää laskun, selvisi että on olemassa erilliset AWS:n palvelut laskujen monitorointiin ja tulevan laskun ennustamiseen.
 Amazon Cost Explorer mahdollistaa laskujen tutkimisen, Amazon Budget puolestaan valvoo tulevan laskun määrää ja ilmoittaa mikäli ollaan menossa asetetuista rajoista yli.
-Alla olevassa kuvassa on AWS-lasku työhön liittyvien koodien ajelusta kesäkuulta 2018.
+Alla olevassa kuvassa \ref{aws_bill} on AWS-lasku työhön liittyvien koodien testaamisesta ja suorittamisesta kesäkuulta 2018.
 
 \begin{figure}[h]
 	\caption{AWS-lasku}
 	\centering
 	\includegraphics[scale=0.3]{aws_bill}
+	\label{aws_bill}
 \end{figure}
 
 Parempi tai ainakin edullisempi keino työn toteuttamiseen olisi ollut pystyttää liukuhihna, ajaa tarvittavat eräajot ja tuloksien kirjaamisen jälkeen pysäyttää liukuhihna, jolloin varatut resurssit olisi vapautettu.
@@ -56,15 +57,15 @@ AWS lähetti pyyntöjen hupenemisesta onneksi viestin ja näin ollen päästiin ratko
 EMR-klusteria ei ole mahdollista muokata jälkeenpäin, joten se täytyy poistaa (terminate), jotta lokien kirjoittaminen saatiin poistettua käytöstä.
 Amazon Free Tier sisältää S3:n osalta 2000 luku/kirjoitus -kutsua kuukaudessa ja koska kaikki Spark-sovelluksen tuottamat lokit kirjoitetaan niin tämä raja tuli vastaan nopeasti.
 
-Saadut tulokset eivät ole palveluiden, kuten Netflix tasolla, mutta ei sitä varmaan kannattanut odottaakaan.
-Mielenkiintoista oli se, kuinka ``huonoja'' saadut suositukset olivat.
+Saadut tulokset eivät ole palveluiden, kuten Netflix, tasolla, mutta ei sitä varmaan kannattanut odottaakaan.
+Mielenkiintoista oli se, kuinka ``huonoilta'' saadut suositukset vaikuttivat.
 Yllättäviä ja uusia kylläkin, mutta mikään elokuvista ei kuulosta soveliaalta tai mielekkäältä.
 Tässä tosin voikin piillä juuri hyvän suosittelun raja, sillä luultavasti ihmisen muodostama mielipide vaikkapa pelkän nimen perusteella saattaa johtaa elokuvan hylkäämiseen.
 Ihminen ei välttämättä ole täysin objektiivinen valitsemaan sitä, onko jokin suositeltu elokuva katsomisen arvoinen.
 Elokuvan julkaisuvuosi, ohjaajan tunnettuus, näyttelijät ja jopa kansikuva herättävät mielipiteitä, jotka saattavat johtaa elokuvan hylkäämiseen tai ainakin siirtämiseen sille kuuluisalle ``katson joskus'' -listalle.
 
 Suuremman aineiston käyttäminen sekä isomman arvostelumäärän tarjoaminen järjestelmälle voisi ajatella parantavan tuloksia.
-Voisi olettaa että tarjotut 20 elokuvan arvostelua eivät vielä riittäneet siihen, että järjestelmä muodostaisi kovin holistista kuvaa allekirjoittaneen elokuvamausta.
+Voisi olettaa että tarjotut 20 elokuvan arvostelua eivät vielä riittäneet siihen, että järjestelmä muodostaisi kovin kokonaisvaltaista kuvaa arvosteluiden antajan elokuvamausta.
 
 \section{Tulevaa työtä}
 

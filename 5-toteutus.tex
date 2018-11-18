@@ -14,7 +14,7 @@ Ennustusten ker‰‰minen mallin avulla.
 
 T‰ss‰ osiossa esitet‰‰n EMR-klusterin konfigurointi sek‰ tyˆss‰ k‰ytetyll‰ tavalla ett‰ vaihtoehtoisesti komentorivin kautta tapahtuvalla keinolla.
 EMR-klusteri on mahdollista pystytt‰‰ myˆs suoraan Spark-sovelluksesta.
-Klusterin konfigurointi piti tehd‰ k‰yt‰nnˆss‰ kolmannen osapuolen \cite{levelup} videon perusteella, sill‰ AWS:n omat ohjeistukset eiv‰t olleet riitt‰v‰t, tai ainakin ne olivat vaikeaselkoiset.
+Klusterin konfigurointi piti tehd‰ k‰yt‰nnˆss‰ kolmannen osapuolen \cite{levelup} videon perusteella, sill‰ AWS:n omat ohjeistukset eiv‰t olleet riitt‰v‰t, tai ainakin ne koettiin vaikeaselkoisiksi.
 
 \subsection{WEB-k‰yttˆliittym‰n avulla}
 
@@ -35,9 +35,12 @@ K‰ytt‰j‰n tulee luoda EC2-avainpari, jotta on mahdollista muodostaa SSH-yhteys k
 	\caption{EMR-klusterin luominen}
 	\centering
 	\includegraphics[scale=0.5]{emr_create}
+	\label{emr_configuration}
 \end{figure}
 
-Yll‰ olevassa kuvassa on esitetty klusterin konfiguroinnin www-k‰yttˆliittym‰, johon p‰‰st‰‰n k‰siksi AWS:n konsolin kautta.
+Yll‰ olevassa kuvassa \ref{emr_configuration} on esitetty klusterin konfiguroinnin www-k‰yttˆliittym‰, johon p‰‰st‰‰n k‰siksi AWS:n konsolin kautta.
+
+\newpage
 
 \subsection{Komentorivin avulla}
 
@@ -47,12 +50,11 @@ Yll‰ olevassa kuvassa on esitetty klusterin konfiguroinnin www-k‰yttˆliittym‰, j
 	tabsize=2,
 	language=sh,
 	keywordstyle=,
-	numbers=left,
-	numbersep=15pt,
+	numbers=none,
 }
 
-\begin{lstlisting}[caption=Klusterin luominen komentorivilt‰ \cite{create_cluster},language=sh]
-aws emr create-cluster \
+\begin{lstlisting}[caption=Klusterin luominen komentorivilt‰ \cite{create_cluster}, language=sh, label={create_cluster_example}]
+$ aws emr create-cluster \
 	--name "cluster" \
 	--release-label emr-5.17.0 \
 	--applications Name=Spark \
@@ -62,18 +64,18 @@ aws emr create-cluster \
 	--use-default-roles
 \end{lstlisting}
 
-Yll‰ olevassa esimerkiss‰ pystytet‰‰n EMR klusteri AWS:n komentorivityˆkalun avulla.
-Rivinvaihtomerkit \textit{\mybs} on lis‰tty selkeyden takia, joten ne eiv‰t ole merkityksellisi‰ komennon kannalta. \cite{create_cluster}
+Yll‰ olevassa ohjelmassa \ref{create_cluster_example} pystytet‰‰n EMR klusteri AWS:n komentorivityˆkalun avulla.
+Rivinvaihtomerkit ``\textit{\mybs}'' on lis‰tty selkeyden takia, joten ne eiv‰t ole merkityksellisi‰ komennon kannalta. \cite{create_cluster}
 Valinnat omat samat komentoriviversiossa, kuin k‰yttˆliittym‰nkin kautta.
 
-\begin{lstlisting}[caption=Sovelluksen ajaminen AWS EMR:ss‰]
-> sbt package
-> aws s3 cp movielens.jar s3://movielens/movielens.jar
-> aws s3 cp s3://movielens/movielens.jar .
-> spark-submit ./movielens.jar
+\begin{lstlisting}[caption=Sovelluksen ajaminen AWS EMR:ss‰, label={workflow_example}]
+$ sbt package
+$ aws s3 cp movielens.jar s3://movielens/movielens.jar
+$ aws s3 cp s3://movielens/movielens.jar .
+$ spark-submit ./movielens.jar
 \end{lstlisting}
 
-Yll‰ olevassa ohjelmassa esitet‰‰n askeleet, joilla sovellus saadaan paketoitua, l‰hetetty‰ EC2-virtuaalikoneelle ja ajettua EMR-klusterissa.
+Yll‰ olevassa ohjelmassa \ref{workflow_example} esitet‰‰n askeleet, joilla sovellus saadaan paketoitua, l‰hetetty‰ EC2-virtuaalikoneelle ja ajettua EMR-klusterissa.
 Ensin ohjelma paketoidaan $jar$-tiedostoksi.
 Seuraavaksi $jar$-tiedosto l‰hetet‰‰n S3-palveluun, jossa sijaitsee \textit{movielens} niminen bucket.
 T‰m‰n j‰lkeen otetaan SSH-yhteys EC2-virtuaalikoneelle ja ladataan $jar$-tiedosto samaisesta bucketista.
@@ -83,13 +85,13 @@ Lopuksi k‰ytet‰‰n \textit{spark-submit} -tyˆkalua sovelluksen ajamiseen EMR-klus
 
 GroupLens Research on ker‰nnyt ja laittanut saataville aineistoja MovieLens-sivustolta.
 Aineistot on ker‰tty useiden aikajaksojen aikana, riippuen aineiston koosta.
-MovieLens 20M aineisto sis‰lt‰‰ 20 000 000 (kaksikymment‰ miljoonaa) arviota, jotka ovat antaneet 138 000 k‰ytt‰j‰‰ 27 000 elokuvalle.
-MovieLens 20M aineisto koostuu $movies.csv$ and $ratings.csv$ tiedostoista. \cite{movieLens17}
-
-\newpage
+T‰ss‰ tyˆss‰ k‰ytett‰v‰ MovieLens 20M -aineisto sis‰lt‰‰ 20 000 000 (kaksikymment‰ miljoonaa) arviota, jotka ovat antaneet 138 000 k‰ytt‰j‰‰ 27 000 elokuvalle.
+MovieLens 20M -aineisto koostuu $movies.csv$ and $ratings.csv$ tiedostoista. \cite{movieLens17}
+Taulukoissa \ref{movies_csv} ja \ref{ratings_csv} on esitetty esimerkit n‰ist‰ tiedostoista.
 
 \captionof{table}{N‰yte \textit{movies.csv} tiedostosta}
-\begin{tabular}{lll}
+\begin{center}
+\begin{tabular}{lll} \label{movies_csv}
 	movieId & title & genres \\ \hline
 	1 & Toy Story (1995) & Adventure|Animation|Children \\
 	2 & Jumanji (1995) & Adventure|Children|Fantasy \\
@@ -102,9 +104,11 @@ MovieLens 20M aineisto koostuu $movies.csv$ and $ratings.csv$ tiedostoista. \cit
 	9 & Sudden Death (1995) & Action \\
 	10 & GoldenEye (1995) & Action|Adventure|Thriller \\
 \end{tabular}
+\end{center}
 
 \captionof{table}{N‰yte \textit{ratings.csv} tiedostosta}
-\begin{tabular}{llll}
+\begin{center}
+\begin{tabular}{llll} \label{ratings_csv}
 	userId & movieId & rating & timestamp \\ \hline
 	1 & 31 & 2.5 & 1260759144 \\
 	1 & 1029 & 3.0 & 1260759179 \\
@@ -116,6 +120,7 @@ MovieLens 20M aineisto koostuu $movies.csv$ and $ratings.csv$ tiedostoista. \cit
 	1 & 1293 & 2.0 & 1260759148 \\
 	1 & 1339 & 3.5 & 1260759125 \\
 \end{tabular}
+\end{center}
 
 ~
 
@@ -132,16 +137,13 @@ T‰t‰ varten l‰hdekoodi tulee saada paketoitua ja t‰m‰ saavutetaan SBT-tyˆkalulla
 SBT (Scala Build Tool) on k‰‰nnˆstyˆkalu Scala, Java ja C++-kielille, jonka avulla l‰hdekoodi saadaan sek‰ k‰‰nnetty‰ ett‰ paketoitua JAR:iksi \cite{sbt}.
 
 Sovelluksia voidaan ottaa k‰yttˆˆn klusterissa \textit{spark-submit} tyˆkalun avulla, joka mahdollistaa kaikkien Sparkin tukemien klusterinhallintatyˆkalujen k‰ytt‰misen yhten‰isen k‰yttˆliittym‰n kautta.
-T‰m‰ ominaisuus osoittautui eritt‰in hyˆdylliseksi kun sovellusta ajettiin EMR-klusterissa, sill‰ \textit{spark-submit}-tyˆkalu ottaa syˆtteen‰ vain k‰‰nnetyn JAR-tiedoston ja alkaa ajamaan sovellusta.
+T‰m‰ ominaisuus osoittautui eritt‰in hyˆdylliseksi kun sovellusta ajettiin EMR-klusterissa, sill‰ \textit{spark-submit} -tyˆkalu ottaa syˆtteen‰ vain k‰‰nnetyn JAR-tiedoston ja alkaa ajamaan sovellusta.
 
-\begin{lstlisting}[caption=Sovelluksen paketointi ja ajaminen klusterissa,language=sh]
-sbt package
-spark-submit movielens-recommendations_2.11-1.0.jar
+\begin{lstlisting}[caption=Sovelluksen k‰yttˆˆnotto klusterissa,language=sh, label={spark_submit_example}]
+$ spark-submit movielens-recommendations_2.11-1.0.jar
 \end{lstlisting}
 
-~
-
-Alla olevassa esimerkiss‰ ladataan tyˆss‰ k‰ytetyt suositukset RDD-rajapintaa k‰ytt‰en.
+Yll‰ olevassa ohjelmassa \ref{spark_submit_example} on esimerkki ohjelman k‰yttˆˆnotosta Spark-klusterissa.
 
 \lstset{
 	columns=flexible,
@@ -151,41 +153,27 @@ Alla olevassa esimerkiss‰ ladataan tyˆss‰ k‰ytetyt suositukset RDD-rajapintaa k‰
 	commentstyle=\color{scalacomment},
 	keywordstyle=\color{blue},
 	numbers=left,
-	numbersep=15pt,
+	numbersep=-5pt,
 }
-
-\begin{lstlisting}[caption=Suositusten lataaminen RDD-rajapintaa k‰ytt‰en]
-val ratings = sc.textFile("ml-latest-small/ratings.csv")
-\end{lstlisting}
-
-~
-
-Alla olevassa esimerkiss‰ ladataan tyˆss‰ k‰ytetyt suositukset Dataset-rajapintaa k‰ytt‰en.
-
-\begin{lstlisting}[caption=Suositusten lataaminen Dataset-rajapintaa k‰ytt‰en]
-val ratings = spark.read.csv("ml-latest-small/ratings.csv")
-\end{lstlisting}
-
-\newpage
 
 \section{Opetusdatan lataaminen Spark sovellukseen}
 
-Alla olevassa koodilistauksessa on esimerkki opetusdatan lataamisesta S3:sta.
+Alla olevassa ohjelmassa \ref{load_data_example} on esimerkki opetusdatan lataamisesta S3:sta.
 
-\begin{lstlisting}[caption=Aineiston lataaminen]
-val ratings = sc.textFile("s3n://bucket/ratings.csv")
-  .mapPartitionsWithIndex((i, it) => if (i == 0) it.drop(1) else it)
-  .map { line =>
-		val fields = line.split(",")
-		val userId = fields(0).toInt
-		val movieId = fields(1).toInt
-		val rating = fields(2).toDouble
-
-		Rating(userId, movieId, rating)
-  }	
+\begin{lstlisting}[caption=Aineiston lataaminen, label={load_data_example}]
+		val ratings = sc.textFile("s3n://bucket/ratings.csv")
+			.mapPartitionsWithIndex((i, it) => if (i == 0) it.drop(1) else it)
+			.map { line =>
+				val fields = line.split(",")
+				val userId = fields(0).toInt
+				val movieId = fields(1).toInt
+				val rating = fields(2).toDouble
+				
+				Rating(userId, movieId, rating)
+		}	
 \end{lstlisting}
 
-Riveill‰ 1-11 luodaan RDD $ratings$ lataamalla csv-tiedosto.
+Esimerkiss‰ luodaan RDD $ratings$ lataamalla csv-tiedosto.
 Tiedostosta suodatetaan ensin pois otsikkorivit ja t‰m‰n j‰lkeen tiedosto k‰yd‰‰n l‰pi rivi kerrallaan ja p‰tkit‰‰n pilkulla erotetut arvot taulukkoon k‰ytt‰en Scalan String-luokan sis‰‰nrakennettua $split$ funktiota.
 T‰m‰n j‰lkeen taulukossa olevista arvoista muodostetaan \textit{Rating}-olioita.
 Rating on Sparkin tarjoama apuluokka, jota ei en‰‰n k‰ytet‰ uudemman \textit{ml}-kirjaston kanssa, vaan ALS-malli ottaa syˆtteen‰‰n vain tupleja, joissa on oikeat arvot oikeilla paikoillaan.
@@ -194,24 +182,24 @@ Opetusdataa ei juuri tarvinnut siisti‰, sill‰ opetukseen k‰ytettiin valmista, hy
 
 \section{Mallin opettaminen}
 
-Alla olevassa koodilistauksessa on esitetty esimerkki ALS-mallin opettamisesta.
+Alla olevassa ohjelmassa \ref{als_train} on esitetty esimerkki ALS-mallin opettamisesta.
 
-\begin{lstlisting}[caption=Mallin opettaminen]
-for (rank <- ranks; lambda <- lambdas; numIter <- numIters) {
-	val model = ALS.train(training, rank, numIter, lambda)
-	val validationRmse =
-		computeRmse(model, validation, numValidation)
-	
-	if (validationRmse < bestValidationRmse) {
-		bestModel = Some(model)
-		bestValidationRmse = validationRmse
-		bestRank = rank
-		bestLambda = lambda
-		bestNumIter = numIter
-	}
-}
-
+\begin{lstlisting}[caption=Mallin opettaminen, label={als_train}]
+		for (rank <- ranks; lambda <- lambdas; numIter <- numIters) {
+			val model = ALS.train(training, rank, numIter, lambda)
+			val validationRmse = computeRmse(model, validation, numValidation)
+			
+			if (validationRmse < bestValidationRmse) {
+				bestModel = Some(model)
+				bestValidationRmse = validationRmse
+				bestRank = rank
+				bestLambda = lambda
+				bestNumIter = numIter
+			}
+		}
 \end{lstlisting}
+
+~
 
 Yll‰ olevassa esimerkiss‰ suoritetaan varsinainen mallin opetus.
 Opetus tapahtuu niin, ett‰ opetetaan muutama versio mallista ja valitaan malleista paras k‰ytt‰en RMSE-metriikkaa.
@@ -233,54 +221,54 @@ Tutkimuksessa paras arvo saatiin k‰ytt‰en datasetti‰ 80-20 suhteessa ja omassa o
 
 \section{Ennustaminen}
 
-Alla olevassa koodilistauksessa on esitetty esimerkki suositusten ennustamisesta.
+Alla olevassa ohjelmassa \ref{prediction} on esitetty esimerkki suositusten ennustamisesta.
 
-\begin{lstlisting}[caption=Suositusten ennustaminen]
-val myRatedMovieIds = Set(personalRatings.map(_.product))
-val candidates = movies.keys.filter(!myRatedMovieIds.contains(_)).toSeq
-val candidatesRDD = sc.parallelize(candidates)
+\begin{lstlisting}[caption=Suositusten ennustaminen, label={prediction}]
+		val myRatedMovieIds = Set(personalRatings.map(_.product))
+		val candidates = movies.keys.filter(!myRatedMovieIds.contains(_)).toSeq
+		val candidatesRDD = sc.parallelize(candidates)
 
-val recommendations = bestModel
-	.get
-	.predict(candidatesRDD)
-	.collect()
-	.sortBy(- _.rating)
-	.take(10)
+		val recommendations = bestModel
+			.get
+			.predict(candidatesRDD)
+			.collect()
+			.sortBy(- _.rating)
+			.take(10)
 \end{lstlisting}
 
 ~
 
-Yll‰ olevassa koodilistauksessa haetaan henkilˆkohtaiset suositukset k‰ytt‰m‰ll‰ mallin $predict$-metodia, joka ottaa parametrinaan mahdollisten elokuvien joukon.
+Ohjelmassa \ref{prediction} haetaan henkilˆkohtaiset suositukset k‰ytt‰m‰ll‰ mallin $predict$-metodia, joka ottaa parametrinaan mahdollisten elokuvien joukon.
 Mahdollisilla elokuvilla tarkoitetaan elokuvia, joita k‰ytt‰j‰ ei ole viel‰ n‰hnyt, eli ne eiv‰t sis‰lly $personalRatings$-muuttujan sis‰lt‰miin elokuviin.
 Muuttuja $bestModel$ sis‰lt‰‰ aiemmin talteen otetun, parhaan RMSE-arvon omaava malli.
 Tarkemmin sanottuna se on mallin sis‰lt‰v‰ $Option$ muuttuja, jonka sis‰ll‰ olevaan malliin p‰‰st‰‰n k‰siksi $get$-funktion avulla.
 
 \section{Opetusvirheen evaluointi}
 
-Alla olevassa kooodilistauksessa esitet‰‰n apufunktio, jolla evaluoidaan opetetun mallin virhett‰.
+Alla olevassa ohjelmassa \ref{rmse_example} esitet‰‰n apufunktio \textit{computeRmse}, jolla evaluoidaan opetetun mallin virhett‰.
 
-\begin{lstlisting}[caption=RMSE]
-def computeRmse(
-	model: MatrixFactorizationModel,
-	data: RDD[Rating],
-	n: Long
-): Double = {
-	val predictions: RDD[Rating] =
-		model.predict(data.map(x => (x.user, x.product)))
-	val predictionsAndRatings = predictions
-		.map(x => ((x.user, x.product), x.rating))
-		.join(data.map(x => ((x.user, x.product), x.rating)))
-		.values
-	
-	math.sqrt(
-		predictionsAndRatings
-			.map(x => (x._1 - x._2) * (x._1 - x._2))
-			.reduce(_ + _) / n
-	)
-}
+\begin{lstlisting}[caption=computeRmse-funktio, label={rmse_example}]
+		def computeRmse(
+			model: MatrixFactorizationModel,
+			data: RDD[Rating],
+			n: Long
+		): Double = {
+			val predictions: RDD[Rating] =
+				model.predict(data.map(x => (x.user, x.product)))
+			val predictionsAndRatings = predictions
+				.map(x => ((x.user, x.product), x.rating))
+				.join(data.map(x => ((x.user, x.product), x.rating)))
+				.values
+				
+			math.sqrt(
+				predictionsAndRatings
+					.map(x => (x._1 - x._2) * (x._1 - x._2))
+					.reduce(_ + _) / n
+				)
+		}
 \end{lstlisting}
 
-Yll‰ olevassa koodilistauksessa esitet‰‰n apufunktio $computeRMSE$, jonka avulla evaluoidaan opetetun mallin virhett‰.
+Ohjelmassa \ref{rmse_example} esitet‰‰n apufunktio $computeRmse$, jonka avulla evaluoidaan opetetun mallin virhett‰.
 Apufunktio on ehk‰ hieman v‰h‰inen nimitys, sill‰ kuten kappaleessa 2 todettiin, k‰ytet‰‰n RMSE:t‰ kriteerin‰ sille, ett‰ kuinka hyvin malli sovittuu opetusdataan.
 Lis‰ksi vertailevassa tutkimuksessa \cite{miryala17} RMSE-arvoa k‰ytettiin kriteerin‰, jolla todettiin paras malli vaihtoehdoista.
 

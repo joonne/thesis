@@ -19,7 +19,7 @@
 \special{papersize=210mm,297mm}
 
 % Define your basic information
-\author{Jonne Petteri Pihlanen}
+\author{Jonne Pihlanen}
 \title{Suosittelijajärjestelmän rakentaminen Apache Sparkilla}      % primary title (for front page)
 \titleB{Building a Recommendation Engine with Apache Spark} % translated title for abstract
 \thesistype{Diplomityö} % or Bachelor of Science, Laboratory Report... 
@@ -51,7 +51,7 @@
 % Then lay out the author, title and type to the center of page.
 \vspace{6.8cm}
 \maketitle
-\vspace{7cm} % modify if thesis title needs many lines
+\vspace{6cm} % modify if thesis title needs many lines
 
 % Last some additional info to the bottom-right corner
 \begin{flushright}  
@@ -84,8 +84,8 @@
 \begin{spacing}{1.0}
          {\bf \textsf{\MakeUppercase{\@author}}}: \@titleB\\   % use \@titleB when thesis is in Finnish
          \textsf{Tampere University of Technology}\\
-         \textsf{Master of Science, 48 pages} \\
-         \textsf{September 2018}\\
+         \textsf{Master of Science, 47 pages} \\
+         \textsf{November 2018}\\
          \textsf{Master's Degree Program in Signal Processing}\\
          \textsf{Major: Data Engineering}\\
          \textsf{Examiner: \@examiner}\\
@@ -95,15 +95,15 @@
 The amount of recommendation engines around the Internet is constantly growing.
 Even the most common everyday tasks, such as reading the news, incorporate an existence of a recommender system.
 A recommendation engine is a system that tries to form an opinion about user's preferences and recommend items of use.
-This paper studies the usage of Apache Spark when building a recommendation engine with Scala programming language and Amazon Web Services (AWS).
+This thesis studies the usage of Apache Spark when building a recommendation engine with Scala programming language and Amazon Web Services (AWS).
 
 \chapter*{Tiivistelmä}
 
 \begin{spacing}{1.0}
          {\bf \textsf{\MakeUppercase{\@author}}}:\@title\\  % or use \@title when thesis is in Finnish
          \textsf{Tampereen teknillinen yliopisto}\\
-         \textsf{Diplomityä, 48 sivua}\\ %
-         \textsf{syyskuu 2018}\\
+         \textsf{Diplomityä, 47 sivua}\\ %
+         \textsf{lokakuu 2018}\\
          \textsf{Signaalinkäsittelyn koulutusohjelma}\\
          \textsf{Pääaine: Data Engineering}\\
          \textsf{Tarkastaja: \@examiner}\\
@@ -131,7 +131,7 @@ Tämän työn tekemiseen kului noin 900 päivää, työpaikan vaihto, epätoivoa, laisku
 Erityiskiitos tuesta vaimolleni Nooralle.
 Kiitos myös kaikille muille ketkä jaksoivat muistuttaa, hoputtaa ja välillä hymähdelläkin tämän työn tekemiselle ja tekemisestä, ilman tuota hoputusta olisin varmaankin täyttämässä jo toista jatkoaikahakemustani!
 
-Tampere, 13.11.2018
+Tampere, 18.11.2018
 
 Jonne Pihlanen
 
@@ -231,11 +231,9 @@ Jonne Pihlanen
 % The bibliography, i.e the list of references (3 options available)
 \newpage
 
-\selectlanguage{finnish}
-\selectbiblanguage{finnish}
-\renewcommand{\bibname}{Lähdeluettelo}
 \addcontentsline{toc}{chapter}{\bibname}
-\bibliographystyle{IEEEtranS}
+\bibliographystyle{bababbrtut}
+\bibliographystyle{unsrt}
 \bibliography{thesis_refs}
 \markboth{\bibname}{\bibname}
 
