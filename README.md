@@ -1,5 +1,5 @@
-# Building a Recommendation System with Apache Spark #
+# SUOSITTELIJAJÄRJESTELMÄN RAKENTAMINEN APACHE SPARKILLA
 
-Master of Science thesis
+Diplomityö
 
-[download pdf](https://github.com/joonne/thesis/raw/master/thesis.pdf)
+[pdf](https://github.com/joonne/thesis/raw/master/thesis.pdf)
